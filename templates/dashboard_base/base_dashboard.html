@@ -385,6 +385,9 @@
 		<!-- STICKY JS -->
 		<script src="{% static 'assets/js/stiky.js' %}"></script>
 
+		<!-- SIDE-MENU JS-->
+		<script src="{% static 'assets/plugins/sidemenu/sidemenu.js' %}"></script>
+
 		<!-- SIDEBAR JS -->
 		<script src="{% static 'assets/plugins/sidebar/sidebar.js' %}"></script>
 
@@ -400,6 +403,12 @@
 
 		<!-- CUSTOM JS -->
 		<script src="{% static 'assets/js/custom.js' %}"></script>
+        <!-- HTMX import -- >
+        <script src="{% static 'assets/js/htmx.min.js' %}"></script>
+
+        {% block customjs %}
+
+        {% endblock customjs %}
 
 
 
