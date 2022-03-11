@@ -2,4 +2,5 @@ from django.shortcuts import render
 
 
 def home_page(request):
-    return render(request,'home/index.html')
+    if request.method == "GET":
+        return render(request,'home/index.html')

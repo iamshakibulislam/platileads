@@ -18,7 +18,7 @@ def signup(request):
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
 
-        sleep(5)
+    
         try:
             tos = request.POST['tos']
 
@@ -33,7 +33,7 @@ def signup(request):
 
         else:
             User.objects.create_user(first_name=first_name,last_name=last_name,email=email,phone=phone,password=password)
-            return HttpResponse("<div class='alert alert-success'>Account created successfully ! Please Login</div>")
+            return HttpResponse("<div class='alert alert-success'>Account created successfully ! Please <a href='/users/login/'>Login Now</a></div>")
 
 
 
@@ -42,6 +42,7 @@ def login(request):
         return render(request,'users/login.html')
 
     if request.method == "POST":
+      
         email = request.POST.get('email')
         password = request.POST.get('password')
         user_auth = auth.authenticate(email=email,password=password)

@@ -14,7 +14,7 @@
                     
                 </div>
                 <div class="card-body">
-                    <form action="{% url 'signup' %}" method="post" hx-post="{% url 'login' %}" hx-trigger="submit" hx-target="#show_alerts" hx-indicator="#loading_spinner" id="form">
+                    <form action="{% url 'login' %}" method="post" hx-post="{% url 'login' %}" hx-trigger="submit" hx-target="#show_alerts" hx-indicator="#loading" id="loginform">
 
                         {% csrf_token %}
                        
@@ -31,8 +31,8 @@
                        
                        
                         
-                        <div class="form-group d-flex justify-content-center">
-                            <button type="submit" class="btn btn-primary">Signin Now</button>
+                        <div class="form-group d-flex justify-content-center " id="submitbtn" style="ponter-events:all">
+                            <button type="submit"  class="btn btn-primary" style="z-index:5">Signin Now</button>
                         </div>
                        
                     </form>
@@ -45,13 +45,9 @@
 
 <!-- loading spinner-->
 
-<img src="{% static 'img/loading.gif' %}" id="loading_spinner" class="img-responsive htmx-indicator" id="loading_spinner" style="position:absolute;top:30%;left:45%;z-index:33"/>
+<img src="{% static 'img/loading.gif' %}" id="loading" class="img-responsive htmx-indicator"  style="position:absolute;top:40%;left:47%;z-index:0"/>
 
 
-<style>
-
-
-</style>
 
 
 {% endblock content %}
@@ -61,12 +57,26 @@
 
 $(document).ready(function(){
     $('html').addClass('sticky-header-active');
-});
+
+
+
 
 
 document.body.addEventListener('htmx:beforeSend', function(e) {
-    $('body > *:not(#loading_spinner)').css('filter','blur(5px)');
-    $('body > *:not(#loading_spinner)').css('pointer-events','none');
+
+    
+
+    $('.card > *:not(#loading)').css('filter','blur(3px)');
+    
+    $('#loading').css('z-index','5');
+    $('#submitbtn').css('z-index','1');
+
+    
+   
+
+  
+    $('a,.btn').css('pointer-events','none');
+    
 
    
 });
@@ -75,10 +85,14 @@ document.body.addEventListener('htmx:afterSwap', function(e) {
 
     if(e.detail.xhr.responseText == "login_successful"){
         $('#show_alerts').html('<div class="alert alert-success">Login successful ! Please Wait....</div>');
-    }
+    };
+    $('a,.btn').css('pointer-events','auto');
+    $('.card > *:not(#loading)').css('filter','blur(0px)');
+
+    $('#loading').css('z-index','0');
+    $('#submitbtn').css('z-index','5');
+
     
-    $('body > *:not(#loading_spinner').css('filter', 'blur(0px)');
-    $('body > *:not(#loading_spinner)').css('pointer-events','auto');
    
 });
 
@@ -90,7 +104,7 @@ document.body.addEventListener('htmx:afterRequest', function(e) {
     }
    
 });
-
+});
 
 </script>
 

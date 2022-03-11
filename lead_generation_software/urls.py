@@ -10,6 +10,8 @@ urlpatterns = [
     path('',views.home_page,name='home_page'),
     path('users/',include('users.urls')),
     path('dashboard/',include('dashboard.urls')),
+    path('leads/',include('leads.urls')),
+    path('subscriptions/',include('subscriptions.urls')),
 ]
 
 

@@ -40,7 +40,7 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractUser):
-    
+    join_date = models.DateTimeField(auto_now_add=True)
     email = models.EmailField(max_length=60, unique=True)
     username = None
     first_name = models.CharField(max_length=50,null=False,blank=False)
@@ -62,3 +62,34 @@ class User(AbstractUser):
         
         verbose_name = 'User'
         verbose_name_plural = 'Users'
+
+
+
+
+class user_credit(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    credits_remaining = models.IntegerField(default=0)
+
+
+    def __str__(self):
+        return str(self.user.first_name)+' | credits : '+str(self.credits_remaining)
+
+    class Meta:
+        verbose_name = 'User Credit'
+        verbose_name_plural = 'User Credits'
+
+
+class coupon_codes(models.Model):
+    code = models.CharField(max_length=50,null=False,blank=False)
+    discount = models.IntegerField(default=0)
+    bonus_credit = models.IntegerField(default=0)
+    created_at = models.DateField(auto_now_add=True)
+    updated_at = models.DateField(auto_now=True)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return str(self.code)
+
+    class Meta:
+        verbose_name = 'Coupon Code'
+        verbose_name_plural = 'Coupon Codes'

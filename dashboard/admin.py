@@ -1,3 +1,5 @@
 from django.contrib import admin
 
-# Register your models here.
+from dashboard.models import file_uploader
+
+admin.site.register(file_uploader)

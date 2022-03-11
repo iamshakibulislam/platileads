@@ -23,7 +23,7 @@
                         </div>
                         <div class="form-group">
                            
-                            <input type="text" name="last_name" id="name" class="form-control" placeholder="Last Name" required>
+                            <input type="text" name="last_name" id="last_name" class="form-control" placeholder="Last Name" required>
                         </div>
                         <div class="form-group">
                             
@@ -61,7 +61,7 @@
 
 <!-- loading spinner-->
 
-<img src="{% static 'img/loading.gif' %}" id="loading_spinner" class="img-responsive htmx-indicator" id="loading_spinner" style="position:absolute;top:50%;left:45%;z-index:33"/>
+<img src="{% static 'img/loading.gif' %}" id="loading_spinner" class="img-responsive htmx-indicator"  style="position:absolute;top:50%;left:45%;z-index:33"/>
 
 
 <style>
@@ -88,7 +88,7 @@ document.body.addEventListener('htmx:beforeSend', function(e) {
 });
 
 document.body.addEventListener('htmx:beforeSwap', function(e) {
-    $('body > *:not(#loading_spinner').css('filter', 'blur(0px)');
+    $('body > *:not(#loading_spinner)').css('filter', 'blur(0px)');
     $('body > *:not(#loading_spinner)').css('pointer-events','auto');
 });
 
