@@ -3,7 +3,21 @@ import smtplib
 import csv
 from openpyxl import load_workbook,Workbook
 
-# function for getting mx records of a domain
+
+#function for getting mx mx records of a single domain (no input email)
+def get_mx_records_domain(domain):
+    mx_records = []
+    try:
+        answers = resolver.resolve(domain, 'MX')
+        for rdata in answers:
+            mx_records.append(rdata.to_text().split(' ')[1].rstrip('.'))
+    except:
+        pass
+    
+    return mx_records
+
+
+# function for getting mx records of a email domain
 def get_mx_records(email):
     domain = email.split('@')[1]
     mx_records = []
@@ -72,8 +86,8 @@ def xlsx_info(filepath):
 	get_first_row = tuple(wc.rows)[0]
 
 	for item in list(get_first_row):
-		if item != None:
-			information['column_names'].append(item.value)
+		
+		information['column_names'].append(item.value)
 	
 
 
@@ -82,7 +96,7 @@ def xlsx_info(filepath):
 
 
 
-def xlsx_write_on_new_column(curr_row_num,column_num_total,value,filepath,file_name):
+def xlsx_write_on_new_column(curr_row_num,column_num_total,value,filepath):
 	try:
 		wb = load_workbook(filepath)
 
@@ -90,7 +104,7 @@ def xlsx_write_on_new_column(curr_row_num,column_num_total,value,filepath,file_n
 
 		wc.cell(column=column_num_total+1,row=curr_row_num,value=value)
 
-		wb.save(filename=file_name)
+		wb.save(filepath)
 		
 		
 		return True

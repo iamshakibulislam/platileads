@@ -82,20 +82,32 @@
 							<img src="{% static 'assets/images/brand/logo-3.png' %}" class="header-brand-img light-logo1" alt="logo">
 						</a><!-- LOGO -->
 					</div>
-					<ul class="side-menu" style="margin-top:2rem">
+					<ul class="side-menu d-flex flex-column" style="margin-top:2rem">
 						<li class="mt-4"></li>
 						<li class="slide mt-4" >
-							<a class="side-menu__item"  data-bs-toggle="slide" href="{% url 'dashboard_home' %}"><i class="side-menu__icon fe fe-home"></i><span class="side-menu__label">Dashboard</span></a>
+							<a class="side-menu__item"  data-bs-toggle="slide" href="{% url 'dashboard_home' %}"><i class="side-menu__icon fe fe-home" style="font-size:1.5rem;flex:none"></i><span class="side-menu__label" style="flex:none;margin-left:1rem">Dashboard</span></a>
 						</li>
 						<li><h3>Email verification tools</h3></li>
 						
 
                         <li>
-							<a class="side-menu__item" href="{% url 'email_verification' %}"><i class="side-menu__icon fa-solid fa-at " style="font-size:1.5rem;margin-right:0rem"></i><span class="side-menu__label">Email verification</span></a>
+							<a class="side-menu__item" href="{% url 'email_verification' %}"><i class="side-menu__icon fa-solid fa-at " style="font-size:1.5rem;"></i><span class="side-menu__label" style="flex:none">Email verification</span></a>
 						</li>
 
                         <li>
-							<a class="side-menu__item" href="{% url 'bulk_email_verification' %}"><i class="side-menu__icon fa-solid fa-envelopes-bulk ml-0" style="font-size:1.5rem;margin-right:1rem"></i><span class="side-menu__label">Bulk email verification</span></a>
+							<a class="side-menu__item" href="{% url 'bulk_email_verification' %}"><i class="side-menu__icon fa-solid fa-envelopes-bulk" style="font-size:1.3rem"></i><span class="side-menu__label" style="flex:none">Bulk email verification</span></a>
+						</li>
+
+
+						<li><h3>Email Finding tools</h3></li>
+						
+
+                        <li>
+							<a class="side-menu__item text-justify" href="{% url 'find_email' %}"><i class="side-menu__icon fa-solid fa-search " style="font-size:1.5rem"></i><span class="side-menu__label" style="flex:none">Find email</span></a>
+						</li>
+
+                        <li>
+							<a class="side-menu__item text-justify" href="{% url 'find_bulk_email' %}"><i class="side-menu__icon fa-solid fa-file-csv" style="font-size:1.7rem"></i><span class="side-menu__label" style="flex:none">Bulk email finder</span></a>
 						</li>
 						
 						

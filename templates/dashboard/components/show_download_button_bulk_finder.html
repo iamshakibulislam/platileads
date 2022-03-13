@@ -1,0 +1,11 @@
+{% load static %}
+<div id="verified" class="alertmessage d-flex flex-column justify-content-center ">
+    <img src="{% static 'img/tikmark.gif' %}" alt="verified" style="height:6rem;width:6rem" class="align-self-center">
+    <h4 class="h4 font-weight-bold" style="color:green;margin-top:2rem" class="align-self-end ml-auto mr-auto mt-4">Success ! </h4>
+    <ul class="list-group list-group-flush" style="margin-top:1rem">
+        <li class="list-group-item">
+            <h5 class="h5 font-weight-bold">Total Email Found : {{total_found}}</h5>
+        </li>
+        
+    </ul>
+    <a class="btn btn-danger text-white" href="{% url 'download_bulk_email_found_file' %}">Download file with email NOW</a>

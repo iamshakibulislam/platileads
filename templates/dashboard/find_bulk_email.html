@@ -1,6 +1,6 @@
 {% extends 'dashboard_base/base_dashboard.html' %}
 
-{% block title %}Bulk Email Verification {% endblock title%}
+{% block title %}Bulk Email Finder {% endblock title%}
 
 {% block content %}
 
@@ -18,13 +18,15 @@
 
             <div class="card-body ">
                 <p >
-                    <b>Please note that the bulk email verification is not available for the following email providers:</b>
+                    <b>Please note that the bulk email finder only for business leads and it works with any business domain except email providers:</b>
                 </p>
                 <ul class="list-style-none d-flex flex-column " style="border-bottom:1px solid black;border-top:1px solid black;padding-top:10px;padding-bottom:10px">
                    
                     
                     <li class="ml-0 align-self-start">Hotmail</li>
                     <li class="ml-0 align-self-start">AOL</li>
+                    <li class="ml-0 align-self-start">Gmail</li>
+                    <li class="ml-0 align-self-start">Yahoo</li>
                     
                 </ul><br/>
 
@@ -33,11 +35,11 @@
                
 
                 <div class="align-self-start d-flex justify-content-between  text-justify" style="margin-left:0px">
-                    <i class="fa-solid fa-hand-point-right" style="margin-right:1rem"></i> <p class="text-justify" style="margin-left:0px">After uploading you will be asked to select the email column of the file</p>
+                    <i class="fa-solid fa-hand-point-right" style="margin-right:1rem"></i> <p class="text-justify" style="margin-left:0px">After uploading you will be asked to select the first name , last name and website column of the file</p>
                 </div>
 
                 <div class="align-self-start d-flex justify-content-between text-justify" style="margin-left:0px">
-                    <i class="fa-solid fa-hand-point-right" style="margin-right:1rem"></i> <p class="text-justify">Make sure this is a csv or xlsx file that contains the email column</p>
+                    <i class="fa-solid fa-hand-point-right" style="margin-right:1rem"></i> <p class="text-justify">Make sure this is a csv,xls or xlsx file that contains the those column</p>
                 </div>
 
                 </div>
@@ -57,7 +59,7 @@
 
                 <img src="{% static 'img/loading.gif' %}" id="loading_spinner_gif" class="img-responsive htmx-indicator"  style="position:absolute;top:30%;left:45%;z-index:0"/>
                 <div class="card-header">
-                    <h4 class="card-title">Upload file contains emails</h4>
+                    <h4 class="card-title">Upload lead file</h4>
                 </div>
                 <div class="card-body">
                     <p class="hidden" style="display:none" id="hiddenplace"></p>
@@ -86,7 +88,7 @@
                    </div>
                     <!-- end of showing uploaded file columns-->
 
-                    <form action="{% url 'bulk_email_verification' %}"  method="post" hx-encoding="multipart/form-data" id="upload_form" hx-post="{% url 'bulk_email_verification' %}" hx-trigger="submit" hx-target="#selecting_column">
+                    <form action="{% url 'find_bulk_email' %}"  method="post" hx-encoding="multipart/form-data" id="upload_form" hx-post="{% url 'find_bulk_email' %}" hx-trigger="submit" hx-target="#selecting_column">
 
                         {% csrf_token %}
                       <div id="drop_zone" class="drop-zone">

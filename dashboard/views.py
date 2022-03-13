@@ -1,16 +1,22 @@
 #from http.client import HTTPResponse
-from django.shortcuts import render
+from logging import root
+from django.shortcuts import render,redirect
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 from time import sleep
 from xls2xlsx import XLS2XLSX
+import tldextract
+
 import os
 import csv
-from .custom_scripts import get_mx_records,is_valid_email,xlsx_info,xlsx_write_on_new_column,xlsx_retrive_column_data,csv_to_xlsx
+from .custom_scripts import get_mx_records,get_mx_records_domain,is_valid_email,xlsx_info,xlsx_write_on_new_column,xlsx_retrive_column_data,csv_to_xlsx
 from .models import *
 
+@login_required(login_url='/users/login/')
 def dashboard_home(request):
     return render(request,'dashboard/index.html')
 
+@login_required(login_url='/users/login/')
 def email_verification(request):
     if request.method == "GET":
         return render(request,'dashboard/single_email_verification.html')
@@ -43,7 +49,7 @@ def email_verification(request):
         else:
              return HttpResponse("something_went_wrong")
 
-
+@login_required(login_url='/users/login/')
 def bulk_email_verification(request):
     if request.method == "GET":
         return render(request,'dashboard/bulk_email_verification.html')
@@ -115,4 +121,344 @@ def bulk_email_verification(request):
 
            
         
+
+@login_required(login_url='/users/login/')
+def bulk_email_verification_result(request):
+    if request.method == 'POST':
+        get_column_name = request.POST.get('column_name')
+        get_file_instance = file_uploader.objects.filter(user=request.user)
+        get_file_path = get_file_instance[0].file.path
+        actual_file_path = ""
+        file_extension = get_file_path.split('.')[-1]
+
+        if file_extension == "xls":
+            actual_file_path = get_file_path[:-3]+"xlsx"
+           
+        elif file_extension == "csv":
+            actual_file_path = get_file_path[:-3]+"xlsx"
+
+        elif file_extension == "xlsx":
+            actual_file_path = get_file_path
+        
+        else:
+            return HttpResponse("Invalid File")
+
+        information = xlsx_info(actual_file_path)
+
+        all_columns = information['column_names']
+        total_columns = information['total_columns']
+        total_rows = information['total_rows']
+
+        get_the_email_column_position = all_columns.index(get_column_name)+1
+        total_email_verified = 0
+        for row_num in range(1,total_rows+1):
+            email_val=xlsx_retrive_column_data(row_num,get_the_email_column_position,actual_file_path)
+            
+
+            if email_val != None and email_val != "":
+               
+                #do email validation here and write the result in the same column
+                if row_num == 1:
+                    
+                    xlsx_write_on_new_column(row_num,total_columns,"validation status",actual_file_path)
+
+                else:
+                    
+                    #checking the email validity
+                    get_mx = get_mx_records(email_val)[-1]
+
+                    is_exists = is_valid_email(get_mx,email_val)
+                    
+                    if is_exists == True:
+                        xlsx_write_on_new_column(row_num,total_columns,"verified",actual_file_path)
+                        total_email_verified += 1
+                    
+                    else:
+                        xlsx_write_on_new_column(row_num,total_columns,"email does not exist",actual_file_path)
+
+
+                    #end of checking email validity
+                   
+                    
+                     
+
+        
+        return render(request,'dashboard/components/show_download_button.html',{'total_verified':total_email_verified})
+
+
+
+
+@login_required(login_url='/users/login/')
+def download_bulk_email_verification_file(request):
+    get_file_instance = file_uploader.objects.filter(user=request.user)
+    get_file_path = get_file_instance[0].file.url
+    actual_file_path = ""
+    file_extension = get_file_path.split('.')[-1]
+
+    if file_extension == "xls":
+        actual_file_path = get_file_path[:-3]+"xlsx"
+    
+    elif file_extension == "csv":
+        actual_file_path = get_file_path[:-3]+"xlsx"
+    
+    elif file_extension == "xlsx":
+        actual_file_path = get_file_path
+
+    else:
+        return HttpResponse("Invalid File")
+    
+    
+    return redirect(actual_file_path)
+
+
+@login_required(login_url='/users/login/')
+def find_email(request):
+    if request.method == "GET":
+        return render(request,'dashboard/find_email.html')
+
+    if request.method == "POST":
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        domain = request.POST.get('domain')
+
+        #extract only domain name from url
+
+        root_domain_inst = tldextract.extract(domain)
+        root_domain = root_domain_inst.domain+'.'+root_domain_inst.suffix
+
+        possible_combinations = []
+        possible_combinations.append(first_name+'@'+root_domain)
+        possible_combinations.append(first_name+'.'+last_name+'@'+root_domain)
+        
+        possible_combinations.append(last_name+'@'+root_domain)
+        possible_combinations.append(last_name+'.'+first_name+'@'+root_domain)
+        possible_combinations.append(last_name+'-'+first_name+'@'+root_domain)
+        possible_combinations.append(last_name+'_'+first_name+'@'+root_domain)
+        possible_combinations.append(first_name+'-'+last_name+'@'+root_domain)
+        possible_combinations.append(first_name+'_'+last_name+'@'+root_domain)
+        possible_combinations.append(first_name[0]+last_name+'@'+root_domain)
+        possible_combinations.append(first_name+last_name+'@'+root_domain)
+
+        get_mx = get_mx_records_domain(root_domain)[-1]
+
+        #print('your mx record is:',get_mx)
+        for possible_email in possible_combinations:
+            check_valid_or_not = is_valid_email(get_mx,possible_email)
+
+           
+
+            if check_valid_or_not == True:
+                
+                return render(request,'dashboard/components/found_email.html',{'email':possible_email})
+            
+            else:
+                pass
+
+        return render(request,'dashboard/components/found_email.html',{'not_found':True})
+        
+
+
+
+
+def find_bulk_email(request):
+    if request.method == "GET":
+        return render(request,'dashboard/find_bulk_email.html')
+
+    if request.method == "POST":
+        try:
+            get_this_user_files = file_uploader.objects.filter(user=request.user)
+            for file in get_this_user_files:
+                try:
+                    os.remove(file.file.path)
+                except:
+                    pass
+                try:
+                    os.remove(file.file.path[:-3]+"xlsx")
+                except:
+                    pass
+                file.delete()
+        except:
+            pass
+        get_file = request.FILES.get('file')
+
+        file_instance = file_uploader(user=request.user,file=get_file)
+
+
+        file_instance.save()
+
+        file_path = file_instance.file.path
+        
+        #check file extension
+        file_extension = file_path.split('.')[-1]
+
+
+        if file_extension == "xls":
+            new_file_path = file_path[:-3]+"xlsx"
+            thexls = XLS2XLSX(file_path)
+            thexls.to_xlsx(new_file_path)
+
+            information = xlsx_info(new_file_path)
+
+
+        
+        
+
+        elif file_extension == "csv":
+
+            #convert csv to xlsx
+            
+            check= csv_to_xlsx(file_path,file_instance.file.name)
+            new_path = file_instance.file.path[:len(file_instance.file.path)-3]+"xlsx"
+            information = xlsx_info(new_path)
+           
+           # file_instance.file.path=file_instance.file.path[:len(file_instance.file.path)-3]+"xlsx"
+            
+
+        elif file_extension == "xlsx":
+
+        
+            information = xlsx_info(file_path)
+
+        else:
+            os.remove(file_instance.file.path)
+            return HttpResponse("invalid_file_extension")
+
+        all_columns = information['column_names']
+
+
+
+        return render(request,'dashboard/components/email_finder_column_selector.html',{'all_columns':all_columns})
+
+
+
+
+
+@login_required(login_url='/users/login/')
+def find_bulk_email_result(request):
+    if request.method == 'POST':
+        get_first_name_column = request.POST.get('first_name_column')
+        get_last_name_column = request.POST.get('last_name_column')
+        get_domain_column = request.POST.get('website_column')
+
+        get_file_instance = file_uploader.objects.filter(user=request.user)
+        get_file_path = get_file_instance[0].file.path
+        actual_file_path = ""
+        file_extension = get_file_path.split('.')[-1]
+
+        if file_extension == "xls":
+            actual_file_path = get_file_path[:-3]+"xlsx"
+           
+        elif file_extension == "csv":
+            actual_file_path = get_file_path[:-3]+"xlsx"
+
+        elif file_extension == "xlsx":
+            actual_file_path = get_file_path
+        
+        else:
+            return HttpResponse("Invalid File")
+
+        information = xlsx_info(actual_file_path)
+
+        all_columns = information['column_names']
+        total_columns = information['total_columns']
+        total_rows = information['total_rows']
+
+        get_the_first_name_column_position = all_columns.index(get_first_name_column)+1
+        get_the_last_name_column_position = all_columns.index(get_last_name_column)+1
+        get_the_domain_name_column_position = all_columns.index(get_domain_column)+1
+
+        total_email_verified = 0
+        for row_num in range(1,total_rows+1):
+            first_name_val=xlsx_retrive_column_data(row_num,get_the_first_name_column_position,actual_file_path)
+            last_name_val=xlsx_retrive_column_data(row_num,get_the_last_name_column_position,actual_file_path)
+            domain_val=xlsx_retrive_column_data(row_num,get_the_domain_name_column_position,actual_file_path)
+            
+            email_found = False
+            if first_name_val != None and last_name_val != None and domain_val != None and first_name_val != "" and last_name_val != "" and domain_val != "":
+
+                root_domain_inst = tldextract.extract(domain_val)
+                root_domain = root_domain_inst.domain+'.'+root_domain_inst.suffix
+
+                possible_combinations = []
+                possible_combinations.append(first_name_val+'@'+root_domain)
+                possible_combinations.append(first_name_val+'.'+last_name_val+'@'+root_domain)
+                
+                possible_combinations.append(last_name_val+'@'+root_domain)
+
+                possible_combinations.append(last_name_val+'.'+first_name_val+'@'+root_domain)
+                possible_combinations.append(last_name_val+'-'+first_name_val+'@'+root_domain)
+                possible_combinations.append(last_name_val+'_'+first_name_val+'@'+root_domain)
+                possible_combinations.append(first_name_val+'-'+last_name_val+'@'+root_domain)
+                possible_combinations.append(first_name_val+'_'+last_name_val+'@'+root_domain)
+                possible_combinations.append(first_name_val[0]+last_name_val+'@'+root_domain)
+                possible_combinations.append(first_name_val+last_name_val+'@'+root_domain)
+
+               
+                #do email validation here and write the result in the same column
+                if row_num == 1:
+                    
+                    xlsx_write_on_new_column(row_num,total_columns,"Email",actual_file_path)
+
+                else:
+                    
+                    #checking the email validity
+                    get_mx = get_mx_records_domain(root_domain)[-1]
+
+                    for comb in possible_combinations:
+
+                        #checking email existance here
+                        is_exists = is_valid_email(get_mx,comb)
+                        
+
+                        
+                        
+                        if is_exists == True:
+                            xlsx_write_on_new_column(row_num,total_columns,comb,actual_file_path)
+                            total_email_verified += 1
+                            email_found = True
+                            break
+                        
+                        else:
+                            pass
+                    
+
+                    if email_found == False:
+                        xlsx_write_on_new_column(row_num,total_columns,"email not found",actual_file_path)
+
+
+
+                    #end of checking email validity
+                   
+                    
+                     
+
+        
+        return render(request,'dashboard/components/show_download_button_bulk_finder.html',{'total_found':total_email_verified})
+
+
+
+
+
+def download_bulk_email_found_file(request):
+
+    get_file_instance = file_uploader.objects.filter(user=request.user)
+    get_file_path = get_file_instance[0].file.url
+    actual_file_path = ""
+    file_extension = get_file_path.split('.')[-1]
+
+    if file_extension == "xls":
+        actual_file_path = get_file_path[:-3]+"xlsx"
+    
+    elif file_extension == "csv":
+        actual_file_path = get_file_path[:-3]+"xlsx"
+    
+    elif file_extension == "xlsx":
+        actual_file_path = get_file_path
+
+    else:
+        return HttpResponse("Invalid File")
+    
+    
+    return redirect(actual_file_path)
+
 

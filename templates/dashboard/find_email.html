@@ -1,0 +1,105 @@
+{% extends 'dashboard_base/base_dashboard.html' %}
+
+{% block title %} Find anyones email {% endblock title%}
+
+{% block content %}
+
+{% load static %}
+    <div class="app-content" style="height:100vh">
+    <div class="row justify-content-center mt-4" >
+        <div class="col-md-6">
+            <div class="card" style="margin-top:3rem">
+                <img src="{% static 'img/loading.gif' %}" id="loading_spin" class="img-responsive htmx-indicator"  style="position:absolute;top:20%;left:45%;z-index:0"/>
+                <div class="card-header">
+                    <h4 class="card-title">Find email</h4>
+                </div>
+                <div class="card-body">
+                    <p class="hidden" style="display:none" id="hiddenplace"></p>
+                        
+                    <form method="post"  action="{% url 'find_email' %}" hx-post="{% url 'find_email' %}" hx-trigger="submit" hx-target="#messageBox" hx-indicator="#loading_spin">
+                        {% csrf_token %}
+                        <div class="row">
+                        <div class="form-floating col-md-6">
+                            
+                            <input type="text" class="form-control" id="first_name" name="first_name" style="z-index:10"  placeholder="John" required="true" value=" ">
+                            <label for="first_name" style="margin-left:1rem">First Name</label>
+                        </div>
+                        <div class="form-floating col-md-6">
+                            
+                            <input type="text" class="form-control" id="last_name" name="last_name" style="z-index:10"  placeholder="Doe" required="true" value=" ">
+                            <label for="last_name" style="margin-left:1rem">Last Name</label>
+                        </div>
+
+                    </div>
+                        <div class="form-floating mt-4">
+                            
+                        <input type="text" class="form-control" id="domain" name="domain" style="z-index:10"  placeholder="examplecompany.com" required="true" value=" ">
+                        <label for="domain">Domain</label>
+                        </div>
+                        <div class="form-group d-flex justify-content-center mt-3">
+                        <button type="submit" id="submitbtn" class="btn btn-primary" style="z-index:5"> Find Now </button>
+                        </div>
+                    </form>
+                    <div id="messageBox">
+                    
+
+                </div>
+
+
+                    
+<!-- loading spinner-->
+
+
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+{% endblock content %}
+
+{% block customjs %}
+
+
+
+
+<script>
+
+    
+    document.body.addEventListener('htmx:beforeRequest', function(e) {
+      
+       
+
+        $('.card > *:not(#loading_spin)').css('filter','blur(3px)');
+        $('#loading_spin').css('z-index','25');
+       
+        $('#submitbtn').css('z-index','1');
+        $('a,.btn').css('pointer-events','none');
+       
+    
+       
+    });
+    
+
+    document.body.addEventListener('htmx:afterRequest', function(e) {
+        
+       
+
+
+
+        $('.card > *:not(#loading_spin').css('filter', 'blur(0px)');
+        $('a,.btn').css('pointer-events','auto');
+        $('#loading_spin').css('z-index','0');
+        $('#submitbtn').css('z-index','5');
+        $('#email').css('z-index','10');
+    });
+    
+    </script>
+
+
+{% endblock customjs %}
