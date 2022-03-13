@@ -438,7 +438,7 @@ def find_bulk_email_result(request):
 
 
 
-
+@login_required(login_url='/users/login/')
 def download_bulk_email_found_file(request):
 
     get_file_instance = file_uploader.objects.filter(user=request.user)

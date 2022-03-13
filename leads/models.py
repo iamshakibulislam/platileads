@@ -22,10 +22,11 @@ class leads(models.Model):
         verbose_name_plural = 'Leads'
 
 class campaigns(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100,null=False,blank=False)
+    description = models.CharField(max_length=500,null=True,blank=True)
     date = models.DateField(auto_now_add=True)
     user = models.ForeignKey(User,on_delete=models.SET_NULL,null=True)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
     updated_at = models.DateField(auto_now=True)
 
     def __str__(self):
