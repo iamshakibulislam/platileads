@@ -1,0 +1,112 @@
+{% extends 'dashboard_base/base_dashboard.html' %}
+
+{% block title %} Campaign List {% endblock title %}
+
+{% block content %}
+{% load static %}
+<!-- ROW-5 -->
+<div class="app-content">
+<div class="row">
+    <div class="col-12 col-sm-12">
+        <div class="card ">
+            <div class="card-header d-flex justify-content-between">
+                <h3 class="card-title mb-0">Leads for campaign - {{campaign_name}}</h3>
+
+                <a class="btn btn-danger btn-lg float-right" href="{% url 'export_lead' campaign_id %}">Download leads</a>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="data-table" class="table table-bordered text-nowrap mb-0">
+                        <thead class="border-top">
+                        <tr>
+                           
+                            <th class="bg-transparent border-bottom-0">First Name</th>
+                            <th class="bg-transparent border-bottom-0">Last Name</th>
+                            <th class="bg-transparent border-bottom-0">Company</th>
+                            <th class="bg-transparent border-bottom-0">Website</th>
+                            <th class="bg-transparent border-bottom-0">Email</th>
+                            <th class="bg-transparent border-bottom-0">Position</th>
+                            <th class="bg-transparent border-bottom-0">Linkedin</th>
+                            <th class="bg-transparent border-bottom-0">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for lead in get_all_leads %}
+                            <tr class="border-bottom" id="lead{{lead.id}}">
+                                
+                                <td class="text-muted fs-15 fw-semibold">
+                                    {{lead.lead.first_name}}
+                                    
+                                </td>
+                                <td class="text-muted fs-15 fw-semibold">{{lead.lead.last_name}} </td>
+                                <td class="text-muted fs-15 fw-semibold">{{lead.lead.company}}</td>
+                                <td class="text-success fs-15 fw-semibold">{{lead.lead.website}}</td>
+                                <td class="text-success fs-15 fw-semibold">{{lead.lead.email}}</td>
+                                <td class="text-success fs-15 fw-semibold">{{lead.lead.position}}</td>
+                                <td class="text-success fs-15 fw-semibold">{{lead.lead.linkedin_profile}}</td>
+
+
+
+                                <td class="text-success fs-15 fw-semibold d-flex justify-content-center">
+                                    
+                                    <form method="post" action="{% url 'delete_lead' %}" class="delete_forms" hx-post="{% url 'delete_lead' %}" hx-trigger="submit" hx-target="#lead{{lead.id}}" id="{{lead.id}}{{lead.id}}"  >
+                                    
+                                        {% csrf_token %}
+                                        <input type="hidden" name="lead_id" value="{{lead.id}}">
+                                        <button type="submit" class="d-none"></button>
+                                        <button   class="btn btn-danger btn-sm rounded-11 delete_form" leadid={{lead.id}} data-bs-toggle="tooltip" data-bs-original-title="Delete"><i campid="{{lead.id}}"><svg class="table-delete" xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" width="16"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM8 9h8v10H8V9zm7.5-5l-1-1h-5l-1 1H5v2h14V4h-3.5{% static 'svg' %}"></i></button>
+                                    </form>
+                                    
+                                </td>
+                            </tr>
+
+                            {% endfor %}
+                           
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div><!-- COL END -->
+</div><!-- ROW-5 END -->
+</div>
+
+
+
+{% endblock content %}
+
+
+{% block customjs %}
+
+<script>
+
+document.body.addEventListener('htmx:beforeRequest', function(e) {
+    e.detail.elt.lastChild.textContent = 'Deleting...';
+});
+
+
+$('.delete_form').on('click',function(event){
+ event.preventDefault();
+ Swal.fire({
+    title: 'Do you really want to delete the lead ?',
+    
+    showCancelButton: true,
+    confirmButtonText: 'Yes,Delete it',
+    confirmButtonColor:'red',
+    cancelButtonText: 'No,Cancel it',
+  }).then((result) => {
+    /* Read more about isConfirmed, isDenied below */
+    if (result.isConfirmed) {
+     $(this).prev().click();
+    } else {
+      
+    }
+  })
+})
+  
+</script>
+
+
+
+
+{% endblock customjs %}

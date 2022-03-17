@@ -1,0 +1,128 @@
+{% extends 'dashboard_base/base_dashboard.html' %}
+
+{% block title %} Activate a campaign {% endblock title%}
+
+{% block content %}
+
+{% load static %}
+    <div class="app-content" style="height:100vh">
+    <div class="row justify-content-center mt-4" >
+        <div class="col-md-6">
+            <div class="card" style="margin-top:3rem">
+                <img src="{% static 'img/loading.gif' %}" id="loading_spin" class="img-responsive htmx-indicator"  style="position:absolute;top:20%;left:45%;z-index:0"/>
+                <div class="card-header">
+                    <h4 class="card-title">Active campaign</h4>
+                </div>
+                <div class="card-body">
+                    <p class="hidden" style="display:none" id="hiddenplace"></p>
+                        
+                    <form method="post" action="{% url 'activate_campaign' %}" >
+                        {% csrf_token %}
+                        {% if active_campaign == None %}
+                        <h4 class="mb-3">You have not created any campaign yet ! </h4>
+                        {% else %}
+                        <h4 class="mb-3">Your current active campaign : <span class="text-danger font-weight-bold">
+                            {{active_campaign.name}}
+                        </span> </h4>
+                        {% endif %}
+                        <div class="form-group">
+                            
+                       <select class="form-control" name="campaign">
+
+                            
+                            {% for campaign in campaigns %}
+                                {% if campaign.is_active %}
+                                <option value="{{campaign.id}}" selected>{{campaign.name}}</option>
+
+                                {% else %}
+                                <option value="{{campaign.id}}">{{campaign.name}}</option>
+                                {% endif %}
+                            {% endfor %}
+                       </select>
+                        </div>
+                        <div class="form-group d-flex justify-content-center">
+                        <button type="submit" id="submitbtn" class="btn btn-primary" style="z-index:5"> Activate Now </button>
+                        </div>
+                    </form>
+
+                    <div id="verified" class="alertmessage d-flex flex-column justify-content-center d-none">
+                        <img src="{% static 'img/tikmark.gif' %}" alt="verified" style="height:6rem;width:6rem" class="align-self-center">
+                        <h4 class="h4 font-weight-bold" style="color:green;margin-top:2rem" class="align-self-end ml-auto mr-auto mt-4">Congratulations ! This email is verified and deliverable !</h4>
+                    </div>
+
+                    <div id="invalid" class="alertmessage d-flex flex-column justify-content-center d-none">
+                        <img src="{% static 'img/cross.gif' %}" alt="verified" style="height:6rem;width:6rem;" class="align-self-center">
+                        <h4 class="h4 font-weight-bold" style="color:red;margin-top:2rem;margin-left:2rem" class="align-self-end ml-auto mr-auto mt-4">OPS ! This email is invalid and  not deliverable .</h4>
+                    </div>
+
+
+                    
+<!-- loading spinner-->
+
+
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+{% endblock content %}
+
+{% block customjs %}
+
+
+
+
+<script>
+
+    
+    document.body.addEventListener('htmx:beforeRequest', function(e) {
+      
+       
+
+        $('.card > *:not(#loading_spin)').css('filter','blur(3px)');
+        $('#loading_spin').css('z-index','25');
+       
+        $('#submitbtn').css('z-index','1');
+        $('a,.btn').css('pointer-events','none');
+       
+    
+       
+    });
+    
+    document.body.addEventListener('htmx:afterRequest', function(e) {
+        
+        if(e.detail.xhr.responseText == "invalid_email"){
+            $('#invalid').removeClass('d-none');
+           
+            $('#verified').addClass('d-none');
+        }
+    
+        else if(e.detail.xhr.responseText == "valid_email"){
+            $('#verified').removeClass('d-none');
+           
+            $('#invalid').addClass('d-none');
+        }
+    
+        else{
+            alert('something went wront !')
+        };
+
+
+
+        $('.card > *:not(#loading_spin').css('filter', 'blur(0px)');
+        $('a,.btn').css('pointer-events','auto');
+        $('#loading_spin').css('z-index','0');
+        $('#submitbtn').css('z-index','5');
+        $('#email').css('z-index','10');
+    });
+    
+    </script>
+
+
+{% endblock customjs %}

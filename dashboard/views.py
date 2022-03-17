@@ -4,6 +4,8 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from time import sleep
+from users.models import *
+from leads.models import *
 from xls2xlsx import XLS2XLSX
 import tldextract
 
@@ -14,7 +16,22 @@ from .models import *
 
 @login_required(login_url='/users/login/')
 def dashboard_home(request):
-    return render(request,'dashboard/index.html')
+    sel_campaigns = campaigns.objects.filter(user=request.user)
+    total_campaigns = len(sel_campaigns)
+    total_leads = 0
+
+    for campaign in sel_campaigns:
+        total_leads_for_this_camp= campaign_leads.objects.filter(campaign=campaign).count()
+        total_leads += total_leads_for_this_camp
+
+    get_user_credit_inst = user_credit.objects.get(user=request.user)
+    credits_remaining = get_user_credit_inst.credits_remaining
+
+    all_latest_leads = campaign_leads.objects.filter(campaign__user=request.user)[:100]
+
+
+
+    return render(request,'dashboard/index.html',{'total_campaigns':total_campaigns,'total_leads':total_leads,'credits_remaining':credits_remaining,'all_latest_leads':all_latest_leads})
 
 @login_required(login_url='/users/login/')
 def email_verification(request):

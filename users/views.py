@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
-from users.models import User
+from users.models import *
 from time import sleep
 from django.contrib import auth
 
@@ -32,7 +32,9 @@ def signup(request):
             return HttpResponse("<div class='alert alert-danger'>User with this email already exists</div>")
 
         else:
-            User.objects.create_user(first_name=first_name,last_name=last_name,email=email,phone=phone,password=password)
+            new_user= User.objects.create_user(first_name=first_name,last_name=last_name,email=email,phone=phone,password=password)
+            user_credit.objects.create(user=new_user,credits_remaining=300)
+
             return HttpResponse("<div class='alert alert-success'>Account created successfully ! Please <a href='/users/login/'>Login Now</a></div>")
 
 
@@ -51,3 +53,12 @@ def login(request):
             return HttpResponse("login_successful")
         else:
             return HttpResponse("<div class='alert alert-danger'>Invalid Credentials</div>")
+
+
+
+def change_alert_status(request):
+    sel_u=User.objects.get(id=request.user.id)
+    sel_u.alert_status = False
+    sel_u.save()
+
+    return redirect('dashboard_home')

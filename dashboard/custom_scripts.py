@@ -2,6 +2,7 @@ from dns import resolver
 import smtplib
 import csv
 from openpyxl import load_workbook,Workbook
+import os
 
 
 #function for getting mx mx records of a single domain (no input email)
@@ -96,22 +97,53 @@ def xlsx_info(filepath):
 
 
 
-def xlsx_write_on_new_column(curr_row_num,column_num_total,value,filepath):
-	try:
-		wb = load_workbook(filepath)
+def xlsx_write_on_new_column(curr_row_num,column_num_total,value,filepath,is_new_file = False):
+    try:
+        wb=None
 
-		wc = wb.active
+        if is_new_file == False:
+            wb = load_workbook(filepath)
 
-		wc.cell(column=column_num_total+1,row=curr_row_num,value=value)
+        else:
+            wb = Workbook()
+            
+        wc = wb.active
+        wc.cell(column=column_num_total+1,row=curr_row_num,value=value)
+        wb.save(filepath)
+        return True
+        
+    except:
+        return False
 
-		wb.save(filepath)
-		
-		
-		return True
 
-	except:
 
-		return False
+
+#create function for creating and writing on xlsx file using openpyxl
+def xlsx_create_and_write(filepath,datalist,headerlist):
+    if 1==1:
+        wb=Workbook()
+        wc = wb.active
+        for header in range(1,len(headerlist)+1):
+            wc.cell(column=header,row=1,value=headerlist[header-1])
+
+        for row in range(2,len(datalist)+2):
+            for column_id in range(1,len(headerlist)+1):
+                wc.cell(column=column_id,row=row,value=datalist[row-2][column_id-1])
+
+        
+        try:
+            wb.save(filepath)
+
+        except:
+            
+
+            wb.save(filepath)
+
+        return True
+
+    else:
+        return False
+            
 
 
 

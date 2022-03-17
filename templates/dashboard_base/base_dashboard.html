@@ -53,9 +53,18 @@
 		<link id="theme" rel="stylesheet" type="text/css" media="all" href="{% static 'assets/colors/color1.css' %}" />
         <!--HTMX IMPORT-->
         <script src="{% static 'assets/js/htmx.min.js' %}"></script>
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         
 		<!-- JQUERY JS -->
 		<script src="{% static 'assets/js/jquery.min.js' %}"></script>
+
+		
+		
+		<!-- INTERNAL Data tables js-->
+		<script src="{% static 'assets/plugins/datatable/js/jquery.dataTables.min.js' %}"></script>
+		<script src="{% static 'assets/plugins/datatable/js/dataTables.bootstrap5.js' %}"></script>
+		<script src="{% static 'assets/plugins/datatable/dataTables.responsive.min.js' %}"></script>
+
 
 	</head>
 
@@ -84,8 +93,18 @@
 					</div>
 					<ul class="side-menu d-flex flex-column" style="margin-top:2rem">
 						<li class="mt-4"></li>
+						
+
 						<li class="slide mt-4" >
 							<a class="side-menu__item"  data-bs-toggle="slide" href="{% url 'dashboard_home' %}"><i class="side-menu__icon fe fe-home" style="font-size:1.5rem;flex:none"></i><span class="side-menu__label" style="flex:none;margin-left:1rem">Dashboard</span></a>
+						</li>
+						<li><h3>Campaigns</h3></li>
+						<li>
+							<a class="side-menu__item" href="{% url 'campaign_list' %}"><i class="side-menu__icon fa-solid fa-list" style="font-size:1.3rem;margin-right:0.5rem"></i><span class="side-menu__label" style="flex:none">All Campaigns</span></a>
+						</li>
+
+						<li>
+							<a class="side-menu__item" href="{% url 'activate_campaign' %}"><i class="side-menu__icon fa-solid fa-check-circle" style="font-size:1.3rem;margin-right:0.5rem"></i><span class="side-menu__label" style="flex:none">Activate a campaign</span></a>
 						</li>
 						<li><h3>Email verification tools</h3></li>
 						
@@ -358,15 +377,7 @@
 
 
 			<!-- FOOTER -->
-			<footer class="footer">
-				<div class="container">
-					<div class="row align-items-center flex-row-reverse">
-						<div class="col-md-12 col-sm-12 text-center">
-							 Copyright © 2022 <a href="#">platileads.com</a>  All rights reserved
-						</div>
-					</div>
-				</div>
-			</footer>
+			
 			<!-- FOOTER END -->
 		</div>
 
@@ -378,7 +389,13 @@
 		<!-- BOOTSTRAP JS -->
 		<script src="{% static 'assets/plugins/bootstrap/js/popper.min.js' %}"></script>
 		<script src="{% static 'assets/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
-
+		<script>
+			setTimeout(function(){
+				$('.dataTables_length label').css('float','left');
+			},600);
+				
+		</script>
+		
 		<!-- SPARKLINE JS-->
 		<script src="{% static 'assets/js/jquery.sparkline.min.js' %}"></script>
 
@@ -395,11 +412,6 @@
 
 		<!-- INTERNAL SELECT2 JS -->
 		<script src="{% static 'assets/plugins/select2/select2.full.min.js' %}"></script>
-
-		<!-- INTERNAL Data tables js-->
-		<script src="{% static 'assets/plugins/datatable/js/jquery.dataTables.min.js' %}"></script>
-		<script src="{% static 'assets/plugins/datatable/js/dataTables.bootstrap5.js' %}"></script>
-		<script src="{% static 'assets/plugins/datatable/dataTables.responsive.min.js' %}"></script>
 
 		<!-- ECHART JS-->
 		<script src="{% static 'assets/plugins/echarts/echarts.js' %}"></script>
@@ -429,10 +441,12 @@
 					
 			  });
 
+			  
+
 
 			  //customization the uploader 
 
-			 
+			
 
 			  
 		</script>
@@ -464,6 +478,8 @@
 
 		<!-- APEXCHART JS -->
 		<script src="{% static 'assets/js/apexcharts.js' %}"></script>
+		
+
         {% block customjs %}
 
         {% endblock customjs %}
@@ -477,7 +493,6 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js" integrity="sha512-yFjZbTYRCJodnuyGlsKamNE/LlEaEAxSUDe5+u61mV8zzqJVFOH7TnULE2/PP/l5vKWpUNnF4VGVkXh3MjgLsg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
         
-
         
 	</body>
 </html>

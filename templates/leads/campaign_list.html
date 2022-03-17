@@ -1,0 +1,101 @@
+{% extends 'dashboard_base/base_dashboard.html' %}
+
+{% block title %} Campaign List {% endblock title %}
+
+{% block content %}
+{% load static %}
+<!-- ROW-5 -->
+<div class="app-content">
+<div class="row">
+    <div class="col-12 col-sm-12">
+        <div class="card ">
+            <div class="card-header">
+                <h3 class="card-title mb-0">All campaigns</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="data-table" class="table table-bordered text-nowrap mb-0">
+                        <thead class="border-top">
+                        <tr>
+                           
+                            <th class="bg-transparent border-bottom-0">Name</th>
+                            <th class="bg-transparent border-bottom-0">Date</th>
+                            <th class="bg-transparent border-bottom-0">Total leads</th>
+                            <th class="bg-transparent border-bottom-0">Status</th>
+                            <th class="bg-transparent border-bottom-0">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for campaign in get_all_camp %}
+                            <tr class="border-bottom" id="camp{{campaign.id}}">
+                                
+                                <td class="text-muted fs-15 fw-semibold">
+                                    {{campaign.name}}
+                                    
+                                </td>
+                                <td class="text-muted fs-15 fw-semibold">{{campaign.date}} </td>
+                                <td class="text-muted fs-15 fw-semibold">{{campaign.leads_total}}</td>
+                                <td class="text-success fs-15 fw-semibold">{% if campaign.is_active == 1 %}<span class="text-success">Active</span>{% else %} <span class="text-danger">Inactive </span> {% endif %}</td>
+                                <td class="text-success fs-15 fw-semibold d-flex justify-content-center">
+                                    <a class="btn btn-primary btn-sm rounded-11 me-2" href="{% url 'show_leads' campaign.id %}" data-bs-toggle="tooltip" data-bs-original-title="View leads of this campaign"><i class="fa-solid fa-list-ol" style="font-size:1.3rem"></i></a>
+                                    <form method="post" action="{% url 'delete_campaign' %}" class="delete_forms" hx-post="{% url 'delete_campaign' %}" hx-trigger="submit" hx-target="#camp{{campaign.id}}" id="{{campaign.id}}{{campaign.id}}"  >
+                                    
+                                        {% csrf_token %}
+                                        <input type="hidden" name="camp_id" value="{{campaign.id}}">
+                                        <button type="submit" class="d-none"></button>
+                                        <button   class="btn btn-danger btn-sm rounded-11 delete_form" campid={{campaign.id}} data-bs-toggle="tooltip" data-bs-original-title="Delete"><i campid="{{campaign.id}}"><svg class="table-delete" xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" width="16"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM8 9h8v10H8V9zm7.5-5l-1-1h-5l-1 1H5v2h14V4h-3.5{% static 'svg' %}"></i></button>
+                                    </form>
+                                    
+                                </td>
+                            </tr>
+
+                            {% endfor %}
+                           
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div><!-- COL END -->
+</div><!-- ROW-5 END -->
+</div>
+
+
+
+{% endblock content %}
+
+
+{% block customjs %}
+
+<script>
+
+document.body.addEventListener('htmx:beforeRequest', function(e) {
+    e.detail.elt.lastChild.textContent = 'Deleting...';
+});
+
+
+$('.delete_form').on('click',function(event){
+ event.preventDefault();
+ Swal.fire({
+    title: 'Do you really want to delete the campaign ?',
+    
+    showCancelButton: true,
+    confirmButtonText: 'Yes,Delete it',
+    confirmButtonColor:'red',
+    cancelButtonText: 'No,Cancel it',
+  }).then((result) => {
+    /* Read more about isConfirmed, isDenied below */
+    if (result.isConfirmed) {
+     $(this).prev().click();
+    } else {
+      
+    }
+  })
+})
+  
+</script>
+
+
+
+
+{% endblock customjs %}
