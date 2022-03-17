@@ -7,6 +7,7 @@ from openpyxl import load_workbook,Workbook
 import smtplib
 import csv
 import tldextract
+from users.models import *
 from django.views.decorators.csrf import csrf_exempt
 from dashboard.custom_scripts import get_mx_records,get_mx_records_domain,is_valid_email,xlsx_info,xlsx_write_on_new_column,xlsx_retrive_column_data,csv_to_xlsx,xlsx_create_and_write
 import os
@@ -195,6 +196,13 @@ def capture_leads(request):
                 if check_valid_or_not == True:
                     
                     #save the lead into db with active campaign
+                    sel_cred=user_credit.objects.get(user=request.user)
+                    if sel_cred.credits_remaining == 0:
+                        return JsonResponse({'status':'no credits'})
+                    
+                    else:
+                        sel_cred.credits_remaining = sel_credit.credits_remaining - 1
+                        sel_cred.save()
 
                     lead_create = leads.objects.create(first_name=first_name,last_name=last_name,email=possible_email,company=company,website=website,linkedin_profile=linkedin_profile,position=position)
 
