@@ -17,6 +17,8 @@
                     <form action="{% url 'signup' %}" method="post" hx-post="{% url 'signup' %}" hx-trigger="submit" hx-target="#show_alerts" hx-indicator="#loading_spinner" id="form">
 
                         {% csrf_token %}
+
+                        <input type="hidden" name="plan" value="{{ plan }}">
                         <div class="form-group">
                             
                             <input type="text" name="first_name" id="name" class="form-control" placeholder="First Name" required>

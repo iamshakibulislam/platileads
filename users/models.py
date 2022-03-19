@@ -49,6 +49,8 @@ class User(AbstractUser):
     is_admin = models.BooleanField(default=False)
     phone = models.CharField(max_length=20,null=True,blank=True)
     alert_status = models.BooleanField(default=True)
+    customer_id = models.CharField(max_length=100,null=True,blank=True)
+    subscription_id = models.CharField(max_length=100,null=True,blank=True)
     
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['phone']

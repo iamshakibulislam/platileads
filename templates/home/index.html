@@ -10,7 +10,7 @@
 			<div role="main" class="main">
 
 				<section class="section bg-primary curved-border position-relative border-0 m-0" style="height: 100vh;" id="intro">
-
+					<!--
 					<div class="appear-animation position-absolute" data-appear-animation="zoomIn" data-appear-animation-delay="1400" style="top: 25%; left: 16%;">
 						<img src="{% static 'img/demos/sass/icons/icon-' %}1.png" class="img-fluid" alt="" data-plugin-float-element data-plugin-options="{'startPos': 'none', 'speed': 3, 'transition': true}" />
 					</div>
@@ -28,7 +28,8 @@
 					</div>
 					<div class="appear-animation position-absolute" data-appear-animation="zoomIn" data-appear-animation-delay="2300" style="top: 71%; right: 13%;">
 						<img src="{% static 'img/demos/sass/icons/icon-' %}6.png" class="img-fluid" alt="" data-plugin-float-element data-plugin-options="{'startPos': 'none', 'speed': 2.5, 'transition': true, 'horizontal': true}" />
-					</div>
+					</div> 
+				-->
 
 					<div class="container pt-5 mt-5">
 						<div class="row justify-content-center pt-5 mt-5">
@@ -232,6 +233,8 @@
 
 				</section>
 
+				<!--
+
 				<section class="section section-height-3 m-0 border-0" id="reviews">
 					<div class="container">
 						<div class="row py-2">
@@ -287,12 +290,15 @@
 					</div>
 				</section>
 
+			-->
+
 				<section class="section section-height-3 bg-transparent m-0 border-0" id="pricing">
 					<div class="container">
 						<div class="row py-2">
 							<div class="col text-center">
 								<h2 class="text-color-dark font-weight-bold text-7 mb-1">Pricing</h2>
-								<p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit massa enim.</p>
+								<p class="lead">Choose our flexible plan according to your needs</p>
+								<small style="font-size:100%">Each successful email verification or finding will cost 1 credit </small>
 							</div>
 						</div>
 
@@ -300,88 +306,95 @@
 							<div class="col-md-6 col-lg-3">
 								<div class="plan">
 									<div class="plan-header">
-										<h3>Enterprise</h3>
+										<h3>Free forever</h3>
 									</div>
 									<div class="plan-price">
-										<span class="price"><span class="price-unit">$</span>59</span>
+										<span class="price"><span class="price-unit">$</span>0.0</span>
 										<label class="price-label">PER MONTH</label>
 									</div>
 									<div class="plan-features">
 										<ul>
-											<li>10GB Disk Space</li>
-											<li>100GB Monthly Bandwith</li>
-											<li>20 Email Accounts</li>
-											<li>Unlimited Subdomains</li>
+											<li>200 credits/m</li>
+											<li>Email verification</li>
+											<li>Email finding</li>
+											<li>Chrome extension</li>
+											<li>No priority support</li>
 										</ul>
 									</div>
 									<div class="plan-footer">
-										<a href="#" class="btn btn-dark btn-modern btn-outline py-2 px-4">Sign Up</a>
+										<a href="{% url 'signup' %}?plan=f" class="btn btn-dark btn-modern btn-outline py-2 px-4">Sign Up</a>
 									</div>
 								</div>
 							</div>
 							<div class="col-md-6 col-lg-3">
 								<div class="plan">
 									<div class="plan-header">
-										<h3>Professional</h3>
+										<h3>Platinum</h3>
 									</div>
 									<div class="plan-price">
-										<span class="price"><span class="price-unit">$</span>29</span>
+										<span class="price"><span class="price-unit">$</span>14</span>
 										<label class="price-label">PER MONTH</label>
 									</div>
 									<div class="plan-features">
 										<ul>
-											<li>5GB Disk Space</li>
-											<li>50GB Monthly Bandwith</li>
-											<li>10 Email Accounts</li>
-											<li>Unlimited Subdomains</li>
+											<li>1000 credits/m</li>
+											<li>Email verification</li>
+											<li>Email finding</li>
+											<li>Chrome extension</li>
+											<li>Lead export</li>
+											<li>Priority support</li>
 										</ul>
 									</div>
 									<div class="plan-footer">
-										<a href="#" class="btn btn-dark btn-modern btn-outline py-2 px-4">Sign Up</a>
+										<a href="{% url 'signup' %}?plan=p" class="btn btn-dark btn-modern btn-outline py-2 px-4">Sign Up</a>
 									</div>
 								</div>
 							</div>
 							<div class="col-md-6 col-lg-3">
 								<div class="plan plan-featured">
 									<div class="plan-header bg-primary">
-										<h3>Standard</h3>
+										<h3>Gold</h3>
 									</div>
 									<div class="plan-price">
-										<span class="price"><span class="price-unit">$</span>17</span>
+										<span class="price"><span class="price-unit">$</span>39</span>
 										<label class="price-label">PER MONTH</label>
 									</div>
 									<div class="plan-features">
 										<ul>
-											<li>3GB Disk Space</li>
-											<li>25GB Monthly Bandwith</li>
-											<li>5 Email Accounts</li>
-											<li>Unlimited Subdomains</li>
+											<li>6000 credits/m</li>
+											<li>Email verification</li>
+											<li>Email finding</li>
+											<li>Chrome extension</li>
+											<li>Lead export</li>
+											<li>Ultra priority support</li>
 										</ul>
 									</div>
 									<div class="plan-footer">
-										<a href="#" class="btn btn-primary btn-modern py-2 px-4">Sign Up</a>
+										<a href="{% url 'signup' %}?plan=g" class="btn btn-primary btn-modern py-2 px-4">Sign Up</a>
 									</div>
 								</div>
 							</div>
 							<div class="col-md-6 col-lg-3">
 								<div class="plan">
 									<div class="plan-header">
-										<h3>Basic</h3>
+										<h3>Unlimited</h3>
 									</div>
 									<div class="plan-price">
-										<span class="price"><span class="price-unit">$</span>9</span>
+										<span class="price"><span class="price-unit">$</span>99</span>
 										<label class="price-label">PER MONTH</label>
 									</div>
 									<div class="plan-features">
 										<ul>
-											<li>1GB Disk Space</li>
-											<li>10GB Monthly Bandwith</li>
-											<li>2 Email Accounts</li>
-											<li>Unlimited Subdomains</li>
+											<li>Unlimited credit</li>
+											<li>Unlimited email verification</li>
+											<li>Unlimited email findings</li>
+											<li>Chrome extension</li>
+											<li>Lead export</li>
+											<li>Super priority support</li>
 										</ul>
 									</div>
 									<div class="plan-footer">
-										<a href="#" class="btn btn-dark btn-modern btn-outline py-2 px-4">Sign Up</a>
+										<a href="{% url 'signup' %}?plan=u" class="btn btn-dark btn-modern btn-outline py-2 px-4">Sign Up</a>
 									</div>
 								</div>
 							</div>

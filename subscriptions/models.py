@@ -1,6 +1,7 @@
+from email.policy import default
 from django.db import models
 from users.models import User
-
+from datetime import datetime,timedelta
 
 class packages(models.Model):
     name = models.CharField(max_length=100)
@@ -20,7 +21,7 @@ class subscription_data(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
     package = models.ForeignKey(packages,on_delete=models.CASCADE)
     start_date = models.DateField(auto_now_add=True)
-    expire_date = models.DateField(null=True,blank=True,auto_now=False,auto_now_add=False)
+    expire_date = models.DateField(null=True,blank=True,auto_now=False,auto_now_add=False,default=datetime.now()+timedelta(days=30))
     is_active = models.BooleanField(default=True)
     last_update = models.DateField(auto_now=True)
 
