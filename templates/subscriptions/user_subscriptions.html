@@ -1,0 +1,236 @@
+{% extends 'dashboard_base/base_dashboard.html' %}
+
+{% block title %}Subscriptions{% endblock title %}
+
+{% block content %}
+
+<div class="app-content">
+    {% if messages %}
+    {% for message in messages %}
+    <div class="row mt-2" style="background-color:red">
+        <p class="text-white" style="padding-top:2px;padding-bottom:0px">
+            {{message}}
+        </p>
+
+    </div>
+
+    {% endfor %}
+
+    {% endif %}
+<div class="row mt-4 ml-4">
+    <div class="col-md-4 ml-4">
+        <div class="card" style="margin-left:1rem">
+            <div class="card-header justify-content-center">
+                <h4 class="card-title">Current Plan</h4>
+            </div>
+
+            <div class="card-body">
+                {{sub_info.package.name}} 
+                <br>
+                {% if sub_info.package.name == "FREE" %}
+                <a class="" style="visibility:hidden">0</a>
+                {% else %}
+                <div style="margin-left:3px">
+                    <a href="{% url 'cancel_subscription' %}" class="btn btn-sm btn-danger cancelbtn">(Cancel subscription)</a>
+                </div>
+                {% endif %}
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="col-md-4 ml-4">
+        <div class="card" style="margin-left:1rem">
+            <div class="card-header justify-content-center">
+                <h4 class="card-title">Next Renewal Date</h4>
+            </div>
+
+            <div class="card-body">
+                {{sub_info.expire_date}} <br>
+                <a class="" style="visibility:hidden">0</a>
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="col-md-4 ml-4">
+        <div class="card" style="margin-left:1rem">
+            <div class="card-header justify-content-center">
+                <h4 class="card-title">Available Credits</h4>
+            </div>
+
+            <div class="card-body">
+                {{credit.credits_remaining}}
+                <br>
+                <a class="" style="visibility:hidden">0</a>
+            </div>
+
+
+        </div>
+    </div>
+
+
+</div>
+
+
+<div class="row justify-content-center mt-1 bg-white pt-2 mb-3">
+    <div class="col-md-3">
+        <h3>Subscribe to a plan </h3>
+
+    </div>
+
+</div>
+
+<div class="row">
+
+<!-- plan starts here-->
+<div class="col-md-4 ml-4">
+    <div class="card" style="margin-left:1rem">
+        <div class="card-header justify-content-center">
+            <h4 class="card-title">Platinum (14$/m)</h4>
+        </div>
+
+        <div class="card-body">
+           <ul class="list-style-none feature">
+               <li class="text-justify"><i class="fas fa-hand-point-right"></i> 1000 credits/m</li>
+                <li class="text-justify"><i class="fas fa-hand-point-right"></i> Email verification</li>
+                <li class="text-justify"><i class="fas fa-hand-point-right"></i> Email finding</li>
+                <li class="text-justify"><i class="fas fa-hand-point-right"></i> Chrome extension</li>
+                <li class="text-justify"><i class="fas fa-hand-point-right"></i> Lead export</li>
+                <li class="text-justify"><i class="fas fa-hand-point-right"></i> Priority support</li>
+                <li><a href="{% url 'subscribe' %}?plan=p" class="btn btn-success text-white">Subscribe</a></li>
+
+
+
+
+
+           </ul>
+        </div>
+
+
+    </div>
+
+</div>
+
+
+    <!-- gold package -->
+
+    <div class="col-md-4 ml-4">
+        <div class="card" style="margin-left:1rem">
+            <div class="card-header justify-content-center">
+                <h4 class="card-title">Gold (39$/m)</h4>
+            </div>
+    
+            <div class="card-body">
+               <ul class="list-style-none feature">
+                   <li class="text-justify"><i class="fas fa-hand-point-right"></i> 6000 credits/m</li>
+                    <li class="text-justify"><i class="fas fa-hand-point-right"></i> Email verification</li>
+                    <li class="text-justify"><i class="fas fa-hand-point-right"></i> Email finding</li>
+                    <li class="text-justify"><i class="fas fa-hand-point-right"></i> Chrome extension</li>
+                    <li class="text-justify"><i class="fas fa-hand-point-right"></i> Lead export</li>
+                    <li class="text-justify"><i class="fas fa-hand-point-right"></i>Ultra Priority support</li>
+                    <li><a href="{% url 'subscribe' %}?plan=g" class="btn btn-success text-white">Subscribe</a></li>
+    
+    
+    
+    
+    
+               </ul>
+            </div>
+    
+    
+        </div>
+
+    </div>
+
+
+    <!-- unlimited package-->
+
+    <div class="col-md-4 ml-4">
+        <div class="card" style="margin-left:1rem">
+            <div class="card-header justify-content-center">
+                <h4 class="card-title">Unlimited (99$/m)</h4>
+            </div>
+    
+            <div class="card-body">
+               <ul class="list-style-none feature">
+                   <li class="text-justify"><i class="fas fa-hand-point-right"></i> Unlimited credits/m</li>
+                    <li class="text-justify"><i class="fas fa-hand-point-right"></i> Unlimited verification</li>
+                    <li class="text-justify"><i class="fas fa-hand-point-right"></i> Unlimited finding</li>
+                    <li class="text-justify"><i class="fas fa-hand-point-right"></i> Chrome extension</li>
+                    <li class="text-justify"><i class="fas fa-hand-point-right"></i> Unlimited Lead export</li>
+                    <li class="text-justify"><i class="fas fa-hand-point-right"></i> Instant support</li>
+                    <li><a href="{% url 'subscribe' %}?plan=u" class="btn btn-success text-white">Subscribe</a></li>
+    
+    
+    
+    
+    
+               </ul>
+            </div>
+    
+    
+        </div>
+</div>
+
+</div>
+
+
+
+<style>
+.feature li{
+    padding-top:9px;
+    padding-bottom:9px;
+    border-bottom:1px solid #ebedf0;
+    
+
+}
+
+.feature li i{
+    margin-right:10px;
+}
+</style>
+
+<!-- plan ends here -->
+
+
+</div>
+
+
+<style>
+.cancelbtn:hover{
+    background-color:gray !important;
+}
+</style>
+
+{% endblock content %}
+
+
+{% block customjs %}
+
+<script>
+    $('.cancelbtn').on('click',function(event){
+        event.preventDefault();
+        Swal.fire({
+           title: 'Do you really want to cancel the subscription ?',
+           
+           showCancelButton: true,
+           confirmButtonText: 'Yes,Do it',
+           confirmButtonColor:'red',
+           cancelButtonText: 'No, keep it',
+         }).then((result) => {
+           /* Read more about isConfirmed, isDenied below */
+           if (result.isConfirmed) {
+            window.location.href="{% url 'cancel_subscription' %}";
+           } else {
+             
+           }
+         })
+       })
+         
+
+</script>
+
+{% endblock customjs %}

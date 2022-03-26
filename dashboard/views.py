@@ -8,10 +8,10 @@ from users.models import *
 from leads.models import *
 from xls2xlsx import XLS2XLSX
 import tldextract
-
+from functools import wraps
 import os
 import csv
-from .custom_scripts import get_mx_records,get_mx_records_domain,is_valid_email,xlsx_info,xlsx_write_on_new_column,xlsx_retrive_column_data,csv_to_xlsx
+from .custom_scripts import get_mx_records,get_mx_records_domain,is_valid_email,xlsx_info,xlsx_write_on_new_column,xlsx_retrive_column_data,csv_to_xlsx,requires_credit
 from .models import *
 
 @login_required(login_url='/users/login/')
@@ -29,11 +29,12 @@ def dashboard_home(request):
 
     all_latest_leads = campaign_leads.objects.filter(campaign__user=request.user)[:100]
 
+    get_token = str(request.user.secret_id)
 
-
-    return render(request,'dashboard/index.html',{'total_campaigns':total_campaigns,'total_leads':total_leads,'credits_remaining':credits_remaining,'all_latest_leads':all_latest_leads})
+    return render(request,'dashboard/index.html',{'total_campaigns':total_campaigns,'total_leads':total_leads,'credits_remaining':credits_remaining,'all_latest_leads':all_latest_leads,'token':get_token})
 
 @login_required(login_url='/users/login/')
+@requires_credit
 def email_verification(request):
     if request.method == "GET":
         return render(request,'dashboard/single_email_verification.html')
@@ -56,17 +57,23 @@ def email_verification(request):
         #end of checking email validity
         
         if is_exists == False:
+            sel_user_credit = user_credit.objects.get(user=request.user)
+            sel_user_credit.credits_remaining -= 1
+            sel_user_credit.save()
            
             return HttpResponse("invalid_email")
 
         elif is_exists == True:
-            
+            sel_user_credit = user_credit.objects.get(user=request.user)
+            sel_user_credit.credits_remaining -= 1
+            sel_user_credit.save()
             return HttpResponse("valid_email")
 
         else:
              return HttpResponse("something_went_wrong")
 
 @login_required(login_url='/users/login/')
+@requires_credit
 def bulk_email_verification(request):
     if request.method == "GET":
         return render(request,'dashboard/bulk_email_verification.html')
@@ -169,6 +176,9 @@ def bulk_email_verification_result(request):
         get_the_email_column_position = all_columns.index(get_column_name)+1
         total_email_verified = 0
         for row_num in range(1,total_rows+1):
+            sel_user_credit_inst = user_credit.objects.get(user=request.user)
+            if sel_user_credit_inst.credits_remaining == 0:
+                break
             email_val=xlsx_retrive_column_data(row_num,get_the_email_column_position,actual_file_path)
             
 
@@ -189,8 +199,14 @@ def bulk_email_verification_result(request):
                     if is_exists == True:
                         xlsx_write_on_new_column(row_num,total_columns,"verified",actual_file_path)
                         total_email_verified += 1
+                        sel_user_credit = user_credit.objects.get(user=request.user)
+                        sel_user_credit.credits_remaining -= 1
+                        sel_user_credit.save()
                     
                     else:
+                        sel_user_credit = user_credit.objects.get(user=request.user)
+                        sel_user_credit.credits_remaining -= 1
+                        sel_user_credit.save()
                         xlsx_write_on_new_column(row_num,total_columns,"email does not exist",actual_file_path)
 
 
@@ -229,6 +245,7 @@ def download_bulk_email_verification_file(request):
 
 
 @login_required(login_url='/users/login/')
+@requires_credit
 def find_email(request):
     if request.method == "GET":
         return render(request,'dashboard/find_email.html')
@@ -265,6 +282,9 @@ def find_email(request):
            
 
             if check_valid_or_not == True:
+                sel_user_credit = user_credit.objects.get(user=request.user)
+                sel_user_credit.credits_remaining -= 1
+                sel_user_credit.save()
                 
                 return render(request,'dashboard/components/found_email.html',{'email':possible_email})
             
@@ -276,7 +296,8 @@ def find_email(request):
 
 
 
-
+@login_required(login_url='/users/login/')
+@requires_credit
 def find_bulk_email(request):
     if request.method == "GET":
         return render(request,'dashboard/find_bulk_email.html')
@@ -386,6 +407,9 @@ def find_bulk_email_result(request):
 
         total_email_verified = 0
         for row_num in range(1,total_rows+1):
+            sel_user_credit = user_credit.objects.get(user=request.user)
+            if sel_user_credit.credits_remaining == 0:
+                break
             first_name_val=xlsx_retrive_column_data(row_num,get_the_first_name_column_position,actual_file_path)
             last_name_val=xlsx_retrive_column_data(row_num,get_the_last_name_column_position,actual_file_path)
             domain_val=xlsx_retrive_column_data(row_num,get_the_domain_name_column_position,actual_file_path)
@@ -432,6 +456,9 @@ def find_bulk_email_result(request):
                         if is_exists == True:
                             xlsx_write_on_new_column(row_num,total_columns,comb,actual_file_path)
                             total_email_verified += 1
+                            sel_user_credit = user_credit.objects.get(user=request.user)
+                            sel_user_credit.credits_remaining -= 1
+                            sel_user_credit.save()
                             email_found = True
                             break
                         

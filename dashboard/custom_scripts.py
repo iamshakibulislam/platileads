@@ -1,8 +1,23 @@
+from django.http import HttpResponse
 from dns import resolver
 import smtplib
 import csv
 from openpyxl import load_workbook,Workbook
 import os
+from functools import wraps
+from django.http import HttpResponse
+from users.models import *
+
+
+def requires_credit(view):
+    @wraps(view)
+    def _view(request, *args, **kwargs):
+        sel_user_credit = user_credit.objects.get(user=request.user)
+        if sel_user_credit.credits_remaining == 0:
+
+            return HttpResponse("You don't have enough credits to perform this action")
+        return view(request, *args, **kwargs)
+    return _view
 
 
 #function for getting mx mx records of a single domain (no input email)

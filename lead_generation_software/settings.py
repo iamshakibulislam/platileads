@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-8^*no3qd*^_&oslckj)yqgutk^rri!klzj1k))#(b%hcl=szql
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -78,12 +78,6 @@ WSGI_APPLICATION = 'lead_generation_software.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
 
 
 # Password validation
@@ -136,3 +130,62 @@ MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR,'static')
 STATICFILES_DIRS = [os.path.join(BASE_DIR,'staticfiles')]
+
+#stripe secret keys
+
+STRIPE_SECRET_KEY = "sk_test_51K4KJjHrW1RE7YcK2tbMoVqvzgspfjw6iNosIw11bZ0dYg4pBOyY1yjIVZBwW9NMvw5BzNMjnGrR84naYV2M2Vmy00bRq55qAs"
+STRIPE_PUBLIC_KEY = "pk_test_51K4KJjHrW1RE7YcKA4VfBlE9J56SK1fmfMlGMjlZof0G7LRJJeeoPrnkSon2aFVzqbaeom0IjorWDKc5c0yZWGSb009JEbw4o2"
+
+
+#stripe recurring packages price
+
+STRIPE_PLATINUM_PLAN = "price_1KezL2HrW1RE7YcKBsLm3YPy"
+STRIPE_GOLD_PLAN = "price_1Kf0kkHrW1RE7YcKLkpGXhdd"
+STRIPE_UNLIMITED_PLAN = "price_1Kf0m0HrW1RE7YcKcXXu11gz"
+
+STRIPE_WEBHOOK_SECRET = "whsec_L1Q3R64nDPK40SnAME2ylRzfzfeW5GwM"
+
+
+
+
+#django email settings
+
+EMAIL_MAIL_HTML = 'users/password-reset-email-template.html'
+DEFAULT_FROM_EMAIL = 'platileads <info@platileads.com>'
+EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'email-smtp.us-east-1.amazonaws.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'AKIAZ4F4YB5EM7DIHWE3'
+EMAIL_HOST_PASSWORD = 'BLgVm+ewvtP/9vc46uYC7KWfY8LNu7C7Jl5Zn/uvXCm2'
+
+
+
+#local testing database
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+
+
+#production database aws ses service
+'''
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'platileads',
+        'USER': 'shakil',
+        'PASSWORD': 'Platileads121',
+        'HOST': 'platileads.c3mwtiaam63p.us-east-1.rds.amazonaws.com',
+        'PORT': '3306',
+        
+        
+        }
+       
+}
+'''

@@ -1,6 +1,6 @@
 {% extends 'homepage_base/auth_base.html' %}
 
-{% block title %} Signin To Your Account {% endblock %}
+{% block title %} Confirm reset {% endblock %}
 
 {% block content %}
 
@@ -9,38 +9,19 @@
     <div class="row justify-content-center">
         <div class="col-md-4">
             <div class="card" style="margin-top:1.5rem;margin-bottom:1rem;border-radius:10%">
-                <div class="card-header text-center">Signin to account</div>
+                <div class="card-header text-center">Reset Password</div>
                 <div class="card-title" id="show_alerts">
                     
                 </div>
                 <div class="card-body">
-                    <form action="{% url 'login' %}" method="post" hx-post="{% url 'login' %}" hx-trigger="submit" hx-target="#show_alerts" hx-indicator="#loading" id="loginform">
-
+                    <form id="loginForm" method="post">
                         {% csrf_token %}
-                       
                         <div class="form-group">
                             
-                            <input type="email" name="email" id="email" class="form-control" placeholder="Enter your email" required>
+                            {{form}}
                         </div>
-
-                      
-                        <div class="form-group">
-                           
-                            <input type="password" name="password" id="password" class="form-control" placeholder="Enter your password" required>
-                        </div>
-                       
-                       
-                        
-                        <div class="form-group d-flex justify-content-center " id="submitbtn" style="ponter-events:all">
-                            <button type="submit"  class="btn btn-primary" style="z-index:5">Signin Now</button>
-                        </div>
-                        
-                       
+                        <button class="btn btn-primary btn-block my-1" type="submit">Reset</button>
                     </form>
-
-                    <div class="mt-4">
-                        <p class="text-danger">Forgot password ? <a class="text-success" href="{% url 'password_reset' %}">Click here</a></p>
-                    </div>
                 </div>
             </div>
         </div>
@@ -58,6 +39,9 @@
 {% endblock content %}
 
 {% block customjs %}
+<script src="{% static 'js/forms.js' %}"></script>
+
+
 <script>
 
 $(document).ready(function(){

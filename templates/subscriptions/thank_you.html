@@ -1,0 +1,46 @@
+{% extends 'dashboard_base/base_dashboard.html' %}
+
+{% block title %} Thank you for subscribing {% endblock title%}
+
+{% block content %}
+
+{% load static %}
+    <div class="app-content" style="height:100vh">
+    <div class="row justify-content-center mt-4" >
+        <div class="col-md-6">
+            <div class="card" style="margin-top:3rem">
+                <div class="card-body">
+                   
+
+                    <div class="row justify-content-center">
+                        <div class="col-md-12">
+                         
+                            <image src="{% static 'assets/images/congrats.gif' %}" style="width:100px;height:100px;">
+                                <br>
+                            <h1 class="text-center">Thank you for subscribing</h1>
+                            <p class="text-center">You will be redirected to the home page in 5 seconds</p>
+                        </div>
+                    </div>
+
+
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock content %}
+
+{% block customjs %}
+
+<script>
+setTimeout(function(){
+    window.location.href = "{% url 'dashboard_home' %}";
+}, 5000);
+</script>
+
+{% endblock customjs %}
+
+

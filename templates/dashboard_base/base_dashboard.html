@@ -230,7 +230,7 @@
 								<div class="dropdown d-none d-md-flex profile-1">
 									<a href="#" data-bs-toggle="dropdown" class="nav-link pe-2 leading-none d-flex">
 										<span>
-											<img src="{% static 'assets/images/users/8.jpg' %}" alt="profile-user" class="avatar  profile-user brround cover-image">
+											<img src="{% static 'assets/images/menu.svg' %}" alt="profile-user" class="avatar  profile-user  cover-image">
 										</span>
 									</a>
 									<div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
@@ -241,15 +241,15 @@
 											</div>
 										</div>
 										<div class="dropdown-divider m-0"></div>
-										<a class="dropdown-item" href="profile.html">
+										<a class="dropdown-item" href="{% url 'profile' %}">
 											<i class="dropdown-icon fe fe-user"></i> Profile
 										</a>
 										
-										<a class="dropdown-item" href="emailservices.html">
-											<i class="dropdown-icon fa fa-credit-card"></i> Billing
+										<a class="dropdown-item" href="{% url 'subscriptions' %}">
+											<i class="dropdown-icon fa fa-credit-card"></i> Subscriptions
 										</a>
 										
-										<a class="dropdown-item" href="login.html">
+										<a class="dropdown-item" href="{% url 'logout' %}">
 											<i class="dropdown-icon fe fe-alert-circle"></i> Sign out
 										</a>
 									</div>

@@ -11,6 +11,7 @@ from users.models import *
 from django.views.decorators.csrf import csrf_exempt
 from dashboard.custom_scripts import get_mx_records,get_mx_records_domain,is_valid_email,xlsx_info,xlsx_write_on_new_column,xlsx_retrive_column_data,csv_to_xlsx,xlsx_create_and_write
 import os
+import json
 
 
 
@@ -151,22 +152,41 @@ def capture_leads(request):
         return JsonResponse({'status':'not allowed'})
 
     if request.method == "POST":
-        if request.user.is_authenticated == False:
-            return JsonResponse({'status':'not authenticated'})
+       
+        data = json.loads(request.body.decode('utf-8'))
+        
+        get_token = data['plati_token']
 
-        if campaigns.objects.filter(user=request.user,is_active=True).count() == 0:
+        if get_token == '' or get_token == None:
+
+            return JsonResponse({'status':'not authenticated blank'})
+
+        else:
+            try:
+                get_user = User.objects.get(secret_id=get_token)
+                print('working',get_user.email,get_user.id)
+            
+            except:
+                return JsonResponse({'status':'not authenticated'})
+
+        if campaigns.objects.filter(user=get_user,is_active=True).count() == 0:
             return JsonResponse({'status':'no active campaign'})
 
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
+        first_name = data['first_name']
+        last_name = data['last_name']
         
-        company = request.POST.get('company')
-        website = request.POST.get('website')
-        linkedin_profile = request.POST.get('linkedin')
-        position = request.POST.get('position')
-        phone = request.POST.get('phone','Not Available')
+        company = data['company']
+        website = data['website']
+        linkedin_profile = data['linkedin']
+        position = data['position']
+        phone = data['phone']
 
-        sel_camp = campaigns.objects.filter(user=request.user,is_active=True).first()
+        if phone == "" or phone == None:
+            phone = "N/A"
+
+        print('fname',first_name,'lname',last_name,'com',company,'web',website,'linkedin',linkedin_profile,'pos',position,'phone',phone)
+
+        sel_camp = campaigns.objects.filter(user=get_user,is_active=True).first()
 
         try:
             root_domain_inst = tldextract.extract(website)
@@ -196,7 +216,7 @@ def capture_leads(request):
                 if check_valid_or_not == True:
                     
                     #save the lead into db with active campaign
-                    sel_cred=user_credit.objects.get(user=request.user)
+                    sel_cred=user_credit.objects.get(user=get_user)
                     if sel_cred.credits_remaining == 0:
                         return JsonResponse({'status':'no credits'})
                     

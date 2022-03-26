@@ -1,6 +1,6 @@
 {% extends 'dashboard_base/base_dashboard.html' %}
 
-{% block title %} Email Verification {% endblock title%}
+{% block title %} Subscribe to a plan {% endblock title%}
 
 {% block content %}
 
@@ -194,13 +194,15 @@
 
 
 <script>
+    
+    var domain = "{{ request.scheme }}://{{ request.META.HTTP_HOST }}";
 
    
 
       // This is a public sample test API key.
       // Don’t submit any personally identifiable information in requests made with this key.
       // Sign in to see your own test API key embedded in code samples.
-      const stripe = Stripe("pk_test_51K4KJjHrW1RE7YcKA4VfBlE9J56SK1fmfMlGMjlZof0G7LRJJeeoPrnkSon2aFVzqbaeom0IjorWDKc5c0yZWGSb009JEbw4o2");
+      const stripe = Stripe("{{stripe_public_key}}");
 
       // The items the customer wants to buy
       const items = [{ plan: "{{plan_key}}" }];
@@ -242,8 +244,9 @@
         const { error } = await stripe.confirmPayment({
           elements,
           confirmParams: {
+            
             // Make sure to change this to your payment completion page
-            return_url: "http://127.0.0.1:8000",
+            return_url: domain + "{% url 'thank_you' %}",
           },
         });
       
