@@ -135,7 +135,7 @@ def xlsx_write_on_new_column(curr_row_num,column_num_total,value,filepath,is_new
 
 #create function for creating and writing on xlsx file using openpyxl
 def xlsx_create_and_write(filepath,datalist,headerlist):
-    if 1==1:
+    try:
         wb=Workbook()
         wc = wb.active
         for header in range(1,len(headerlist)+1):
@@ -156,7 +156,7 @@ def xlsx_create_and_write(filepath,datalist,headerlist):
 
         return True
 
-    else:
+    except:
         return False
             
 
