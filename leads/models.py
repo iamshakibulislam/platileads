@@ -11,6 +11,10 @@ class leads(models.Model):
     website = models.CharField(max_length=100,null=True,blank=True)
     position = models.CharField(max_length=100,null=True,blank=True)
     linkedin_profile = models.URLField(max_length=400,null=True,blank=True)
+    industry = models.CharField(max_length=100,null=True,blank=True)
+    location = models.CharField(max_length=100,null=True,blank=True)
+    employee_total = models.IntegerField(default=0)
+
 
     def __str__(self):
         return str(self.first_name)+' '+str(self.email)
@@ -25,12 +29,12 @@ class campaigns(models.Model):
     name = models.CharField(max_length=100,null=False,blank=False)
     description = models.CharField(max_length=500,null=True,blank=True)
     date = models.DateField(auto_now_add=True)
-    user = models.ForeignKey(User,on_delete=models.SET_NULL,null=True)
+    user = models.ForeignKey(User,on_delete=models.CASCADE,null=True)
     is_active = models.BooleanField(default=False)
     updated_at = models.DateField(auto_now=True)
 
     def __str__(self):
-        return str(self.name)+' | created by: '+str(self.user.first_name)+' '+str(self.user.email)
+        return str(self.name)
     
     class Meta:
         verbose_name = 'Campaign'

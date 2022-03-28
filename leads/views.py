@@ -104,10 +104,10 @@ def export_lead(request,pk):
     filepath = 'media/export/'+str(sel_camp.name)+str(request.user.id)+'.xlsx'
 
     all_rows = []
-    columns_header = ['first name','last name','email','company','website','linkedin','position']
+    columns_header = ['first name','last name','email','company','website','linkedin','position','location','employee total','industry']
 
     for lead in sel_leads:
-        all_rows.append([lead.lead.first_name,lead.lead.last_name,lead.lead.email,lead.lead.company,lead.lead.website,lead.lead.linkedin_profile,lead.lead.position])
+        all_rows.append([lead.lead.first_name,lead.lead.last_name,lead.lead.email,lead.lead.company,lead.lead.website,lead.lead.linkedin_profile,lead.lead.position,lead.lead.location,lead.lead.employee_total,lead.lead.industry])
 
     writing_to_xls=xlsx_create_and_write(filepath,all_rows,columns_header)
 
@@ -153,18 +153,19 @@ def capture_leads(request):
 
     if request.method == "POST":
        
-        data = json.loads(request.body.decode('utf-8'))
+        
+        data = request.POST
         
         get_token = data['plati_token']
 
         if get_token == '' or get_token == None:
 
-            return JsonResponse({'status':'not authenticated blank'})
+            return JsonResponse({'status':'not authenticated yet !'})
 
         else:
             try:
                 get_user = User.objects.get(secret_id=get_token)
-                print('working',get_user.email,get_user.id)
+                
             
             except:
                 return JsonResponse({'status':'not authenticated'})
@@ -177,16 +178,24 @@ def capture_leads(request):
         
         company = data['company']
         website = data['website']
-        linkedin_profile = data['linkedin']
+        linkedin_profile = data['linkedin_profile']
         position = data['position']
-        phone = data['phone']
+        phone = data.get('phone')
+        location = data['location']
+        employee_total = data['employee_total']
+        industry = data['industry']
+
+        is_found = False
+
 
         if phone == "" or phone == None:
             phone = "N/A"
 
-        print('fname',first_name,'lname',last_name,'com',company,'web',website,'linkedin',linkedin_profile,'pos',position,'phone',phone)
+        print('fname',first_name,'lname',last_name,'com',company,'web',website,'linkedin',linkedin_profile,'pos',position,'phone',phone,'industry',industry,'location',location,'employee_total',employee_total)
 
         sel_camp = campaigns.objects.filter(user=get_user,is_active=True).first()
+
+       
 
         try:
             root_domain_inst = tldextract.extract(website)
@@ -218,13 +227,14 @@ def capture_leads(request):
                     #save the lead into db with active campaign
                     sel_cred=user_credit.objects.get(user=get_user)
                     if sel_cred.credits_remaining == 0:
-                        return JsonResponse({'status':'no credits'})
+                        return JsonResponse({'status':'not enough credits'})
                     
                     else:
                         sel_cred.credits_remaining = sel_credit.credits_remaining - 1
                         sel_cred.save()
+                        is_found = True
 
-                    lead_create = leads.objects.create(first_name=first_name,last_name=last_name,email=possible_email,company=company,website=website,linkedin_profile=linkedin_profile,position=position)
+                    lead_create = leads.objects.create(first_name=first_name,last_name=last_name,email=possible_email,company=company,website=website,linkedin_profile=linkedin_profile,position=position,location=location,employee_total=employee_total,industry=industry)
 
                     campaign_leads.objects.create(lead=lead_create,campaign=sel_camp)
 
@@ -232,6 +242,9 @@ def capture_leads(request):
                 
                 else:
                     pass
+            
+            if is_found == False:
+                return JsonResponse({'status':'not found'})
 
         except:
             return JsonResponse({'status':'error'})
