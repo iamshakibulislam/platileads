@@ -61,9 +61,9 @@
 							<div class="header-column">
 								<div class="header-row">
 									<div class="header-logo header-logo-sticky-change" style="width: 82px; height: 40px;">
-										<a href="#">
-											<img class="header-logo-non-sticky opacity-0" alt="Porto" width="82" height="40" src="{% static 'img/logo-default-slim-dark-small.png' %}">
-											<img class="header-logo-sticky opacity-0" alt="Porto" width="82" height="40" src="{% static 'img/logo-default-slim-small.png' %}">
+										<a href="{% url 'home_page' %}">
+											<img class="header-logo-non-sticky opacity-0" alt="Porto" width="100" height="50" src="{% static 'img/logo_white.svg' %}">
+											<img class="header-logo-sticky opacity-0" alt="Porto" width="100" height="50" src="{% static 'img/logo_blue.svg' %}">
 										</a>
 									</div>
 								</div>
@@ -92,11 +92,12 @@
 							</div>
 							<div class="header-column">
 								<div class="header-row justify-content-end">
+									<!---
 									<ul class="header-social-icons social-icons d-none d-sm-block social-icons-clean social-icons-icon-light">
 										<li class="social-icons-facebook"><a href="#" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a></li>
 										<li class="social-icons-twitter"><a href="#" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a></li>
 										<li class="social-icons-linkedin"><a href="#" target="_blank" title="Linkedin"><i class="fab fa-linkedin-in"></i></a></li>
-									</ul>
+									</ul> -->
 									<button class="btn header-btn-collapse-nav" data-bs-toggle="collapse" data-bs-target=".header-nav-main nav">
 										<i class="fas fa-bars"></i>
 									</button>
@@ -124,7 +125,7 @@
 					<div class="row py-5">
 						<div class="col-md-6 col-lg-3 mb-5 mb-lg-0">
 							<a href="#" class="text-decoration-none">
-								<img class="mt-4" alt="Porto Website Template" src="{% static 'img/logo-footer-dark.png' %}" height="42">
+								<img class="mt-4" alt="Porto Website Template" src="{% static 'img/logo_black.svg' %}" height="50">
 							</a>
 						</div>
 						<div class="col-6 col-lg-2 mb-5 mb-lg-0">
