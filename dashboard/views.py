@@ -1,7 +1,7 @@
 #from http.client import HTTPResponse
 from logging import root
 from django.shortcuts import render,redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
 from time import sleep
 from users.models import *
@@ -11,6 +11,7 @@ import tldextract
 from functools import wraps
 import os
 import csv
+from django.views.decorators.csrf import csrf_exempt
 from .custom_scripts import get_mx_records,get_mx_records_domain,is_valid_email,xlsx_info,xlsx_write_on_new_column,xlsx_retrive_column_data,csv_to_xlsx,requires_credit
 from .models import *
 
@@ -506,3 +507,15 @@ def download_bulk_email_found_file(request):
     return redirect(actual_file_path)
 
 
+
+
+@csrf_exempt
+def contact_us(request):
+    name = request.POST.get('name')
+    email = request.POST.get('email')
+    message = request.POST.get('message')
+    subject = request.POST.get('subject')
+
+    contact.objects.create(name=name,email=email,message=message,subject=subject)
+
+    return JsonResponse({'status':'ok'})

@@ -86,7 +86,7 @@
 				<div class="app-sidebar__overlay" data-bs-toggle="sidebar"></div>
 				<aside class="app-sidebar">
 					<div class="side-header">
-						<a class="header-brand1" href="index.html">
+						<a class="header-brand1" href="{% url 'dashboard_home' %}">
 							<img src="{% static 'assets/images/logo_black.svg' %}" class="header-brand-img desktop-logo" alt="logo">
 							<img src="{% static 'assets/images/logo_black.svg' %}" class="header-brand-img toggle-logo" alt="logo">
 							<img src="{% static 'assets/images/logo_black.svg' %}" class="header-brand-img light-logo" alt="logo">
@@ -180,8 +180,7 @@
 									</a>
 								</div><!-- FULL-SCREEN -->
 								<div class="dropdown d-none d-md-flex notifications">
-									<a class="nav-link icon" data-bs-toggle="dropdown"><i class="fe fe-bell"></i><span class=" pulse"></span>
-									</a>
+									
 									<div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow ">
 										<div class="drop-heading border-bottom">
 											<div class="d-flex">
@@ -287,8 +286,7 @@
 								</a>
 							</div><!-- FULL-SCREEN -->
 							<div class="dropdown  d-md-flex notifications">
-								<a class="nav-link icon" data-bs-toggle="dropdown"><i class="fe fe-bell"></i><span class=" pulse"></span>
-								</a>
+								
 								<div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
 									<div class="drop-heading border-bottom">
 										<div class="d-flex">

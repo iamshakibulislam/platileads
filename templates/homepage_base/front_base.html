@@ -41,6 +41,10 @@
 		<!-- Demo CSS -->
 		<link rel="stylesheet" href="{% static 'css/demos/demo-sass.css' %}">
 
+		<!--adding zoom css-->
+
+		
+
 		<!-- Skin CSS -->
 		<link id="skinCSS" rel="stylesheet" href="{% static 'css/skins/skin-sass.css' %}">
 
@@ -131,20 +135,20 @@
 						</div>
 						<div class="col-6 col-lg-2 mb-5 mb-lg-0">
 							<ul class="list list-icons list-icons-sm">
-								<li><i class="fas fa-angle-right text-color-default"></i><a href="" class="link-hover-style-1 text-color-default ms-1"> Our Services</a></li>
-								<li><i class="fas fa-angle-right text-color-default"></i><a href="" class="link-hover-style-1 text-color-default ms-1"> About Us</a></li>
-								<li><i class="fas fa-angle-right text-color-default"></i><a href="" class="link-hover-style-1 text-color-default ms-1"> Contact Us</a></li>
+								
+								<li><i class="fas fa-angle-right text-color-default"></i><a href="{% url 'about_us' %}" class="link-hover-style-1 text-color-default ms-1"> About Us</a></li>
+								<li><i class="fas fa-angle-right text-color-default"></i><a href="#trial" class="link-hover-style-1 text-color-default ms-1"> Contact Us</a></li>
 							</ul>
 						</div>
 						<div class="col-6 col-lg-2 mb-5 mb-lg-0">
 							<ul class="list list-icons list-icons-sm">
-								<li><i class="fas fa-angle-right text-color-default"></i><a href="" class="link-hover-style-1 text-color-default ms-1"> FAQ's</a></li>
-								<li><i class="fas fa-angle-right text-color-default"></i><a href="" class="link-hover-style-1 text-color-default ms-1"> Sitemap</a></li>
+								<li><i class="fas fa-angle-right text-color-default"></i><a href="#faqs" class="link-hover-style-1 text-color-default ms-1"> FAQ's</a></li>
+								<li><i class="fas fa-angle-right text-color-default"></i><a href="#pricing" class="link-hover-style-1 text-color-default ms-1"> Pricing</a></li>
 							</ul>
 						</div>
 						<div class="col-md-6 col-lg-5">
 							<div id="tweet" class="twitter" data-plugin-tweets data-plugin-options="{'username': 'oklerthemes', 'count': 1, 'iconColor': 'text-color-primary'}">
-								<p>Please wait...</p>
+								
 							</div>
 						</div>
 					</div>
@@ -159,8 +163,8 @@
 							<div class="col-auto">
 								<nav id="sub-menu">
 									<ul>
-										<li><a href="" class="text-color-default ms-1 text-decoration-none"> Terms and Conditions</a></li>
-										<li><a href="" class="text-color-default ms-1 text-decoration-none"> Privacy Policy</a></li>
+										<li><a href="{% url 'terms_and_conditions' %}" class="text-color-default ms-1 text-decoration-none"> Terms and Conditions</a></li>
+										<li><a href="{% url 'privacy_policy' %}" class="text-color-default ms-1 text-decoration-none"> Privacy Policy</a></li>
 									</ul>
 								</nav>
 							</div>
@@ -179,12 +183,16 @@
 		<script src="{% static 'vendor/jquery.validation/jquery.validate.min.js' %}"></script>
 		<script src="{% static 'vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js' %}"></script>
 		<script src="{% static 'vendor/jquery.gmap/jquery.gmap.min.js' %}"></script>
+		<!-- zoom js plugin -->
+		
 		<script src="{% static 'vendor/lazysizes/lazysizes.min.js' %}"></script>
 		<script src="{% static 'vendor/isotope/jquery.isotope.min.js' %}"></script>
 		<script src="{% static 'vendor/owl.carousel/owl.carousel.min.js' %}"></script>
 		<script src="{% static 'vendor/magnific-popup/jquery.magnific-popup.min.js' %}"></script>
 		<script src="{% static 'vendor/vide/jquery.vide.min.js' %}"></script>
 		<script src="{% static 'vendor/vivus/vivus.min.js' %}"></script>
+
+	
 
 		<!-- Theme Base, Components and Settings -->
 		<script src="{% static 'js/theme.js' %}"></script>
@@ -199,6 +207,43 @@
 		<script src="{% static 'js/theme.init.js' %}"></script>
 		<!-- HTMX import-->
 		<script src="{% static 'js/htmx.min.js' %}"></script>
+
+		<!-- handling jquery ajax request for contact form-->
+
+		<script>
+			$(document).ready(function(){
+				$('.contact-forms').on('submit',function(e){
+					e.preventDefault();
+					document.getElementById('sendBtn').textContent = "Please wait.....";
+
+					var name = $("#name").val();
+					var subject = $("#subject").val();
+					var email = $("#email").val();
+					var message = $("#message").val();
+
+					$.ajax({
+						url: '{% url "contact_us" %}',
+						type: 'POST',
+						dataType: 'json',
+						data: {
+						  name:name,
+						  subject:subject,
+						  email:email,
+						  message:message
+						}
+						
+					  })
+
+					  .done(function(res){
+						  $(".contact-forms-success").removeClass('d-none');
+						  $("#sendBtn").text("SEND INQUERY");
+						  document.getElementById('sendBtn').textContent = "SEND INQUERY";
+						  $('.input-box').empty();
+						  
+					  })
+				})
+			})
+		</script>
 
 
 		{% block customjs %}

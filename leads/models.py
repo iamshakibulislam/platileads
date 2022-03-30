@@ -13,7 +13,7 @@ class leads(models.Model):
     linkedin_profile = models.URLField(max_length=400,null=True,blank=True)
     industry = models.CharField(max_length=100,null=True,blank=True)
     location = models.CharField(max_length=100,null=True,blank=True)
-    employee_total = models.IntegerField(default=0)
+    employee_total = models.CharField(default=0,max_length=100,null=True,blank=True)
 
 
     def __str__(self):

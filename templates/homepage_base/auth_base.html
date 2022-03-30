@@ -75,12 +75,12 @@
 											<nav class="collapse">
 												<ul class="nav nav-pills" id="mainNav">
 													<li class="active"><a data-hash data-hash-offset="0" data-hash-offset-lg="60" href="{% url  'home_page' %}" class="dropdown-item active">Home</a></li>
-													<li><a data-hash data-hash-offset="0" data-hash-offset-lg="60" href="#features" class="dropdown-item">FEATURES</a></li>
+													<li><a data-hash data-hash-offset="0" data-hash-offset-lg="60" href="{% url 'home_page' %}#features" class="dropdown-item">FEATURES</a></li>
 													
-													<li><a data-hash data-hash-offset="0" data-hash-offset-lg="60" href="#reviews" class="dropdown-item">REVIEWS</a></li>
-													<li><a data-hash data-hash-offset="0" data-hash-offset-lg="60" href="#pricing" class="dropdown-item">PRICING</a></li>
-													<li><a data-hash data-hash-offset="0" data-hash-offset-lg="60" href="#faqs" class="dropdown-item">FAQ'S</a></li>
-													<li><a data-hash data-hash-offset="0" data-hash-offset-lg="60" href="#trial" class="dropdown-item">TRIAL</a></li>
+													
+													<li><a data-hash data-hash-offset="0" data-hash-offset-lg="60" href="{% url 'home_page' %}#pricing" class="dropdown-item">PRICING</a></li>
+													<li><a data-hash data-hash-offset="0" data-hash-offset-lg="60" href="{% url 'home_page' %}#faqs" class="dropdown-item">FAQ'S</a></li>
+													<li><a data-hash data-hash-offset="0" data-hash-offset-lg="60" href="{% url 'home_page' %}#trial" class="dropdown-item">CONTACT</a></li>
 													<li><a data-hash data-hash-offset="0" data-hash-offset-lg="60" href="#overview" class="dropdown-item btn btn-info"></a></li>
 													<li><a data-hash data-hash-offset="0" data-hash-offset-lg="60" href="{% url 'login' %}" class="dropdown-item btn btn-info">Login</a></li>
 													<li><a data-hash data-hash-offset="0" data-hash-offset-lg="60" href="{% url 'signup' %}" class="dropdown-item btn btn-success">Sign Up</a></li>
@@ -119,54 +119,53 @@
 
 {% endblock content %}
 
-
 <footer id="footer" class="bg-light border-0">
-				<div class="container my-4">
-					<div class="row py-5">
-						<div class="col-md-6 col-lg-3 mb-5 mb-lg-0">
-							<a href="#" class="text-decoration-none">
-								<img class="mt-4" alt="Porto Website Template" src="{% static 'img/logo_black.svg' %}" height="50">
-							</a>
-						</div>
-						<div class="col-6 col-lg-2 mb-5 mb-lg-0">
-							<ul class="list list-icons list-icons-sm">
-								<li><i class="fas fa-angle-right text-color-default"></i><a href="" class="link-hover-style-1 text-color-default ms-1"> Our Services</a></li>
-								<li><i class="fas fa-angle-right text-color-default"></i><a href="" class="link-hover-style-1 text-color-default ms-1"> About Us</a></li>
-								<li><i class="fas fa-angle-right text-color-default"></i><a href="" class="link-hover-style-1 text-color-default ms-1"> Contact Us</a></li>
-							</ul>
-						</div>
-						<div class="col-6 col-lg-2 mb-5 mb-lg-0">
-							<ul class="list list-icons list-icons-sm">
-								<li><i class="fas fa-angle-right text-color-default"></i><a href="" class="link-hover-style-1 text-color-default ms-1"> FAQ's</a></li>
-								<li><i class="fas fa-angle-right text-color-default"></i><a href="" class="link-hover-style-1 text-color-default ms-1"> Sitemap</a></li>
-							</ul>
-						</div>
-						<div class="col-md-6 col-lg-5">
-							<div id="tweet" class="twitter" data-plugin-tweets data-plugin-options="{'username': 'oklerthemes', 'count': 1, 'iconColor': 'text-color-primary'}">
-								<p>Please wait...</p>
-							</div>
-						</div>
-					</div>
+	<div class="container my-4">
+		<div class="row py-5">
+			<div class="col-md-6 col-lg-3 mb-5 mb-lg-0">
+				<a href="#" class="text-decoration-none">
+					<img class="mt-4" alt="Porto Website Template" src="{% static 'img/logo_black.svg' %}" height="50">
+				</a>
+			</div>
+			<div class="col-6 col-lg-2 mb-5 mb-lg-0">
+				<ul class="list list-icons list-icons-sm">
+					
+					<li><i class="fas fa-angle-right text-color-default"></i><a href="{% url 'about_us' %}" class="link-hover-style-1 text-color-default ms-1"> About Us</a></li>
+					<li><i class="fas fa-angle-right text-color-default"></i><a href="#trial" class="link-hover-style-1 text-color-default ms-1"> Contact Us</a></li>
+				</ul>
+			</div>
+			<div class="col-6 col-lg-2 mb-5 mb-lg-0">
+				<ul class="list list-icons list-icons-sm">
+					<li><i class="fas fa-angle-right text-color-default"></i><a href="#faqs" class="link-hover-style-1 text-color-default ms-1"> FAQ's</a></li>
+					<li><i class="fas fa-angle-right text-color-default"></i><a href="#pricing" class="link-hover-style-1 text-color-default ms-1"> Pricing</a></li>
+				</ul>
+			</div>
+			<div class="col-md-6 col-lg-5">
+				<div id="tweet" class="twitter" data-plugin-tweets data-plugin-options="{'username': 'oklerthemes', 'count': 1, 'iconColor': 'text-color-primary'}">
+					
 				</div>
-				<div class="footer-copyright bg-light">
-					<div class="container py-2">
-						<hr class="my-2">
-						<div class="row justify-content-between pt-4 pb-5">
-							<div class="col-auto">
-								<p>© Copyright 2021. All Rights Reserved.</p>
-							</div>
-							<div class="col-auto">
-								<nav id="sub-menu">
-									<ul>
-										<li><a href="" class="text-color-default ms-1 text-decoration-none"> Terms and Conditions</a></li>
-										<li><a href="" class="text-color-default ms-1 text-decoration-none"> Privacy Policy</a></li>
-									</ul>
-								</nav>
-							</div>
-						</div>
-					</div>
+			</div>
+		</div>
+	</div>
+	<div class="footer-copyright bg-light">
+		<div class="container py-2">
+			<hr class="my-2">
+			<div class="row justify-content-between pt-4 pb-5">
+				<div class="col-auto">
+					<p>© Copyright 2022. All Rights Reserved.</p>
 				</div>
-			</footer>
+				<div class="col-auto">
+					<nav id="sub-menu">
+						<ul>
+							<li><a href="{% url 'terms_and_conditions' %}" class="text-color-default ms-1 text-decoration-none"> Terms and Conditions</a></li>
+							<li><a href="{% url 'privacy_policy' %}" class="text-color-default ms-1 text-decoration-none"> Privacy Policy</a></li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
 		</div>
 
 		<!-- Vendor -->

@@ -151,13 +151,13 @@ STRIPE_WEBHOOK_SECRET = "whsec_L1Q3R64nDPK40SnAME2ylRzfzfeW5GwM"
 #django email settings
 
 EMAIL_MAIL_HTML = 'users/password-reset-email-template.html'
-DEFAULT_FROM_EMAIL = 'platileads <info@platileads.com>'
+DEFAULT_FROM_EMAIL = 'platileads <support@platileads.com>'
 EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'email-smtp.us-east-1.amazonaws.com'
+EMAIL_HOST = 'smtp.zoho.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'AKIAZ4F4YB5EM7DIHWE3'
-EMAIL_HOST_PASSWORD = 'BLgVm+ewvtP/9vc46uYC7KWfY8LNu7C7Jl5Zn/uvXCm2'
+EMAIL_HOST_USER = 'support@platileads.com'
+EMAIL_HOST_PASSWORD = 'pURgSSJVVLny'
 
 
 

@@ -17,3 +17,19 @@ class file_uploader(models.Model):
 
     def __str__(self):
         return self.user.first_name + ' ' + self.user.last_name
+
+
+
+class contact(models.Model):
+    date = models.DateField(auto_now=False,auto_now_add=True)
+    name = models.CharField(max_length=200,null=True,blank=True)
+    email = models.CharField(max_length=100,null=True,blank=True)
+    subject = models.CharField(max_length=200,null=True,blank=True)
+    message = models.CharField(max_length=800,null=True,blank=True)
+
+    is_read = models.BooleanField(default=False)
+
+    def __str__(self):
+
+        return str(self.name)+' '+str(self.email) + ' '+self.subject
+

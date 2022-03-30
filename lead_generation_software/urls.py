@@ -12,6 +12,9 @@ urlpatterns = [
     path('dashboard/',include('dashboard.urls')),
     path('leads/',include('leads.urls')),
     path('subscriptions/',include('subscriptions.urls')),
+    path('about-us/',views.about_us,name='about_us'),
+    path('terms-and-conditions/',views.terms_and_conditions,name='terms_and_conditions'),
+    path('privacy-policy/',views.privacy_policy,name='privacy_policy'),
 ]
 
 
