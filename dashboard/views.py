@@ -287,7 +287,7 @@ def find_email(request):
                 sel_user_credit.credits_remaining -= 1
                 sel_user_credit.save()
                 
-                return render(request,'dashboard/components/found_email.html',{'email':possible_email})
+                return render(request,'dashboard/components/found_email.html',{'email':possible_email.replace(' ','')})
             
             else:
                 pass
