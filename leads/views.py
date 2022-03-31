@@ -260,7 +260,7 @@ def capture_leads(request):
                         return JsonResponse({'status':'not enough credits'})
                     
                     else:
-                        sel_cred.credits_remaining = sel_credit.credits_remaining - 1
+                        sel_cred.credits_remaining = sel_cred.credits_remaining - 1
                         sel_cred.save()
                         is_found = True
 
