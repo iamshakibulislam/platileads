@@ -213,7 +213,7 @@ def capture_leads(request):
 
         #print(first_name,last_name,company,website,linkedin_profile,position,phone,location,employee_total,industry)
 
-        return JsonResponse({'status':'success','email':'tetemeial@gmail.com'})
+       # return JsonResponse({'status':'success','email':'tetemeial@gmail.com'})
 
         is_found = False
 
