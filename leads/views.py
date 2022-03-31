@@ -176,14 +176,44 @@ def capture_leads(request):
         first_name = data['first_name']
         last_name = data['last_name']
         
-        company = data['company']
-        website = data['website']
+        company = None
+        try:
+            company = data['company']
+        except:
+            pass
+        website = None
+        try:
+            website = data['website']
+        except:
+            pass
         linkedin_profile = data['linkedin_profile']
-        position = data['position']
-        phone = data.get('phone')
-        location = data['location']
-        employee_total = data['employee_total']
-        industry = data['industry']
+
+        position = None
+        try:
+            position = data['position']
+        except:
+            pass
+
+        phone = None
+        try:
+            phone = data.get('phone')
+        except:
+            pass
+
+        location=None
+        employee_total = 0
+        industry = None
+        try:
+            location = data['location']
+            employee_total = data['employee_total']
+            industry = data['industry']
+
+        except:
+            pass
+
+        #print(first_name,last_name,company,website,linkedin_profile,position,phone,location,employee_total,industry)
+
+        return JsonResponse({'status':'success','email':'tetemeial@gmail.com'})
 
         is_found = False
 
