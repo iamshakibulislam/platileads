@@ -178,38 +178,42 @@ def bulk_email_verification_result(request):
         get_the_email_column_position = all_columns.index(get_column_name)+1
         total_email_verified = 0
         for row_num in range(1,total_rows+1):
-            sel_user_credit_inst = user_credit.objects.get(user=request.user)
-            if sel_user_credit_inst.credits_remaining == 0:
-                break
-            email_val=xlsx_retrive_column_data(row_num,get_the_email_column_position,actual_file_path)
-            
+            try:
+                sel_user_credit_inst = user_credit.objects.get(user=request.user)
+                if sel_user_credit_inst.credits_remaining == 0:
+                    break
+                email_val=xlsx_retrive_column_data(row_num,get_the_email_column_position,actual_file_path)
+                
 
-            if email_val != None and email_val != "":
-               
-                #do email validation here and write the result in the same column
-                if row_num == 1:
-                    
-                    xlsx_write_on_new_column(row_num,total_columns,"validation status",actual_file_path)
+                if email_val != None and email_val != "":
+                
+                    #do email validation here and write the result in the same column
+                    if row_num == 1:
+                        
+                        xlsx_write_on_new_column(row_num,total_columns,"validation status",actual_file_path)
 
-                else:
-                    
-                    #checking the email validity
-                    get_mx = get_mx_records(email_val)[-1]
-
-                    is_exists = is_valid_email(get_mx,email_val)
-                    
-                    if is_exists == True:
-                        xlsx_write_on_new_column(row_num,total_columns,"verified",actual_file_path)
-                        total_email_verified += 1
-                        sel_user_credit = user_credit.objects.get(user=request.user)
-                        sel_user_credit.credits_remaining -= 1
-                        sel_user_credit.save()
-                    
                     else:
-                        sel_user_credit = user_credit.objects.get(user=request.user)
-                        sel_user_credit.credits_remaining -= 1
-                        sel_user_credit.save()
-                        xlsx_write_on_new_column(row_num,total_columns,"email does not exist",actual_file_path)
+                        
+                        #checking the email validity
+                        get_mx = get_mx_records(email_val)[-1]
+
+                        is_exists = is_valid_email(get_mx,email_val)
+                        
+                        if is_exists == True:
+                            xlsx_write_on_new_column(row_num,total_columns,"verified",actual_file_path)
+                            total_email_verified += 1
+                            sel_user_credit = user_credit.objects.get(user=request.user)
+                            sel_user_credit.credits_remaining -= 1
+                            sel_user_credit.save()
+                        
+                        else:
+                            sel_user_credit = user_credit.objects.get(user=request.user)
+                            sel_user_credit.credits_remaining -= 1
+                            sel_user_credit.save()
+                            xlsx_write_on_new_column(row_num,total_columns,"email does not exist",actual_file_path)
+            
+            except:
+                pass
 
 
                     #end of checking email validity
