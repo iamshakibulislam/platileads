@@ -209,9 +209,10 @@ def capture_leads(request):
             industry = data['industry']
 
         except:
+            
             pass
 
-        #print(first_name,last_name,company,website,linkedin_profile,position,phone,location,employee_total,industry)
+        #print('firstName' ,first_name,'last_name ',last_name,'company ',company,'website ',website,linkedin_profile,position,phone,location,employee_total,industry)
 
        # return JsonResponse({'status':'success','email':'tetemeial@gmail.com'})
 
