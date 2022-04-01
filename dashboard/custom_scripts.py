@@ -192,7 +192,7 @@ def csv_to_xlsx(filepath,file_name):
     wb = Workbook()
     wc = wb.active
     rows = []
-    if True:
+    try:
         with open(filepath) as csv_file:
             csv_inst = csv.reader(csv_file)
             for row in csv_inst:
@@ -207,5 +207,5 @@ def csv_to_xlsx(filepath,file_name):
                 
         wb.save('media/uploads/'+new_path)
         return True
-    else:
+    except:
         return False

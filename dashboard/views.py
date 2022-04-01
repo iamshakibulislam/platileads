@@ -148,6 +148,7 @@ def bulk_email_verification(request):
         
 
 @login_required(login_url='/users/login/')
+@csrf_exempt
 def bulk_email_verification_result(request):
     if request.method == 'POST':
         get_column_name = request.POST.get('column_name')
