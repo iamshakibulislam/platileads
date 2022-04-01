@@ -131,20 +131,43 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR,'static')
 STATICFILES_DIRS = [os.path.join(BASE_DIR,'staticfiles')]
 
-#stripe secret keys
-
+#stripe secret keys FOR TEST
+'''
 STRIPE_SECRET_KEY = "sk_test_51K4KJjHrW1RE7YcK2tbMoVqvzgspfjw6iNosIw11bZ0dYg4pBOyY1yjIVZBwW9NMvw5BzNMjnGrR84naYV2M2Vmy00bRq55qAs"
 STRIPE_PUBLIC_KEY = "pk_test_51K4KJjHrW1RE7YcKA4VfBlE9J56SK1fmfMlGMjlZof0G7LRJJeeoPrnkSon2aFVzqbaeom0IjorWDKc5c0yZWGSb009JEbw4o2"
+'''
+
+#STRIPE SECRET KEYS FOR LIVE
 
 
-#stripe recurring packages price
+STRIPE_SECRET_KEY = "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"
+STRIPE_PUBLIC_KEY = "pk_live_51K4KJjHrW1RE7YcKGX1lm6vR4aJIHdp5em0gLoP7zV7cbwDbjmrJNU26kBmRxu6g3UViY3UGXneaqvymJp2r7r9M00Xm8MWcvx"
 
+#stripe real LIVE recurring package price
+
+STRIPE_PLATINUM_PLAN = "price_1Kjib5HrW1RE7YcK9nBAxzMl"
+STRIPE_GOLD_PLAN = "price_1KjickHrW1RE7YcKOD7NflVk"
+STRIPE_UNLIMITED_PLAN = "price_1KjidzHrW1RE7YcKckW1q7A9"
+
+
+
+#stripe test recurring packages price COMMENT OUT FOR PRODUCTION
+'''
 STRIPE_PLATINUM_PLAN = "price_1KezL2HrW1RE7YcKBsLm3YPy"
 STRIPE_GOLD_PLAN = "price_1Kf0kkHrW1RE7YcKLkpGXhdd"
 STRIPE_UNLIMITED_PLAN = "price_1Kf0m0HrW1RE7YcKcXXu11gz"
+'''
 
+
+#STRIPE TEST WEBHOOK SECRET KEY
+'''
 STRIPE_WEBHOOK_SECRET = "whsec_L1Q3R64nDPK40SnAME2ylRzfzfeW5GwM"
+'''
 
+
+#STRIPE LIVE WEBHOOK SECRET
+
+STRIPE_WEBHOOK_SECRET = "whsec_3pyNfTdYgX2N1fE0yMvJFpnNthPIpiWb"
 
 
 
@@ -163,18 +186,18 @@ EMAIL_HOST_PASSWORD = 'pURgSSJVVLny'
 
 #local testing database
 
-
+'''
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
+'''
 
 
 #production database aws ses service
-'''
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -188,4 +211,3 @@ DATABASES = {
         }
        
 }
-'''

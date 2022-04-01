@@ -59,7 +59,7 @@ def email_verification(request):
         
         if is_exists == False:
             sel_user_credit = user_credit.objects.get(user=request.user)
-            sel_user_credit.credits_remaining -= 1
+            sel_user_credit.credits_remaining -= 0
             sel_user_credit.save()
            
             return HttpResponse("invalid_email")

@@ -209,7 +209,7 @@ def capture_leads(request):
             industry = data['industry']
 
         except:
-            
+
             pass
 
         #print('firstName' ,first_name,'last_name ',last_name,'company ',company,'website ',website,linkedin_profile,position,phone,location,employee_total,industry)
@@ -261,8 +261,7 @@ def capture_leads(request):
                         return JsonResponse({'status':'not enough credits'})
                     
                     else:
-                        sel_cred.credits_remaining = sel_cred.credits_remaining - 1
-                        sel_cred.save()
+                        
                         is_found = True
 
                     lead_create = leads.objects.create(first_name=first_name,last_name=last_name,email=possible_email,company=company,website=website,linkedin_profile=linkedin_profile,position=position,location=location,employee_total=employee_total,industry=industry)
