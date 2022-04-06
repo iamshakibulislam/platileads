@@ -213,9 +213,9 @@ def bulk_email_verification_result(request):
                                 sel_user_credit.save()
                         
                         else:
-                            sel_user_credit = user_credit.objects.get(user=request.user)
-                            sel_user_credit.credits_remaining -= 1
-                            sel_user_credit.save()
+                            #sel_user_credit = user_credit.objects.get(user=request.user)
+                            #sel_user_credit.credits_remaining -= 1
+                            #sel_user_credit.save()
                             xlsx_write_on_new_column(row_num,total_columns,"email does not exist",actual_file_path)
             
             except:

@@ -254,6 +254,9 @@ def capture_leads(request):
             
 
                 if check_valid_or_not == True:
+
+                    if is_valid_email(get_mx,'11'+possible_email)_== True:
+                        return JsonResponse('status':'catchAll')
                     
                     #save the lead into db with active campaign
                     sel_cred=user_credit.objects.get(user=get_user)
