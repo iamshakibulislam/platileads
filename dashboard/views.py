@@ -65,6 +65,8 @@ def email_verification(request):
             return HttpResponse("invalid_email")
 
         elif is_exists == True:
+            if is_valid_email(get_mx,'1'+email) == True:
+                return HttpResponse('invalid_email')
             sel_user_credit = user_credit.objects.get(user=request.user)
             sel_user_credit.credits_remaining -= 1
             sel_user_credit.save()
@@ -200,11 +202,15 @@ def bulk_email_verification_result(request):
                         is_exists = is_valid_email(get_mx,email_val)
                         
                         if is_exists == True:
-                            xlsx_write_on_new_column(row_num,total_columns,"verified",actual_file_path)
-                            total_email_verified += 1
-                            sel_user_credit = user_credit.objects.get(user=request.user)
-                            sel_user_credit.credits_remaining -= 1
-                            sel_user_credit.save()
+                            if is_valid_email(get_mx,'1'+email_val) == True:
+                                xlsx_write_on_new_column(row_num,total_columns,"catchall",actual_file_path)
+                            
+                            else:
+                                xlsx_write_on_new_column(row_num,total_columns,"verified",actual_file_path)
+                                total_email_verified += 1
+                                sel_user_credit = user_credit.objects.get(user=request.user)
+                                sel_user_credit.credits_remaining -= 1
+                                sel_user_credit.save()
                         
                         else:
                             sel_user_credit = user_credit.objects.get(user=request.user)

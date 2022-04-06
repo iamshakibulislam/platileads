@@ -197,7 +197,7 @@ DATABASES = {
 
 
 #production database aws ses service
-'''
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -211,10 +211,10 @@ DATABASES = {
         }
        
 }
-'''
+
 
 #local production database
-
+'''
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -228,3 +228,4 @@ DATABASES = {
         }
        
 }
+'''
