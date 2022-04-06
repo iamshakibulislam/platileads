@@ -197,7 +197,7 @@ DATABASES = {
 
 
 #production database aws ses service
-
+'''
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -205,6 +205,23 @@ DATABASES = {
         'USER': 'shakil',
         'PASSWORD': 'Platileads121',
         'HOST': 'platileads.c3mwtiaam63p.us-east-1.rds.amazonaws.com',
+        'PORT': '3306',
+        
+        
+        }
+       
+}
+'''
+
+#local production database
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'platileads',
+        'USER': 'shakil',
+        'PASSWORD': 'Shakil121@',
+        'HOST': 'localhost',
         'PORT': '3306',
         
         
