@@ -1,7 +1,10 @@
 from django.contrib import admin
-from .models import User,coupon_codes,user_credit
+from .models import User,coupon_codes,user_credit,user_coupon
 
-
+@admin.register(user_coupon)
+class user_couponAdmin(admin.ModelAdmin):
+    list_display = ('email','code','has_redeemed','date')
+    search_fields = ('email','code','has_redeemed','date')
 
 @admin.register(user_credit)
 class user_creditAdmin(admin.ModelAdmin):

@@ -97,3 +97,13 @@ class coupon_codes(models.Model):
     class Meta:
         verbose_name = 'Coupon Code'
         verbose_name_plural = 'Coupon Codes'
+
+
+class user_coupon(models.Model):
+    email = models.CharField(max_length=100,null=False,blank=False)
+    code = models.CharField(max_length=50,null=False,blank=False)
+    has_redeemed = models.BooleanField(default=False)
+    date = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.email)+' | '+str(self.code) + ' | '+str(self.has_redeemed)

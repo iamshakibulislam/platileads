@@ -1,0 +1,94 @@
+{% extends 'homepage_base/auth_base.html' %}
+
+{% block title %} Redeem Successful {% endblock %}
+
+{% block content %}
+
+{% load static %}
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card" style="margin-top:1.5rem;margin-bottom:1rem;border-radius:10%">
+                <div class="card-header text-center">Thank you </div>
+                <div class="card-title" id="show_alerts">
+                    
+                </div>
+                <div class="card-body">
+                    <h5 class="text-primary">Redeem request sent successfully !</h5>
+                    <p class="text-danger">Please wait a little for administrator approval .</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- loading spinner-->
+
+<img src="{% static 'img/loading.gif' %}" id="loading" class="img-responsive htmx-indicator"  style="position:absolute;top:40%;left:47%;z-index:0"/>
+
+
+
+
+{% endblock content %}
+
+{% block customjs %}
+<script src="{% static 'js/forms.js' %}"></script>
+
+
+<script>
+
+$(document).ready(function(){
+    $('html').addClass('sticky-header-active');
+
+
+
+
+
+document.body.addEventListener('htmx:beforeSend', function(e) {
+
+    
+
+    $('.card > *:not(#loading)').css('filter','blur(3px)');
+    
+    $('#loading').css('z-index','5');
+    $('#submitbtn').css('z-index','1');
+
+    
+   
+
+  
+    $('a,.btn').css('pointer-events','none');
+    
+
+   
+});
+
+document.body.addEventListener('htmx:afterSwap', function(e) {
+
+    if(e.detail.xhr.responseText == "login_successful"){
+        $('#show_alerts').html('<div class="alert alert-success">Login successful ! Please Wait....</div>');
+    };
+    $('a,.btn').css('pointer-events','auto');
+    $('.card > *:not(#loading)').css('filter','blur(0px)');
+
+    $('#loading').css('z-index','0');
+    $('#submitbtn').css('z-index','5');
+
+    
+   
+});
+
+
+document.body.addEventListener('htmx:afterRequest', function(e) {
+    if(e.detail.xhr.responseText == "login_successful"){
+    
+    window.location.href = "{% url 'dashboard_home' %}";
+    }
+   
+});
+});
+
+</script>
+
+{% endblock customjs %}

@@ -175,3 +175,24 @@ def profile(request):
 def logout(request):
     auth.logout(request)
     return redirect('home_page')
+
+
+def appsumo_code(request):
+    if request.method == "GET":
+        return render(request,'users/appsumo_code.html')
+
+    if request.method == "POST":
+        email = request.POST.get('email')
+        code = request.POST.get('code')
+
+        if code == "":
+            return redirect('appsumo_code')
+
+        if email == "":
+            return redirect('appsumo_code')
+
+        user_coupon.objects.create(email=email,code=code)
+
+        return render(request,'users/appsumo_code_redeemed.html')
+
+    
