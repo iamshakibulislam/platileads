@@ -68,7 +68,7 @@
 
                     <div class="progress mb-4 d-none" style="height:2rem" id="progress_bar">
                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"  style="width: 0%" aria-valuenow="0" aria-valuemin="0" id="bar" aria-valuemax="100">
-                            <small class="justify-content-center font-weight-bold d-flex position-absolute w-100" style="color:black;font-size:1.5rem"> <span id="percent" style="margin-right:5px">0% </span> complete</small></div>
+                            <small class="justify-content-center font-weight-bold d-flex position-absolute w-100" style="color:black;font-size:1.5rem"> <span id="percent" style="margin-right:5px">0% </span> </small></div>
                     </div>
 
                     
@@ -131,7 +131,7 @@
     htmx.find('#bar').setAttribute('aria-valuenow',Math.round( evt.detail.loaded/evt.detail.total * 100));
     htmx.find('#percent').innerHTML=("please wait...");
 
-    if(Math.round(evt.detail.loaded/evt.detail.total * 100) == 100){
+    if(Math.round(evt.detail.loaded/evt.detail.total * 100) > 95){
         $('#progress_bar').addClass('d-none');
         $('#loading_spinner_gif').removeClass('d-none');
         $('#upload_form').addClass('d-none');
