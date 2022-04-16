@@ -127,12 +127,13 @@
    
     $('#bar').css('width',Math.round(evt.detail.loaded/evt.detail.total * 100) + '%');
     htmx.find('#bar').setAttribute('aria-valuenow',Math.round( evt.detail.loaded/evt.detail.total * 100));
-    htmx.find('#percent').innerHTML=(toString(Math.round(evt.detail.loaded/evt.detail.total * 100)) + '%');
+    htmx.find('#percent').innerHTML=("please wait..");
 
     if(Math.round(evt.detail.loaded/evt.detail.total * 100) == 100){
         $('#progress_bar').addClass('d-none');
         $('#loading_spinner_gif').removeClass('d-none');
         $('#upload_form').addClass('d-none');
+        htmx.find('#percent').innerHTML=("Done");
     }
     
 
