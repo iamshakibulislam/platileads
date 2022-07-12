@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'dashboard',
     'leads',
     'subscriptions',
+    'company_email_finder',
 ]
 
 MIDDLEWARE = [
@@ -170,6 +171,11 @@ STRIPE_WEBHOOK_SECRET = "whsec_L1Q3R64nDPK40SnAME2ylRzfzfeW5GwM"
 STRIPE_WEBHOOK_SECRET = "whsec_3pyNfTdYgX2N1fE0yMvJFpnNthPIpiWb"
 
 
+#scraperapi APIKEY
+SCRAPER_API_KEY = "cc6396c718645725f059a4146b4a9f61"
+
+#openAI APIKEY
+OPENAI_API_KEY = "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"
 
 #django email settings
 
@@ -186,7 +192,7 @@ EMAIL_HOST_PASSWORD = 'pURgSSJVVLny'
 
 #local testing database
 
-'''
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -194,7 +200,7 @@ DATABASES = {
     }
 }
 
-'''
+
 
 #production database aws ses service
 '''
@@ -215,7 +221,7 @@ DATABASES = {
 
 
 #local production database
-
+'''
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -230,3 +236,4 @@ DATABASES = {
        
 }
 
+'''

@@ -32,7 +32,7 @@ def dashboard_home(request):
 
     get_token = str(request.user.secret_id)
 
-    return render(request,'dashboard/index.html',{'total_campaigns':total_campaigns,'total_leads':total_leads,'credits_remaining':credits_remaining,'all_latest_leads':all_latest_leads,'token':get_token})
+    return render(request,'dashboard/index.html',{'total_campaigns':total_campaigns,'total_leads':total_leads,'credits_remaining':credits_remaining,'all_latest_leads':all_latest_leads,'token':get_token,'all_latest_leads_count':len(all_latest_leads)})
 
 @login_required(login_url='/users/login/')
 @requires_credit

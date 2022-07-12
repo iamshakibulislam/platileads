@@ -86,7 +86,7 @@
 
 				<!--APP-SIDEBAR-->
 				<div class="app-sidebar__overlay" data-bs-toggle="sidebar"></div>
-				<aside class="app-sidebar">
+				<aside class="app-sidebar" style="position:absolute;height:150vh">
 					<div class="side-header">
 						<a class="header-brand1" href="{% url 'dashboard_home' %}">
 							<img src="{% static 'assets/images/logo_black.svg' %}" class="header-brand-img desktop-logo" alt="logo">
@@ -119,6 +119,18 @@
 
                         <li>
 							<a class="side-menu__item" href="{% url 'bulk_email_verification' %}"><i class="side-menu__icon fa-solid fa-envelopes-bulk" style="font-size:1.3rem"></i><span class="side-menu__label" style="flex:none">Bulk email verification</span></a>
+						</li>
+
+
+						<li><h3>Company email finder(as job role)</h3></li>
+						
+
+                        <li>
+							<a class="side-menu__item text-justify" href="{% url 'find_email' %}"><i class="side-menu__icon fa-solid fas fa-male" style="font-size:2rem"></i><span class="side-menu__label" style="flex:none"> Find single email as job role</span></a>
+						</li>
+
+                        <li>
+							<a class="side-menu__item text-justify" href="{% url 'find_bulk_email' %}"><i class="side-menu__icon fas fa-solid fa-users" style="font-size:1.4rem"></i><span class="side-menu__label" style="flex:none">Find Bulk email as job role</span></a>
 						</li>
 
 
