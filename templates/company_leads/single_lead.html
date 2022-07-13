@@ -1,0 +1,131 @@
+{% extends 'dashboard_base/base_dashboard.html' %}
+
+{% block title %} Company email find with job role {% endblock title%}
+
+{% block content %}
+
+{% load static %}
+    <div class="app-content" style="height:100vh">
+    <div class="row justify-content-center mt-4" >
+        <div class="col-md-6">
+            <div class="card" style="margin-top:3rem">
+                <img src="{% static 'img/loading.gif' %}" id="loading_spin" class="img-responsive htmx-indicator"  style="position:absolute;top:20%;left:45%;z-index:0"/>
+                <div class="card-header">
+                    <h4 class="card-title">Find company email by job position</h4>
+                </div>
+                <div class="card-body">
+                    <p class="hidden" style="display:none" id="hiddenplace"></p>
+                        
+                    <form method="post"  action="{% url 'single_lead' %}" hx-post="{% url 'single_lead' %}" hx-trigger="submit" hx-target="#messageBox" hx-indicator="#loading_spin">
+                        {% csrf_token %}
+                        <div class="row">
+                        <div class="fdorm-floating col-md-6">
+                            
+                            <input type="text" placeholder="company website(example.com)" class="form-control" id="domain" name="domain" style="z-index:10"   required="true" >
+                            
+                        </div>
+                        <div class=" col-md-6">
+                            
+                            <select class="form-control" name="position"  id="jobrole">
+                                <option value="">Select Job Position </option>
+                                <option value="CEO">CEO</option>
+                                <option value="FOUNDER">FOUNDER</option>
+                                <option value="CO FOUNDER">CO-FOUNDER</option>
+                                <option value="CTO">CTO</option>
+                                <option value="CMO">CMO</option>
+                                <option value="CFO">CFO</option>
+                                <option value="AUTHOR">AUTHOR</option>
+                                <option value="EDITOR">EDITOR</option>
+                                <option value="AUTHOR or EDITOR">AUTHOR OR EDITOR</option>
+                                <option value="OWNER">OWNER</option>
+                                <option value="MANAGER">MANAGER</option>
+                                <option value="DIRECTOR">DIRECTOR</option>
+                                <option value="PRODUCT MANAGER">PRODUCT MANAGER</option>
+                                <option value="PRODUCT DIRECTOR">PRODUCT DIRECTOR</option>
+                                <option value="HR">HR</option>
+                                <option value="Recruiter">RECRUITER</option>
+                                <option value="Marketer">MARKETER</option>
+                                <option value="BLOGGER">BLOGGER</option>
+                                <option value="Sales execute">SALES EXECUTIVE</option>
+                                <option value="Sales manager">SALES MANAGER</option>
+                                <option value="Sales director">SALES DIRECTOR</option>
+                                <option value="Digital marketer">DIGITAL MARKETER</option>
+                                <option value="Content Marketer">CONTENT MARKETER</option>
+                                <option value="Content writer">CONTENT WRITER</option>
+                                <option value="Social media manager">SOCIAL MEDIA MANAGER</option>
+                                <option value="SOFTWARE DEVELOPER">SOFTWARE DEVELOPER</option>
+
+                                
+                            </select>
+                            
+                        </div>
+
+                    </div>
+                       
+                        <div class="form-group d-flex justify-content-center mt-3">
+                        <button type="submit" id="submitbtn" class="btn btn-primary" style="z-index:5"> Find Now </button>
+                        </div>
+                    </form>
+                    <div id="messageBox">
+                    
+
+                </div>
+
+
+                    
+<!-- loading spinner-->
+
+
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+{% endblock content %}
+
+{% block customjs %}
+
+
+
+
+<script>
+
+    
+    document.body.addEventListener('htmx:beforeRequest', function(e) {
+      
+       
+
+        $('.card > *:not(#loading_spin)').css('filter','blur(3px)');
+        $('#loading_spin').css('z-index','25');
+       
+        $('#submitbtn').css('z-index','1');
+        $('a,.btn').css('pointer-events','none');
+       
+    
+       
+    });
+    
+
+    document.body.addEventListener('htmx:afterRequest', function(e) {
+        
+       
+
+
+
+        $('.card > *:not(#loading_spin').css('filter', 'blur(0px)');
+        $('a,.btn').css('pointer-events','auto');
+        $('#loading_spin').css('z-index','0');
+        $('#submitbtn').css('z-index','5');
+        $('#email').css('z-index','10');
+    });
+    
+    </script>
+
+
+{% endblock customjs %}
