@@ -8,21 +8,18 @@ admin.site.register(campaign_leads)
 
 @admin.register(campaigns)
 class campaignsAdmin(admin.ModelAdmin):
-    list_display = ('name','date','user__first_name','user_last_name','user__email')
-    search_fields = ('name','date','user__first_name','user_last_name','user__email','user__phone')
+    
+    list_display = ('name','date','user__email')
+    search_fields = ('name','date','user__email')
     ordering = ('date',)
 
 
-    def user__first_name(self,obj):
-        return obj.user.first_name
-    
-    def user_last_name(self,obj):
-        return obj.user.last_name
     
     def user__email(self,obj):
         return obj.user.email
     def user__phone(self,obj):
         return obj.user.phone
+
 
 
 

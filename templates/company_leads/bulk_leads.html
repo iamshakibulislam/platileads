@@ -1,6 +1,6 @@
 {% extends 'dashboard_base/base_dashboard.html' %}
 
-{% block title %} Bulk Email Finder {% endblock title%}
+{% block title %} Bulk Email Finder From Domain {% endblock title%}
 
 {% block content %}
 
@@ -17,6 +17,8 @@
         </div>
 
             <div class="card-body ">
+                
+               
                 <p >
                     <b>Please note that the bulk email finder only for business leads and it works with any business domain except email providers:</b>
                 </p>
@@ -35,11 +37,19 @@
                
 
                 <div class="align-self-start d-flex justify-content-between  text-justify" style="margin-left:0px">
-                    <i class="fa-solid fa-hand-point-right" style="margin-right:1rem"></i> <p class="text-justify" style="margin-left:0px">After uploading you will be asked to select the first name , last name and website column of the file</p>
+                    <i class="fa-solid fa-hand-point-right" style="margin-right:1rem"></i> <p class="text-justify" style="margin-left:0px">After uploading you will be asked to select the company website column of the file</p>
                 </div>
 
                 <div class="align-self-start d-flex justify-content-between text-justify" style="margin-left:0px">
-                    <i class="fa-solid fa-hand-point-right" style="margin-right:1rem"></i> <p class="text-justify">Make sure this is a csv,xls or xlsx file that contains  these columns</p>
+                    <i class="fa-solid fa-hand-point-right" style="margin-right:1rem"></i> <p class="text-justify">Make sure this is a (.csv) file that contains  the company website column</p>
+                </div>
+
+                <div class="align-self-start d-flex justify-content-between text-justify" style="margin-left:0px">
+                    <i class="fa-solid fa-hand-point-right" style="margin-right:1rem"></i> <p class="text-justify">Each successful email costs 5 credits including auto verification</p>
+                </div>
+
+                <div class="align-self-start d-flex justify-content-between text-justify" style="margin-left:0px">
+                    <i class="fa-solid fa-hand-point-right" style="margin-right:1rem"></i> <p class="text-justify">It is recommended to upload less than 100 company at a time</p>
                 </div>
 
                 </div>
@@ -59,7 +69,11 @@
 
                 <img src="{% static 'img/loading.gif' %}" id="loading_spinner_gif" class="img-responsive htmx-indicator"  style="position:absolute;top:30%;left:45%;z-index:0"/>
                 <div class="card-header">
-                    <h4 class="card-title">Upload lead file</h4>
+                    <h4 class="card-title">Find email by job role - Upload csv file </h4><br>
+                </div>
+
+                <div class="card-header">
+                    <p>Note: It will find and verify emails automatically - It may take a while to complete the process</p>
                 </div>
                 <div class="card-body">
                     <p class="hidden" style="display:none" id="hiddenplace"></p>
@@ -88,14 +102,14 @@
                    </div>
                     <!-- end of showing uploaded file columns-->
 
-                    <form action="{% url 'find_bulk_email' %}"  method="post" hx-encoding="multipart/form-data" id="upload_form" hx-post="{% url 'find_bulk_email' %}" hx-trigger="submit" hx-target="#selecting_column">
+                    <form action="{% url 'bulk_leads' %}"  method="post" hx-encoding="multipart/form-data" id="upload_form" hx-post="{% url 'bulk_leads' %}" hx-trigger="submit" hx-target="#selecting_column">
 
                         {% csrf_token %}
                       <div id="drop_zone" class="drop-zone">
-                        <p class="title">Drop file here(.csv,.xls,.xlsx)</p>
+                        <p class="title">Drop file here(.csv only)</p>
                         <div class="preview-container"></div>
                       </div>
-                      <input id="file_input" type="file" multiple="false" name="file" accept=".xls,.xlsx,.csv" required>
+                      <input id="file_input" type="file" multiple="false" name="file" accept=".csv" required>
                       <button id="upload_images">Upload Now</button>
                       <div id="result_images" class="result-images"></div>
                     </form>
@@ -131,7 +145,7 @@
     htmx.find('#bar').setAttribute('aria-valuenow',Math.round( evt.detail.loaded/evt.detail.total * 100));
     htmx.find('#percent').innerHTML=("please wait...");
 
-    if(Math.round(evt.detail.loaded/evt.detail.total * 100) > 98){
+    if(Math.round(evt.detail.loaded/evt.detail.total * 100) == 100){
         $('#progress_bar').addClass('d-none');
         $('#loading_spinner_gif').removeClass('d-none');
         $('#upload_form').addClass('d-none');

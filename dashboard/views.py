@@ -297,6 +297,22 @@ def find_email(request):
                 sel_user_credit = user_credit.objects.get(user=request.user)
                 sel_user_credit.credits_remaining -= 1
                 sel_user_credit.save()
+
+                save_lead = leads()
+                save_lead.user = request.user
+                save_lead.first_name = first_name
+                save_lead.last_name = last_name
+                save_lead.email = possible_email
+                save_lead.website = domain
+                
+                save_lead.save()
+
+                get_active_campaign = campaigns.objects.get(user=request.user,is_active=True)
+
+                campaign_leads_inst = campaign_leads()
+                campaign_leads_inst.campaign = get_active_campaign
+                campaign_leads_inst.lead = save_lead
+                campaign_leads_inst.save()
                 
                 return render(request,'dashboard/components/found_email.html',{'email':possible_email.replace(' ','')})
             
@@ -329,6 +345,7 @@ def find_bulk_email(request):
                 file.delete()
         except:
             pass
+        
         get_file = request.FILES.get('file')
 
         file_instance = file_uploader(user=request.user,file=get_file)
@@ -472,6 +489,22 @@ def find_bulk_email_result(request):
                             sel_user_credit.credits_remaining -= 1
                             sel_user_credit.save()
                             email_found = True
+
+                            save_lead = leads()
+                            save_lead.user = request.user
+                            save_lead.first_name = first_name_val
+                            save_lead.last_name = last_name_val
+                            save_lead.email = comb
+                            save_lead.website = domain_val
+                            
+                            save_lead.save()
+
+                            get_active_campaign = campaigns.objects.get(user=request.user,is_active=True)
+
+                            campaign_leads_inst = campaign_leads()
+                            campaign_leads_inst.campaign = get_active_campaign
+                            campaign_leads_inst.lead = save_lead
+                            campaign_leads_inst.save()
                             break
                         
                         else:

@@ -9,6 +9,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 import datetime
 from datetime import timedelta
+from leads.models import *
 
 
 def signup(request):
@@ -65,6 +66,11 @@ def signup(request):
             user_credit.objects.create(user=new_user,credits_remaining=200)
             user_auth = auth.authenticate(email=email,password=password)
             auth.login(request,user_auth)
+
+            try:
+                campaigns.objects.create(name="default campaign",description="default campaign description",user=new_user,is_active=True)
+            except:
+                pass
 
             if plan == 'f':
                 get_package = packages.objects.get(name='FREE')

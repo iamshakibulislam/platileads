@@ -50,7 +50,7 @@ def subscribe(request):
 def create_payment_intent(request):
     get_plan = json.load(request)['items'][0]['plan']
 
-    print('selected plan is ',get_plan)
+    #print('selected plan is ',get_plan)
 
     price = 0
 
