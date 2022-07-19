@@ -148,7 +148,7 @@ document.body.addEventListener("htmx:beforeSend", function(evt) {
         $('#progress_bar').addClass('d-none');
         $('#loading_spinner_gif').css('z-index','35');
         $('a,.btn').css('pointer-events','none');
-        $(".card > *:not(#loading_spinner_gif)").css('filter','blur(5px)');
+        //$(".card > *:not(#loading_spinner_gif)").css('filter','blur(5px)');
     };
 });
 
@@ -159,7 +159,7 @@ document.body.addEventListener("htmx:afterRequest", function(evt) {
     if(evt.detail.elt.id == "show_columns"){
         $('#selecting_column').empty();
         $('#loading_spinner_gif').css('z-index','0');
-        $(".card > *").css('filter','blur(0px)');
+        //$(".card > *").css('filter','blur(0px)');
         $('a,.btn').css('pointer-events','auto');
     };
 })

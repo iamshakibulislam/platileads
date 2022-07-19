@@ -52,9 +52,16 @@ class User(AbstractUser):
     customer_id = models.CharField(max_length=100,null=True,blank=True)
     subscription_id = models.CharField(max_length=100,null=True,blank=True)
     secret_id = models.CharField(max_length=100,null=True,blank=True)
+
+    referred_by = models.ForeignKey('self',null=True,blank=True,on_delete=models.SET_NULL)
+    is_affiliate = models.BooleanField(default=False)
+    balance = models.FloatField(default=0)
+    #track user uploaded file progress while processing either for bulk email verification or finding . It will update the status and store 
+    #the % of progress of the file . Later this field will be called from frontend to show the progress of the file
+    file_process_percentage = models.FloatField(default=0)
     
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['phone']
+    REQUIRED_FIELDS = ['first_name','last_name']
 
 
     objects = UserManager()

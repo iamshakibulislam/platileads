@@ -18,3 +18,7 @@ def terms_and_conditions(request):
 def privacy_policy(request):
     if request.method == "GET":
         return render(request,'home/privacy-policy.html')
+
+def affiliates(request):
+    if request.method == "GET":
+        return render(request,'home/affiliates.html')

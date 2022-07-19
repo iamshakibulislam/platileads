@@ -1,8 +1,16 @@
 {% load static %}
+
+<div class="progress htmx-indicator" id="pb">
+    <div class="progress-bar progress-bar-striped active" role="progressbar" id="pb_bar"
+    aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%">
+      0%
+    </div>
+  </div><br>
+
 <form id="show_columns" action="{% url 'bulk_email_verification_result' %}"
  hx-post="{% url 'bulk_email_verification_result' %}"
  hx-trigger="submit"
- hx-indicator="#loading_spinner_gif"
+ hx-indicator="#pb"
  hx-target="#confirming_column"
  >
  {% csrf_token %}
@@ -21,3 +29,41 @@
     </div>
 
 </form>
+
+<script>
+
+
+    $('#show_columns').on('submit',function(event){
+
+        event.preventDefault();
+
+        $('#show_columns').attr('style','display:none');
+        
+        //make a jquery ajax request inside setInterval
+
+
+        function check_progress(){
+            $.ajax({
+                url: "{% url 'process_percentage' %}",
+                type: "GET",
+                dataType: "json"
+
+            }).done(function(data){
+                console.log(data);
+                $('#pb_bar').attr('style','width:'+data.percentage+'%');
+                $('#pb_bar').text(data.percentage+'%');
+                $('#pb_bar').attr('aria-valuenow',data.percentage);
+                if(data.percentage > 99){
+                    clearInterval(check_status)
+                }
+            })
+        }
+
+
+       var check_status = setInterval(check_progress,1000);
+
+
+       
+    })
+
+</script>

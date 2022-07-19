@@ -147,7 +147,7 @@ def bulk_email_verification(request):
         return render(request,'dashboard/components/column_selection.html',{'all_columns':all_columns})
 
            
-        
+       
 
 @login_required(login_url='/users/login/')
 @csrf_exempt
@@ -179,8 +179,19 @@ def bulk_email_verification_result(request):
 
         get_the_email_column_position = all_columns.index(get_column_name)+1
         total_email_verified = 0
+        try:
+            sel_user_inst = request.user
+            sel_user_inst.file_process_percentage = float(0)
+            sel_user_inst.save()
+
+        except:
+            pass
         for row_num in range(1,total_rows+1):
             try:
+                sel_user_inst = request.user
+                sel_user_inst.file_process_percentage = float((row_num/total_rows)*100)
+                sel_user_inst.save()
+
                 sel_user_credit_inst = user_credit.objects.get(user=request.user)
                 if sel_user_credit_inst.credits_remaining == 0:
                     break
@@ -435,7 +446,19 @@ def find_bulk_email_result(request):
         get_the_domain_name_column_position = all_columns.index(get_domain_column)+1
 
         total_email_verified = 0
+        try:
+            sel_user_inst = request.user
+            sel_user_inst.file_process_percentage = float(0)
+            sel_user_inst.save()
+
+        except:
+            pass
+
         for row_num in range(1,total_rows+1):
+            sel_user_inst = request.user
+            sel_user_inst.file_process_percentage = float((row_num/total_rows)*100)
+            sel_user_inst.save()
+
             sel_user_credit = user_credit.objects.get(user=request.user)
             if sel_user_credit.credits_remaining == 0:
                 break

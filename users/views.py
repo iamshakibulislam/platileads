@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from users.models import *
 from time import sleep
 from django.contrib import auth
@@ -63,7 +63,7 @@ def signup(request):
             set_secret.secret_id = abs(hash(str(new_user.id)+str(new_user.email)))
             set_secret.save()
 
-            user_credit.objects.create(user=new_user,credits_remaining=200)
+            user_credit.objects.create(user=new_user,credits_remaining=100)
             user_auth = auth.authenticate(email=email,password=password)
             auth.login(request,user_auth)
 
@@ -201,4 +201,9 @@ def appsumo_code(request):
 
         return render(request,'users/appsumo_code_redeemed.html')
 
-    
+
+
+
+def process_percentage(request):
+    get_per = request.user.file_process_percentage
+    return JsonResponse({"percentage":round(get_per,2)})

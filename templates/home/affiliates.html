@@ -1,0 +1,76 @@
+{% extends 'homepage_base/auth_base.html' %}
+
+{% block content %}
+
+<div class="row justify-content-center" style="margin-top:5rem">
+<div class="col-md-6">
+<h1 class="text-center text-white">Become Our Affiliate and Earn 30%  Lifetime Recurring Commision !</h1><br>
+
+<div class="row justify-content-center">
+    <div class="col-md-5">
+<a href="#affiliateform" class="btn btn-lg btn-dark text-white  text-center mx-auto">Join As An Affiliate</a>
+    </div>
+</div>
+
+</div>
+</div>
+
+
+<div class="row justify-content-center" style="margin-top:3rem">
+
+    <div class="col-md-4">
+<h3 class="text-center text-white">Why joining ?</h3><br>
+<ul class="list-group">
+    <li class="list-group-item">Earn 30% Lifetime Recurring Commision</li>
+    <li class="list-group-item">Bi-weekly payment</li>
+    <li class="list-group-item">World class tracking system</li>
+    <li class="list-group-item"> 30 days cookie duration </li>
+    <li class="list-group-item">Minimum payout is only 25$</li>
+    <li class="list-group-item"> Complete performance data on dashboard </li>
+    <li class="list-group-item">Refer other affiliates and earn 20% Recurring commision on their earning</li>
+</ul>
+    </div>
+
+    <div class="col-md-4">
+        <h3 class="text-center text-white">Promote to whom ?</h3><br>
+<ul class="list-group">
+    <li class="list-group-item">B2B Sales proffesionals</li>
+    <li class="list-group-item">SEO link builders</li>
+    <li class="list-group-item">Lead generation experts</li>
+    <li class="list-group-item">Freelance lead generators</li>
+    <li class="list-group-item"> Cold email marketers </li>
+    <li class="list-group-item">Agencies who do email marketing</li>
+    <li class="list-group-item">Marketing agencies</li>
+</ul>
+    </div>
+
+</div>
+
+
+<div class="row justify-content-center" style="margin-top:3rem">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="text-center text-dark pt-3">Signup Today</h3>
+            </div>
+            <div class="card-body" id="affiliateform">
+                <form action="#" mehtod="POST"  >
+                    <div class="form-group" >
+                        <label for="email" class="text-dark" >Email</label>
+                        <input type="email" class="form-control" id="email" placeholder="Enter email" required>
+                    </div>
+                    <div class="form-group" >
+                        <label for="password" class="text-dark">Password</label>
+                        <input type="password" class="form-control" id="password" placeholder="Password" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-dark text-white" value="Join Now As Affiliate"/>
+                    </div>
+                </form>
+            </div>
+    </div>
+</div>
+</div>
+
+{% endblock content %}

@@ -75,6 +75,12 @@
                 <div class="card-header">
                     <p>Note: It will find and verify emails automatically - It may take a while to complete the process</p>
                 </div>
+                {% if plan == "FREE" %}
+
+                <div class="card-header text-center">
+                    <h4 class="card-title text-danger text-center">This feature is not available for FREE plan. <a href="{% url 'subscriptions' %}" class="font-weight-bold text-success">Please Upgrade </a></h4>
+                </div>
+                {% endif %}
                 <div class="card-body">
                     <p class="hidden" style="display:none" id="hiddenplace"></p>
 
@@ -110,7 +116,7 @@
                         <div class="preview-container"></div>
                       </div>
                       <input id="file_input" type="file" multiple="false" name="file" accept=".csv" required>
-                      <button id="upload_images">Upload Now</button>
+                      <button id="upload_images" {% if plan == "FREE" %} disabled {% endif %}>Upload Now</button>
                       <div id="result_images" class="result-images"></div>
                     </form>
                         
@@ -162,7 +168,7 @@ document.body.addEventListener("htmx:beforeSend", function(evt) {
         $('#progress_bar').addClass('d-none');
         $('#loading_spinner_gif').css('z-index','35');
         $('a,.btn').css('pointer-events','none');
-        $(".card > *:not(#loading_spinner_gif)").css('filter','blur(5px)');
+        //$(".card > *:not(#loading_spinner_gif)").css('filter','blur(5px)');
     };
 });
 
@@ -173,7 +179,7 @@ document.body.addEventListener("htmx:afterRequest", function(evt) {
     if(evt.detail.elt.id == "show_columns"){
         $('#selecting_column').empty();
         $('#loading_spinner_gif').css('z-index','0');
-        $(".card > *").css('filter','blur(0px)');
+        //$(".card > *").css('filter','blur(0px)');
         $('a,.btn').css('pointer-events','auto');
     };
 })

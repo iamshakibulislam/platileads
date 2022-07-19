@@ -9,6 +9,7 @@ urlpatterns = [
     path('change_alert_status/',views.change_alert_status,name='change_alert_status'),
     path('profile/',views.profile,name='profile'),
     path('logout/',views.logout,name='logout'),
+    path('process_percentage/',views.process_percentage,name='process_percentage'),
     path('appsumo_code/',views.appsumo_code,name='appsumo_code'),
     #password reset urls
     path('password-reset/',auth_views.PasswordResetView.as_view(template_name='users/reset.html',html_email_template_name='users/password-reset-email-template.html'),name='password_reset'),

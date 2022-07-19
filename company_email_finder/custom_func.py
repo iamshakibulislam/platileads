@@ -93,45 +93,47 @@ def extract_name_and_position(list_of_search_titles,position):
 
 def return_email_found_status(first_name,last_name,domain):
     #extract only domain name from url
+        try:
+            root_domain_inst = tldextract.extract(domain)
+            root_domain = root_domain_inst.domain+'.'+root_domain_inst.suffix
 
-        root_domain_inst = tldextract.extract(domain)
-        root_domain = root_domain_inst.domain+'.'+root_domain_inst.suffix
-
-        possible_combinations = []
-        possible_combinations.append(first_name+'@'+root_domain)
-        possible_combinations.append(first_name+'.'+last_name+'@'+root_domain)
-        
-        possible_combinations.append(last_name+'@'+root_domain)
-        possible_combinations.append(last_name+'.'+first_name+'@'+root_domain)
-        possible_combinations.append(last_name+'-'+first_name+'@'+root_domain)
-        possible_combinations.append(last_name+'_'+first_name+'@'+root_domain)
-        possible_combinations.append(first_name+'-'+last_name+'@'+root_domain)
-        possible_combinations.append(first_name+'_'+last_name+'@'+root_domain)
-        possible_combinations.append(first_name[0]+last_name+'@'+root_domain)
-        possible_combinations.append(first_name+last_name+'@'+root_domain)
-
-        get_mx = get_mx_records_domain(root_domain)[-1]
-
-        #print('your mx record is:',get_mx)
-        for possible_email in possible_combinations:
-            check_valid_or_not = is_valid_email(get_mx,possible_email)
-
-           
-
-            if check_valid_or_not == True:
-                '''
-                sel_user_credit = user_credit.objects.get(user=request.user)
-                sel_user_credit.credits_remaining -= int(credit_deduct_amount)
-                sel_user_credit.save()
-                '''
-                
-                return possible_email.replace(' ','')
+            possible_combinations = []
+            possible_combinations.append(first_name+'@'+root_domain)
+            possible_combinations.append(first_name+'.'+last_name+'@'+root_domain)
             
-            else:
-                '''
-                sel_user_credit = user_credit.objects.get(user=request.user)
-                sel_user_credit.credits_remaining -= 1
-                sel_user_credit.save()
-                '''
+            possible_combinations.append(last_name+'@'+root_domain)
+            possible_combinations.append(last_name+'.'+first_name+'@'+root_domain)
+            possible_combinations.append(last_name+'-'+first_name+'@'+root_domain)
+            possible_combinations.append(last_name+'_'+first_name+'@'+root_domain)
+            possible_combinations.append(first_name+'-'+last_name+'@'+root_domain)
+            possible_combinations.append(first_name+'_'+last_name+'@'+root_domain)
+            possible_combinations.append(first_name[0]+last_name+'@'+root_domain)
+            possible_combinations.append(first_name+last_name+'@'+root_domain)
 
-                return None
+            get_mx = get_mx_records_domain(root_domain)[-1]
+
+            #print('your mx record is:',get_mx)
+            for possible_email in possible_combinations:
+                check_valid_or_not = is_valid_email(get_mx,possible_email)
+
+            
+
+                if check_valid_or_not == True:
+                    '''
+                    sel_user_credit = user_credit.objects.get(user=request.user)
+                    sel_user_credit.credits_remaining -= int(credit_deduct_amount)
+                    sel_user_credit.save()
+                    '''
+                    
+                    return possible_email.replace(' ','')
+                
+                else:
+                    '''
+                    sel_user_credit = user_credit.objects.get(user=request.user)
+                    sel_user_credit.credits_remaining -= 1
+                    sel_user_credit.save()
+                    '''
+
+                    return None
+        except:
+            return None

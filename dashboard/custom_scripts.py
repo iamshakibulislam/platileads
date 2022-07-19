@@ -49,26 +49,31 @@ def get_mx_records(email):
 #check if the email is valid
 def is_valid_email(mx_record,email):
 
-    server = smtplib.SMTP()
-    # uncomment the below line if you want to see full output.
-    #server.set_debuglevel(1)
+    try:
 
-    #This is just a fake email that doesn't probably exist for smtp.mail(fromAddress)  
-    fromAddress = 'shakibulislam@gmail.com'
+        server = smtplib.SMTP()
+        # uncomment the below line if you want to see full output.
+        #server.set_debuglevel(1)
 
-    # SMTP Conversation
-    server.connect(mx_record)
-    server.helo(server.local_hostname) ### server.local_hostname(Get local server hostname)
-    server.mail(fromAddress)
-    code, message = server.rcpt(str(email))
-    server.quit()
+        #This is just a fake email that doesn't probably exist for smtp.mail(fromAddress)  
+        fromAddress = 'shakibulislam@gmail.com'
 
+        # SMTP Conversation
+        server.connect(mx_record)
+        server.helo(server.local_hostname) ### server.local_hostname(Get local server hostname)
+        server.mail(fromAddress)
+        code, message = server.rcpt(str(email))
+        server.quit()
+
+        
+
+        # Assume SMTP response 250 is success
+        if (code == 250 or code == 251 or code == 220 or code == 200):
+            return True
+        else:
+            return False
     
-
-    # Assume SMTP response 250 is success
-    if (code == 250 or code == 251 or code == 220 or code == 200):
-        return True
-    else:
+    except:
         return False
 
 

@@ -25,20 +25,29 @@ openai.api_key = st.OPENAI_API_KEY
 
 def single_lead(request):
     if request.method == "GET":
-
+        
         curr_sub = subscription_data.objects.get(user=request.user)
         curr_sub_plan = curr_sub.package.name
 
+        plan = None
+
         if curr_sub_plan == "FREE" or curr_sub_plan == "free":
-            return redirect('subscriptions')
+            plan = "FREE"
+
         
-        return render(request, 'company_leads/single_lead.html')
+        
+        return render(request, 'company_leads/single_lead.html',{'plan':plan})
 
 
     if request.method == "POST":
         get_domain = request.POST.get('domain')
         get_position = request.POST.get('position')
         scraperapikey = st.SCRAPER_API_KEY
+
+        #get credits remaining
+        cred = user_credit.objects.get(user=request.user)
+        if cred.credits_remaining <5:
+            return HttpResponse("You don't have enough credits")
 
 
         try:
@@ -138,13 +147,17 @@ def single_lead(request):
 
 def bulk_leads(request):
     if request.method == "GET":
+        
         curr_sub = subscription_data.objects.get(user=request.user)
         curr_sub_plan = curr_sub.package.name
+        
+        plan = None
 
         if curr_sub_plan == "FREE" or curr_sub_plan == "free":
-            return redirect('subscriptions')
-            
-        return render(request, 'company_leads/bulk_leads.html')
+            plan = "FREE"
+        
+
+        return render(request, 'company_leads/bulk_leads.html',{'plan':plan})
 
     if request.method == "POST":
 
@@ -214,8 +227,23 @@ def bulk_leads_results(request):
             data = read_file["data"]
 
             new_data = []
+            
+            try:
+                sel_user_inst = request.user
+                sel_user_inst.file_process_percentage = float(0)
+                sel_user_inst.save()
 
+            except:
+                pass
+
+            i = 1
             for dt in data:
+
+                sel_user_inst = request.user
+                sel_user_inst.file_process_percentage = float((i/len(data))*100)
+                sel_user_inst.save()
+
+                i+=1
 
                 #check if  the user has enough credits or not
                 select_user_credit = user_credit.objects.get(user=request.user)
