@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'subscriptions',
     'company_email_finder',
     'affiliate_payout',
-    
+
 ]
 
 MIDDLEWARE = [
@@ -194,13 +194,13 @@ EMAIL_HOST_PASSWORD = 'pURgSSJVVLny'
 
 #local testing database
 
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if DEBUG == True:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
 
 
 
@@ -223,19 +223,18 @@ DATABASES = {
 
 
 #local production database
-'''
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'platileads',
-        'USER': 'shakil',
-        'PASSWORD': 'Shakil121@',
-        'HOST': 'localhost',
-        'PORT': '3306',
+if DEBUG == False:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'platileads',
+            'USER': 'shakil',
+            'PASSWORD': 'Shakil121@',
+            'HOST': 'localhost',
+            'PORT': '3306',
+            
+            
+            }
         
-        
-        }
-       
-}
+    }
 
-'''
