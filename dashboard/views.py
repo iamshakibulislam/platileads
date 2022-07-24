@@ -9,11 +9,34 @@ from leads.models import *
 from xls2xlsx import XLS2XLSX
 import tldextract
 from functools import wraps
+from subscriptions.models import *
 import os
 import csv
 from django.views.decorators.csrf import csrf_exempt
 from .custom_scripts import get_mx_records,get_mx_records_domain,is_valid_email,xlsx_info,xlsx_write_on_new_column,xlsx_retrive_column_data,csv_to_xlsx,requires_credit
 from .models import *
+
+
+
+def get_affiliate_data(request):
+    if request.user.is_affiliate == True:
+        balance = round(request.user.balance,2)
+
+        all_referred = User.objects.filter(referred_by=request.user)
+        total_referred = len(all_referred)
+
+        all_referred_user = subscription_data.objects.filter(user__referred_by=request.user)
+        all_prem_user=all_referred_user.exclude(package__name='FREE')
+
+
+        return {"total_referred":total_referred,"balance":balance,"all_prem_user":len(all_prem_user),"all_referred_user":all_referred_user,'all_referred_user_count':len(all_referred_user)}
+
+
+    else:
+        return None
+
+
+
 
 @login_required(login_url='/users/login/')
 def dashboard_home(request):
@@ -31,8 +54,12 @@ def dashboard_home(request):
     all_latest_leads = campaign_leads.objects.filter(campaign__user=request.user)[:100]
 
     get_token = str(request.user.secret_id)
+    aff_data = None
+    if request.user.is_affiliate:
+        aff_data = get_affiliate_data(request)
+        
 
-    return render(request,'dashboard/index.html',{'total_campaigns':total_campaigns,'total_leads':total_leads,'credits_remaining':credits_remaining,'all_latest_leads':all_latest_leads,'token':get_token,'all_latest_leads_count':len(all_latest_leads)})
+    return render(request,'dashboard/index.html',{'total_campaigns':total_campaigns,'total_leads':total_leads,'credits_remaining':credits_remaining,'all_latest_leads':all_latest_leads,'token':get_token,'all_latest_leads_count':len(all_latest_leads),"aff_data":aff_data})
 
 @login_required(login_url='/users/login/')
 @requires_credit
@@ -59,7 +86,7 @@ def email_verification(request):
         
         if is_exists == False:
             sel_user_credit = user_credit.objects.get(user=request.user)
-            sel_user_credit.credits_remaining -= 0
+            sel_user_credit.credits_remaining -= 1
             sel_user_credit.save()
            
             return HttpResponse("invalid_email")
@@ -215,6 +242,10 @@ def bulk_email_verification_result(request):
                         if is_exists == True:
                             if is_valid_email(get_mx,'1'+email_val) == True:
                                 xlsx_write_on_new_column(row_num,total_columns,"catchall",actual_file_path)
+                                total_email_verified += 1
+                                sel_user_credit = user_credit.objects.get(user=request.user)
+                                sel_user_credit.credits_remaining -= 1
+                                sel_user_credit.save()
                             
                             else:
                                 xlsx_write_on_new_column(row_num,total_columns,"verified",actual_file_path)
@@ -224,9 +255,10 @@ def bulk_email_verification_result(request):
                                 sel_user_credit.save()
                         
                         else:
-                            #sel_user_credit = user_credit.objects.get(user=request.user)
-                            #sel_user_credit.credits_remaining -= 1
-                            #sel_user_credit.save()
+                            total_email_verified += 1
+                            sel_user_credit = user_credit.objects.get(user=request.user)
+                            sel_user_credit.credits_remaining -= 1
+                            sel_user_credit.save()
                             xlsx_write_on_new_column(row_num,total_columns,"email does not exist",actual_file_path)
             
             except:

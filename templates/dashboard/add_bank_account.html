@@ -1,0 +1,84 @@
+{% extends 'dashboard_base/base_dashboard.html' %}
+
+{% block title %} Add bank account for payout {% endblock title%}
+
+{% block content %}
+
+{% load static %}
+    <div class="app-content" style="height:100vh">
+    <div class="row justify-content-center mt-4" >
+        <div class="col-md-6">
+            <div class="card" style="margin-top:3rem">
+
+                <div class="card-header">
+                    <h4 class="card-title">Add bank account for payout</h4>
+                </div>
+
+                {% if messages %}
+
+                {% for message in messages %}
+                <div class="card-header">
+                    <h4 class="card-title text-success">
+                        {{message}}
+                    </h4>
+                </div>
+
+                {% endfor %}
+
+                {% endif %}
+                <div class="card-body">
+                    <p class="hidden" style="display:none" id="hiddenplace"></p>
+                        
+                    <form method="post" action="{% url 'add_bank_account' %}" >
+                        {% csrf_token %}
+                        <div class="form-group">
+                            
+                        <input type="text" class="form-control" id="bank_name" name="bank_name" style="z-index:10"  placeholder="Bank Name" required="true" {% if data.bank_name != None %} value="{{data.bank_name}}" {% endif %}>
+                        </div>
+                        <div class="form-group">
+                            
+                            <input type="text" class="form-control" id="bank_account_number" name="bank_account_number" style="z-index:10"  placeholder="Account Number" required="true" {% if data.account_number != None %} value="{{data.account_number}}" {% endif %}>
+                        </div>
+                        <div class="form-group">
+                            
+                            <input type="text" class="form-control" id="bank_branch_name" name="bank_branch_name" style="z-index:10"  placeholder="Branch Name" {% if data.branch_name != None %} value="{{data.branch_name}}" {% endif %}>
+                        </div>
+                        <div class="form-group">
+                            
+                            <input type="text" class="form-control" id="bank_routing_number" name="bank_routing_number" style="z-index:10"  placeholder="Routing Number" {% if data.routing_number != None %} value="{{data.routing_number}}" {% endif %}>
+                        </div>
+                        <div class="form-group">
+                            
+                            <input type="text" class="form-control" id="account-type" name="account_type" style="z-index:10"  placeholder="Account type (personal/business)" {% if data.account_type != None %} value="{{data.account_type}}" {% endif %}>
+                        </div>
+                        <div class="form-group d-flex justify-content-center">
+                        <button type="submit" id="submitbtn" class="btn btn-primary" style="z-index:5"> Add account </button>
+                        </div>
+                    </form>
+
+                   
+
+
+                    
+<!-- loading spinner-->
+
+
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+{% endblock content %}
+
+{% block customjs %}
+
+
+
+
+{% endblock customjs %}

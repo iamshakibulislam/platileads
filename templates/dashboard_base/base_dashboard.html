@@ -102,6 +102,7 @@
 						<li class="slide mt-4" >
 							<a class="side-menu__item"  data-bs-toggle="slide" href="{% url 'dashboard_home' %}"><i class="side-menu__icon fe fe-home" style="font-size:1.5rem;flex:none"></i><span class="side-menu__label" style="flex:none;margin-left:1rem">Dashboard</span></a>
 						</li>
+						{% if request.user.is_affiliate == 0 %}
 						<li><h3>Campaigns</h3></li>
 						<li>
 							<a class="side-menu__item" href="{% url 'campaign_list' %}"><i class="side-menu__icon fa-solid fa-list" style="font-size:1.3rem;margin-right:0.5rem"></i><span class="side-menu__label" style="flex:none">All Campaigns</span></a>
@@ -144,6 +145,19 @@
                         <li>
 							<a class="side-menu__item text-justify" href="{% url 'find_bulk_email' %}"><i class="side-menu__icon fa-solid fa-file-csv" style="font-size:1.7rem"></i><span class="side-menu__label" style="flex:none">Bulk email finder</span></a>
 						</li>
+
+						{% else %}
+
+						<li>
+							<a class="side-menu__item text-justify" href="{% url 'add_bank_account' %}"><i class="side-menu__icon fa-solid fa-building-columns " style="font-size:1.5rem"></i><span class="side-menu__label" style="flex:none">  Add bank account  </span></a>
+						</li>
+
+						<li>
+							<a class="side-menu__item text-justify" href="{% url 'request_payout' %}"><i class="side-menu__icon fa-solid fa-money-check-dollar " style="font-size:1.5rem"></i><span class="side-menu__label" style="flex:none">  Request Payout  </span></a>
+						</li>
+
+
+						{% endif %}
 						
 						
 						
@@ -257,10 +271,12 @@
 										<a class="dropdown-item" href="{% url 'profile' %}">
 											<i class="dropdown-icon fe fe-user"></i> Profile
 										</a>
-										
+										{% if request.user.is_affiliate == 0 %}
 										<a class="dropdown-item" href="{% url 'subscriptions' %}">
 											<i class="dropdown-icon fa fa-credit-card"></i> Subscriptions
 										</a>
+
+										{% endif %}
 										
 										<a class="dropdown-item" href="{% url 'logout' %}">
 											<i class="dropdown-icon fe fe-alert-circle"></i> Sign out

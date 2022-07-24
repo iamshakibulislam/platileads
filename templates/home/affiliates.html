@@ -54,16 +54,34 @@
                 <h3 class="text-center text-dark pt-3">Signup Today</h3>
             </div>
             <div class="card-body" id="affiliateform">
-                <form action="#" mehtod="POST"  >
+                <form action="{% url 'signup' %}" method="POST" >
+
+                    {% csrf_token %}
                     <div class="form-group" >
-                        <label for="email" class="text-dark" >Email</label>
-                        <input type="email" class="form-control" id="email" placeholder="Enter email" required>
+                        
+                        <input type="text" class="form-control" name="first_name" id="first_name" placeholder="First Name" required>
+                    </div>
+
+                    <input type="hidden" name="is_affiliate" value="1">
+
+                    <div class="form-group" >
+                        
+                        <input type="text" class="form-control" name="last_name" id="last_name" placeholder="Last Name" required>
                     </div>
                     <div class="form-group" >
-                        <label for="password" class="text-dark">Password</label>
-                        <input type="password" class="form-control" id="password" placeholder="Password" required>
+                        
+                        <input type="email" class="form-control" name="email" id="email" placeholder="Enter email" required>
+                    </div>
+                    <input type="hidden" name="tos" value="1">
+                    <div class="form-group" >
+                        
+                        <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
                     </div>
                     
+                    <div class="form-group" >
+                        
+                        <input type="password" class="form-control" name="confirm_password" id="confirm_password" placeholder="Confirm Password" required>
+                    </div>
                     <div class="form-group">
                         <input type="submit" class="btn btn-dark text-white" value="Join Now As Affiliate"/>
                     </div>

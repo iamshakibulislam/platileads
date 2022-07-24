@@ -10,7 +10,7 @@
 					<div class="side-app">
 
 						<!-- PAGE-HEADER -->
-						{% if request.user.alert_status %}
+						{% if request.user.alert_status and request.user.is_affiliate != 1 %}
 						<div class="page-header">
 							<p class="text-danger"> All new discovered leads will be stored under active campaign . Each email verification costs 1 credit and each email finding from company name(with job role) costs 5 credits per email. <a href="{% url 'change_alert_status' %}" class="btn btn-danger btn-sm">Got it,thanks</a></p>
 						</div>
@@ -40,7 +40,7 @@
 								</div>
 
 							</form>
-							
+							{% if request.user.is_affiliate == 0 %}
 							<div class="ms-auto pageheader-btn">
 								<a href="#" id="createcampbtn" class="btn btn-primary btn-icon text-white me-2">
 									<span>
@@ -49,12 +49,16 @@
 								</a>
 								
 							</div>
+
+							{% endif %}
 						</div>
 
 						 
 						<!-- PAGE-HEADER END -->
 
 						<!-- ROW-1 -->
+
+						{% if request.user.is_affiliate == 0 %}
 						<div class="row">
 							<div class="col-lg-12 col-md-12 col-sm-12 col-xl-12">
 								<div class="row">
@@ -135,11 +139,102 @@
 								</div>
 							</div>
 						</div>
+
+						{% endif %}
 						
 						<!-- ROW-1 END -->
 
-						<!-- latest leads will be shown here -->
 
+
+						<!--     affiliate cards should go there    -->
+
+						
+						{% if request.user.is_affiliate == 1 %}
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12 col-xl-12">
+								<div class="row">
+									<div class="col-lg-6 col-md-12 col-sm-12 col-xl-3">
+										<div class="card overflow-hidden">
+											<div class="card-body">
+												<div class="row">
+													<div class="col">
+														<h6 class="">Total Referred Users</h6>
+														<h3 class="mb-2 number-font">{{aff_data.total_referred}}</h3>
+														
+													</div>
+													<div class="col col-auto">
+														<div class="counter-icon bg-primary-gradient box-shadow-primary brround ms-auto">
+															<i class="fa-solid fa-circle text-white mb-5 "></i>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-6 col-md-12 col-sm-12 col-xl-3">
+										<div class="card overflow-hidden">
+											<div class="card-body">
+												<div class="row">
+													<div class="col">
+														<h6 class="">Premium Subscribers</h6>
+														<h3 class="mb-2 number-font">{{aff_data.all_prem_user}}</h3>
+														
+													</div>
+													<div class="col col-auto">
+														<div class="counter-icon bg-danger-gradient box-shadow-danger brround  ms-auto">
+															<i class="icon icon-rocket text-white mb-5 "></i>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-6 col-md-12 col-sm-12 col-xl-3">
+										<div class="card overflow-hidden">
+											<div class="card-body">
+												<div class="row">
+													<div class="col">
+														<h6 class="">Balance</h6>
+														<h3 class="mb-2 number-font">{{aff_data.balance}}</h3>
+														
+													</div>
+													<div class="col col-auto">
+														<div class="counter-icon bg-secondary-gradient box-shadow-secondary brround ms-auto">
+															<i class="fe fe-dollar-sign text-white mb-5 "></i>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									
+									<div class="col-lg-6 col-md-12 col-sm-12 col-xl-3">
+										<div class="card overflow-hidden">
+											<div class="card-body">
+												<div class="row">
+													<div class="col">
+														<h6 class="">Referral link</h6>
+														<h6 class="mb-2  number-font" id="reflnk">https://platileads.com/?ref={{request.user.id}}</h6>
+														<a id="cp"  onclick="cp()" class="text-white btn btn-sm btn-dark">Click to copy </a>
+														
+													</div>
+													
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						{% endif %}
+
+						<!--end if showing cards of affiliate -->
+
+
+						<!-- latest leads will be shown here -->
+						{% if request.user.is_affiliate == 0 %}
 						<div class="row">
 							<div class="col-12 col-sm-12">
 								<div class="card ">
@@ -199,7 +294,73 @@
 							</div><!-- COL END -->
 						</div><!-- ROW-5 END -->
 
+						{% endif %}
+
 						<!-- end of showing latest leads-->
+
+
+						<!-- invited users by affiliate  here  -->
+
+						{% if request.user.is_affiliate == 1 %}
+						<div class="row">
+							<div class="col-12 col-sm-12">
+								<div class="card ">
+									<div class="card-header d-flex justify-content-between">
+										<h3 class="card-title mb-0">Your invited users</h3>
+						
+										
+									</div>
+									<div class="card-body">
+										{% if aff_data.all_referred_user_count == 0 %}
+
+										<h2 class="text-dark text-center">You don't have any invited users for now</h2>
+										{% else %}
+										<div class="table-responsive">
+											<table id="data-table" class="table table-bordered text-nowrap mb-0">
+												<thead class="border-top">
+												<tr>
+													<th class="bg-transparent border-bottom-0">Date</th>
+													<th class="bg-transparent border-bottom-0">First Name</th>
+													<th class="bg-transparent border-bottom-0">Last Name</th>
+													
+													
+													<th class="bg-transparent border-bottom-0">Subscribed Plan</th>
+													
+													
+												</tr>
+												</thead>
+												<tbody>
+													{% for user in aff_data.all_referred_user %}
+													<tr class="border-bottom" id="lead{{user.id}}">
+														
+														<td class="text-muted fs-15 fw-semibold">
+															{{user.start_date}}
+															
+														</td>
+														<td class="text-muted fs-15 fw-semibold">{{user.user.first_name}} </td>
+														
+														<td class="text-muted fs-15 fw-semibold">{{user.user.last_name}}</td>
+														<td class="text-success fs-15 fw-semibold">{{user.package.name}}</td>
+														
+														
+						
+						
+						
+													
+													</tr>
+						
+													{% endfor %}
+												   
+												</tbody>
+											</table>
+										</div>
+										{% endif %}
+									</div>
+								</div>
+							</div><!-- COL END -->
+						</div><!-- ROW-5 END -->
+
+						{% endif %}
 			
 
 						<!-- table was there -->
@@ -216,6 +377,21 @@
 
 
 			{% block customjs %}
+
+			<script>
+				var reftxt = document.getElementById("reflnk")
+
+				function cp(){
+
+					
+					navigator.clipboard.writeText(reftxt.textContent);
+
+					document.getElementById('cp').textContent = "Copied !"
+
+				}
+
+			</script>
+
 			<script>
 				
 				$('#campaign_form').hide();

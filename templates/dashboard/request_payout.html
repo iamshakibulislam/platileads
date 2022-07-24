@@ -1,0 +1,71 @@
+{% extends 'dashboard_base/base_dashboard.html' %}
+
+{% block title %} Request payout {% endblock title%}
+
+{% block content %}
+
+{% load static %}
+    <div class="app-content" style="height:100vh">
+    <div class="row justify-content-center mt-4" >
+        <div class="col-md-6">
+            <div class="card" style="margin-top:3rem">
+
+                <div class="card-header">
+                    <h4 class="card-title">Request Payout</h4>
+                </div>
+
+                {% if messages %}
+
+                {% for message in messages %}
+                <div class="card-header">
+                    <h4 class="card-title text-success">
+                        {{message}}
+                    </h4>
+                </div>
+
+                {% endfor %}
+
+                {% endif %}
+                <div class="card-body">
+                    <p class="hidden" style="display:none" id="hiddenplace"></p>
+                        
+                    <form method="post" action="{% url 'request_payout' %}" >
+                        {% csrf_token %}
+                        <div class="form-group">
+                            
+                        
+                        <div class="form-group">
+                            
+                            <input type="number" min="25" class="form-control" id="amount" name="amount" style="z-index:10"  placeholder="Payout amount" required>
+                        </div>
+                        <div class="form-group d-flex justify-content-center">
+                        <button type="submit" id="submitbtn" class="btn btn-primary" style="z-index:5"> Payout now </button>
+                        </div>
+                    </form>
+
+                   
+
+
+                    
+<!-- loading spinner-->
+
+
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+{% endblock content %}
+
+{% block customjs %}
+
+
+
+
+{% endblock customjs %}

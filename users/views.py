@@ -41,6 +41,17 @@ def signup(request):
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
         plan = request.POST.get('plan','f')
+        is_affiliate = request.POST.get('is_affiliate',False)
+
+        try:
+            if is_affiliate == 1 or is_affiliate == '1':
+                is_affiliate = True
+
+            else:
+                is_affiliate = False
+
+        except:
+            pass
 
         
 
@@ -51,6 +62,16 @@ def signup(request):
         except:
             return HttpResponse("Please accept the terms and conditions")
 
+        referred_by = None
+
+        try:
+            get_referer_id = int(request.COOKIES['ref'])
+            if get_referer_id != 0 or get_referer_id != None or get_referer_id != '':
+                referred_by = User.objects.get(id=get_referer_id)
+
+        except:
+            pass
+
         if password != confirm_password:
             return HttpResponse("<div class='alert alert-danger'>Password does not match</div>")
 
@@ -58,7 +79,7 @@ def signup(request):
             return HttpResponse("<div class='alert alert-danger'>User with this email already exists</div>")
 
         else:
-            new_user= User.objects.create_user(first_name=first_name,last_name=last_name,email=email,phone=phone,password=password)
+            new_user= User.objects.create_user(first_name=first_name,last_name=last_name,email=email,phone=phone,password=password,referred_by=referred_by,is_affiliate=is_affiliate)
             set_secret = User.objects.get(id=new_user.id)
             set_secret.secret_id = abs(hash(str(new_user.id)+str(new_user.email)))
             set_secret.save()
@@ -71,6 +92,11 @@ def signup(request):
                 campaigns.objects.create(name="default campaign",description="default campaign description",user=new_user,is_active=True)
             except:
                 pass
+
+            if is_affiliate == True:
+                get_package = packages.objects.get(name='FREE')
+                subscription_data.objects.create(user=new_user,package=get_package)
+                return redirect('dashboard_home')
 
             if plan == 'f':
                 get_package = packages.objects.get(name='FREE')

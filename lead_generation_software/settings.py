@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'leads',
     'subscriptions',
     'company_email_finder',
+    'affiliate_payout',
+    
 ]
 
 MIDDLEWARE = [

@@ -34,7 +34,7 @@
 					<div class="container pt-5 mt-5">
 						<div class="row justify-content-center pt-5 mt-5">
 							<div class="col-lg-7 text-center pt-3">
-								<h1 class="text-color-light font-weight-extra-bold text-12 mb-1 line-height-2 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="500" style="margin-bottom:4rem;margin-top:-6rem">The Platform to Manage All your outbound leads</h1>
+								<h1 class="text-color-light font-weight-extra-bold text-12 mb-1 mb-2 line-height-2 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="500" style="margin-bottom:4rem;margin-top:-6rem">The AI-Powered Software to Find,Verify and Manage Outbound Leads</h1>
 								
 								<a href="{% url 'signup' %}" class="btn btn-light text-color-dark custom-secondary-font font-weight-bold text-3 px-5 py-3 appear-animation" data-appear-animation="fadeInRightShorter" data-appear-animation-delay="900">GET STARTED FREE</small></a>
 								<a href="#pricing" class="btn btn-dark custom-secondary-font font-weight-bold text-3 px-5 py-3 ms-4 appear-animation" data-appear-animation="fadeInLeftShorter" data-appear-animation-delay="900">VIEW OUR PLANS</a>
@@ -73,15 +73,15 @@
 				<div class="container my-5">
 					<div class="row text-center py-5">
 						<div class="col px-5">
-							<a href="https://chrome.google.com/webstore/detail/platileads-extension/mfpjccmdhcelgghljlemdjhpebjdkdgf">
+							
 							<h1 class="word-rotator-title font-weight-bold text-9 mb-3 appear-animation" data-appear-animation="fadeInUpShorter">
-								Download platileads chrome extension
+								Generate leads in a bulk - completely autopilot
 							</h1>
-							</a>
+							
 							<p class="lead px-5 mb-0 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="200">
-								Extract and save all informations of the prospects and companies with just one click .
+								Find and verify targeted emails in a bulk. No need to enter manually.Our AI powered software will find and verify emails from csv files.
 							</p>
-							<a href="https://chrome.google.com/webstore/detail/platileads-extension/mfpjccmdhcelgghljlemdjhpebjdkdgf" class="btn btn-primary text-center mt-2" style="border-radius:25px">Install From Chrome Web Store</a>
+							<a href="{% url 'signup' %}" class="btn btn-primary text-center mt-2" style="border-radius:25px">Signup For Free</a>
 						</div>
 					</div>
 					<!---
@@ -127,13 +127,14 @@
 				<section class="section m-0 mt-4 border-0 p-relative" id="features">
 					<div class="container">
 						<div class="row py-2 align-items-center justify-content-center">
-							<div class="col-lg-6 text-center">
-								<img class="img-fluid" src="{% static 'img/homepage/extension.PNG' %}" alt="">
+							<div class="col-lg-6 text-center" style="max-width: 1500px">
+								<img class="img-fluid" src="{% static 'img/jobroleemail.PNG' %}" alt="">
 							</div>
 							<div class="col-lg-6 text-center text-lg-start">
-								<h2 class="text-color-dark font-weight-bold text-6 mb-1 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="0">Linkedin Sales Navigator To Lead List within seconds</h2>
-								<p class=" appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="200">Just install the free chrome extension > open the sales navigator > find prospects > Open extension and click on get lead .
-									All of the informations of the prospects including email and company details will be saved into your platileads account which you can export later as xls file.
+								<h2 class="text-color-dark font-weight-bold text-6 mb-1 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="0">Find anyones email selecting only job role</h2>
+								<p class="appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="200">
+									Only have company website address ? No problem. Our AI powered software  is capable of findng anybody if you just give it the targated job position .<br>
+									No need to worry about the email accurancy . This tool finds and verifies email altogether .
 								</p>
 								
 								<a href="#pricing" class="btn btn-dark custom-secondary-font font-weight-bold text-3 px-5 py-3 mt-3 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="600">VIEW OUR PLANS</a>
@@ -154,7 +155,7 @@
 						<div class="row py-2 align-items-center justify-content-center">
 							<div class="col-lg-6 text-center text-lg-start">
 								<h2 class="text-color-dark font-weight-bold text-6 mb-1 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="0">Instant email verification</h2>
-								<p class="appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="200"> Higher bounce rate causes emails landing on spam . We provide three levels of email verification including syntax check,dns check and mailbox existing check </p>
+								<p class="appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="200"> Higher bounce rate causes emails landing on spam . We provide three levels of email verification including syntax check,dns check and mailbox existance check </p>
 								<p class="appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="400">If you have a list of email addresses you can verify those with the bulk verification feature. Just upload your lead and let the software do all the boaring tasks for you.</p>
 								<a href="#pricing" class="btn btn-dark custom-secondary-font font-weight-bold text-3 px-5 py-3 mt-3 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="600">VIEW OUR PLANS</a>
 							</div>
@@ -173,8 +174,8 @@
 							</div>
 							<div class="col-lg-6 text-center text-lg-start">
 								<h2 class="text-color-dark font-weight-bold text-6 mb-1 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="0">Find anyones email using email finder tool</h2>
-								<p class="appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="200">You just have name and company website ? Just go to the email finding tool and enter those informations and the tool will find and validate the email. </p>
-								<p class="appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="400">If you have a list of leads without emails , just upload the file and the tool will find emails automatically</p>
+								<p class="appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="200">You just have  company websites ? No problem , Just go to the email finding tool and enter website and targeted job position and the tool will find and validate the email. </p>
+								<p class="appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="400">If you have a list of leads with name and website , the tool will find emails even more faster</p>
 								<a href="#pricing" class="btn btn-dark custom-secondary-font font-weight-bold text-3 px-5 py-3 mt-3 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="600">VIEW OUR PLANS</a>
 							</div>
 						</div>
@@ -186,7 +187,7 @@
 						<div class="row">
 							<div class="col text-center">
 								<h2 class="text-color-light font-weight-bold text-7 mb-1">All in one lead generation solutioin</h2>
-								<p class="lead">Generate leads from your linkedin sales navigator within just one click. Save everything including email and addresses completely automated</p>
+								<p class="lead">Generate and verify leads  within just one click. Save and export everything including name, email , job role etc completely automated</p>
 							</div>
 						</div>
 					</div>
@@ -278,7 +279,7 @@
 							<div class="col text-center">
 								<h2 class="text-color-dark font-weight-bold text-7 mb-1">Pricing</h2>
 								<p class="lead">Choose our flexible plan according to your needs</p>
-								<small style="font-size:100%">Each successful email verification or finding(normally) will cost 1 credit . Email finding with job position costs 5 credits each </small>
+								<small style="font-size:100%">Each successful email verification or finding(normally) costs 1 credit . Email finding with job position costs 5 credits each </small>
 							</div>
 						</div>
 
@@ -515,7 +516,7 @@
 							<div class="col-lg-6">
 								<form class="contact-forms custom-form-style-1 form-errors-light" action="{% url 'contact_us' %}" method="POST">
 									<div class="contact-forms-success alert alert-success d-none mt-4">
-										<strong>Success!</strong> Your message has been sent to us.
+										<strong>Success!</strong> Your message has been sent ! We will get back to you as soon as possible.
 									</div>
 
 									

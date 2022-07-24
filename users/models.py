@@ -114,3 +114,5 @@ class user_coupon(models.Model):
 
     def __str__(self):
         return str(self.email)+' | '+str(self.code) + ' | '+str(self.has_redeemed)
+
+
