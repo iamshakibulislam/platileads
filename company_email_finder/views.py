@@ -1,6 +1,5 @@
 
 import imp
-from turtle import pos
 from django.shortcuts import redirect, render
 from numpy import full
 from dashboard.custom_scripts import *
