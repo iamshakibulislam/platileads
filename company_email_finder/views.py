@@ -276,7 +276,7 @@ def bulk_leads_results(request):
 
                     names = extract_name_and_position(astring,job_position).split(",")
 
-                    print(astring,' and ','whole names ',names)
+                    #print(astring,' and ','whole names ',names)
 
                     for name in names:
                         print("the name is ",name)
