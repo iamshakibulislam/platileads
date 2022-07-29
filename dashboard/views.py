@@ -344,6 +344,8 @@ def find_email(request):
            
 
             if check_valid_or_not == True:
+                if is_valid_email(get_mx,'1'+possible_email) == True:
+                    break
                 sel_user_credit = user_credit.objects.get(user=request.user)
                 sel_user_credit.credits_remaining -= 1
                 sel_user_credit.save()
@@ -555,6 +557,9 @@ def find_bulk_email_result(request):
                         
                         
                         if is_exists == True:
+                            if is_valid_email(get_mx,'1'+comb) == True:
+                                is_exists = False
+                                break
                             xlsx_write_on_new_column(row_num,total_columns,comb,actual_file_path)
                             total_email_verified += 1
                             sel_user_credit = user_credit.objects.get(user=request.user)
