@@ -584,7 +584,10 @@ def find_bulk_email_result(request):
                     
 
                     if email_found == False:
-                        xlsx_write_on_new_column(row_num,total_columns,"email not found",actual_file_path)
+                        sel_user_credit = user_credit.objects.get(user=request.user)
+                        sel_user_credit.credits_remaining -= 1
+                        sel_user_credit.save()
+                        xlsx_write_on_new_column(row_num,total_columns,"not found",actual_file_path)
 
 
 
