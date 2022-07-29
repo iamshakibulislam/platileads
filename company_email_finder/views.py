@@ -107,6 +107,19 @@ def single_lead(request):
                     found_email = None
                 
                 if found_email != None:
+
+                    
+
+
+                    
+                    try:
+                        if return_email_found_status(first_name+'1',last_name+'1',get_domain) != None:
+                            found_email = None
+                            break
+                    except:
+                        found_email = None
+                        break
+
                     sel_user_credit = user_credit.objects.get(user=request.user)
                     sel_user_credit.credits_remaining -= 5
                     sel_user_credit.save()
@@ -314,9 +327,21 @@ def bulk_leads_results(request):
                             
                             except:
                                 found_email = None
+
+                            
                             
                             
                             if found_email != None:
+
+                                
+                                try:
+                                    if return_email_found_status(first_name+'1',last_name+'1',dt[domain]) != None:
+                                        found_email = None
+                                        break
+                                except:
+                                    found_email = None
+                                    break
+
                                 sel_user_credit = user_credit.objects.get(user=request.user)
                                 sel_user_credit.credits_remaining -= 5
                                 sel_user_credit.save()
@@ -356,7 +381,7 @@ def bulk_leads_results(request):
                 try:
                     if found_email == None:
                         sel_user_credit = user_credit.objects.get(user=request.user)
-                        sel_user_credit.credits_remaining -= 1
+                        sel_user_credit.credits_remaining -= 5
                         sel_user_credit.save()
 
                         new_dt = dt.copy()

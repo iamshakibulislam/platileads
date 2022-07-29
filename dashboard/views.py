@@ -1,4 +1,5 @@
 #from http.client import HTTPResponse
+import email
 from logging import root
 from django.shortcuts import render,redirect
 from django.http import HttpResponse, JsonResponse
@@ -339,35 +340,46 @@ def find_email(request):
 
         #print('your mx record is:',get_mx)
         for possible_email in possible_combinations:
-            check_valid_or_not = is_valid_email(get_mx,possible_email)
+            try:
+                check_valid_or_not = is_valid_email(get_mx,possible_email)
+            
+            except FunctionTimedOut:
+                check_valid_or_not = False
 
            
 
             if check_valid_or_not == True:
-                if is_valid_email(get_mx,'1'+possible_email) == True:
-                    break
-                sel_user_credit = user_credit.objects.get(user=request.user)
-                sel_user_credit.credits_remaining -= 1
-                sel_user_credit.save()
+                try:
+                    if is_valid_email(get_mx,'1'+possible_email) == True:
+                        sel_user_credit = user_credit.objects.get(user=request.user)
+                        sel_user_credit.credits_remaining -= 1
+                        sel_user_credit.save()
+                        return render(request,'dashboard/components/found_email.html',{'not_found':True})
+                        break
+                    sel_user_credit = user_credit.objects.get(user=request.user)
+                    sel_user_credit.credits_remaining -= 1
+                    sel_user_credit.save()
 
-                save_lead = leads()
-                save_lead.user = request.user
-                save_lead.first_name = first_name
-                save_lead.last_name = last_name
-                save_lead.email = possible_email
-                save_lead.website = domain
+                    save_lead = leads()
+                    save_lead.user = request.user
+                    save_lead.first_name = first_name
+                    save_lead.last_name = last_name
+                    save_lead.email = possible_email
+                    save_lead.website = domain
+                    
+                    save_lead.save()
+
+                    get_active_campaign = campaigns.objects.get(user=request.user,is_active=True)
+
+                    campaign_leads_inst = campaign_leads()
+                    campaign_leads_inst.campaign = get_active_campaign
+                    campaign_leads_inst.lead = save_lead
+                    campaign_leads_inst.save()
+                    
                 
-                save_lead.save()
-
-                get_active_campaign = campaigns.objects.get(user=request.user,is_active=True)
-
-                campaign_leads_inst = campaign_leads()
-                campaign_leads_inst.campaign = get_active_campaign
-                campaign_leads_inst.lead = save_lead
-                campaign_leads_inst.save()
-                
-                return render(request,'dashboard/components/found_email.html',{'email':possible_email.replace(' ','')})
-            
+                    return render(request,'dashboard/components/found_email.html',{'email':possible_email.replace(' ','')})
+                except:
+                    pass
             else:
                 pass
 
@@ -559,6 +571,7 @@ def find_bulk_email_result(request):
                         if is_exists == True:
                             if is_valid_email(get_mx,'1'+comb) == True:
                                 is_exists = False
+                                email_found = False
                                 break
                             xlsx_write_on_new_column(row_num,total_columns,comb,actual_file_path)
                             total_email_verified += 1
