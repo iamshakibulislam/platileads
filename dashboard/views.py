@@ -349,11 +349,16 @@ def find_email(request):
            
 
             if check_valid_or_not == True:
+                print("first found lets check its validity")
                 try:
                     if is_valid_email(get_mx,'1'+possible_email) == True:
+                        print("-------yes yes this is a catch all email server --- ----")
+                        check_valid_or_not = False
                         sel_user_credit = user_credit.objects.get(user=request.user)
                         sel_user_credit.credits_remaining -= 1
                         sel_user_credit.save()
+
+                        print("----credit deducted 1 for catch all")
                         return render(request,'dashboard/components/found_email.html',{'not_found':True})
                         break
                     sel_user_credit = user_credit.objects.get(user=request.user)
@@ -376,12 +381,14 @@ def find_email(request):
                     campaign_leads_inst.lead = save_lead
                     campaign_leads_inst.save()
                     
-                
+                    print("email found unintentinally ---- not good")
                     return render(request,'dashboard/components/found_email.html',{'email':possible_email.replace(' ','')})
                 except:
                     pass
             else:
                 pass
+        
+        print("all loop failed -- finnally going without not found")
 
         return render(request,'dashboard/components/found_email.html',{'not_found':True})
         
