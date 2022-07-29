@@ -248,7 +248,8 @@ def bulk_email_verification_result(request):
                             is_exists = False
                         
                         if is_exists == True:
-                            if is_valid_email(get_mx,'1'+email_val) == True:
+                            demo_mail = email_val.split('@')[0]+'doe'+'@'+email_val.split('@')[1]
+                            if is_valid_email(get_mx,demo_mail) == True:
                                 xlsx_write_on_new_column(row_num,total_columns,"catchall",actual_file_path)
                                 total_email_verified += 1
                                 sel_user_credit = user_credit.objects.get(user=request.user)
@@ -351,7 +352,8 @@ def find_email(request):
             if check_valid_or_not == True:
                 print("first found lets check its validity")
                 try:
-                    if is_valid_email(get_mx,'1'+possible_email) == True:
+                    demo_mail = possible_email.split('@')[0]+'doe'+'@'+possible_email.split('@')[1]
+                    if is_valid_email(get_mx,demo_mail) == True:
                         print("-------yes yes this is a catch all email server --- ----")
                         check_valid_or_not = False
                         sel_user_credit = user_credit.objects.get(user=request.user)
@@ -576,7 +578,8 @@ def find_bulk_email_result(request):
                         
                         
                         if is_exists == True:
-                            if is_valid_email(get_mx,'1'+comb) == True:
+                            demo_mail=comb.split('@')[0]+'doe'+'@'+comb.split('@')[1]
+                            if is_valid_email(get_mx,demo_mail) == True:
                                 is_exists = False
                                 email_found = False
                                 break
