@@ -7,7 +7,7 @@ from django.shortcuts import render
 from dashboard.custom_scripts import *
 import json
 import csv
-
+from func_timeout import *
 
 def read_csv_file(filepath):
 	op = open(filepath,'r')
@@ -90,7 +90,7 @@ def extract_name_and_position(list_of_search_titles,position):
 
 
 
-
+@func_set_timeout(30)
 def return_email_found_status(first_name,last_name,domain):
     #extract only domain name from url
         try:

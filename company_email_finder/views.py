@@ -19,6 +19,7 @@ from .models import *
 from leads.models import *
 from subscriptions.models import *
 import json
+from func_timeout import *
 
 openai.api_key = st.OPENAI_API_KEY
 
@@ -100,8 +101,10 @@ def single_lead(request):
             #find email address from firstname and lastname and domain
 
             if first_name != None and last_name != None:
-                
-                found_email = return_email_found_status(first_name,last_name,get_domain)
+                try:
+                    found_email = return_email_found_status(first_name,last_name,get_domain)
+                except:
+                    found_email = None
                 
                 if found_email != None:
                     sel_user_credit = user_credit.objects.get(user=request.user)
@@ -303,12 +306,15 @@ def bulk_leads_results(request):
 
                         #find email address from firstname and lastname and domain
 
-                        print(first_name,'-->',last_name)
+                        #print(first_name,'-->',last_name)
                         
                         if first_name != None and last_name != None:
+                            try:
+                                found_email = return_email_found_status(first_name,last_name,dt[domain])
                             
-                            found_email = return_email_found_status(first_name,last_name,dt[domain])
-                            print('email finnaly found ',found_email)
+                            except:
+                                found_email = None
+                            
                             
                             if found_email != None:
                                 sel_user_credit = user_credit.objects.get(user=request.user)

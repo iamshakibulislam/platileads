@@ -7,7 +7,7 @@ import os
 from functools import wraps
 from django.http import HttpResponse
 from users.models import *
-
+from func_timeout import *
 
 def requires_credit(view):
     @wraps(view)
@@ -21,6 +21,7 @@ def requires_credit(view):
 
 
 #function for getting mx mx records of a single domain (no input email)
+@func_set_timeout(5)
 def get_mx_records_domain(domain):
     mx_records = []
     try:
@@ -34,6 +35,7 @@ def get_mx_records_domain(domain):
 
 
 # function for getting mx records of a email domain
+@func_set_timeout(5)
 def get_mx_records(email):
     domain = email.split('@')[1]
     mx_records = []
@@ -47,6 +49,7 @@ def get_mx_records(email):
     return mx_records
 
 #check if the email is valid
+@func_set_timeout(5)
 def is_valid_email(mx_record,email):
 
     try:

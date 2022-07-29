@@ -4,6 +4,8 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
 from time import sleep
+
+from func_timeout import *
 from users.models import *
 from leads.models import *
 from xls2xlsx import XLS2XLSX
@@ -15,6 +17,7 @@ import csv
 from django.views.decorators.csrf import csrf_exempt
 from .custom_scripts import get_mx_records,get_mx_records_domain,is_valid_email,xlsx_info,xlsx_write_on_new_column,xlsx_retrive_column_data,csv_to_xlsx,requires_credit
 from .models import *
+from func_timeout import *
 
 
 
@@ -235,9 +238,13 @@ def bulk_email_verification_result(request):
                     else:
                         
                         #checking the email validity
-                        get_mx = get_mx_records(email_val)[-1]
+                        try:
+                            get_mx = get_mx_records(email_val)[-1]
 
-                        is_exists = is_valid_email(get_mx,email_val)
+                            is_exists = is_valid_email(get_mx,email_val)
+
+                        except FunctionTimedOut:
+                            is_exists = False
                         
                         if is_exists == True:
                             if is_valid_email(get_mx,'1'+email_val) == True:
@@ -527,12 +534,22 @@ def find_bulk_email_result(request):
                 else:
                     
                     #checking the email validity
-                    get_mx = get_mx_records_domain(root_domain)[-1]
+                    try:
+                        get_mx = get_mx_records_domain(root_domain)[-1]
+
+                    except FunctionTimedOut:
+                        pass
 
                     for comb in possible_combinations:
 
                         #checking email existance here
-                        is_exists = is_valid_email(get_mx,comb)
+
+                        try:
+
+                            is_exists = is_valid_email(get_mx,comb)
+
+                        except FunctionTimedOut:
+                            is_exists = False
                         
 
                         
