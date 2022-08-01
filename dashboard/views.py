@@ -1,11 +1,13 @@
 #from http.client import HTTPResponse
+
 import email
 from logging import root
 from django.shortcuts import render,redirect
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
 from time import sleep
-
+from bs4 import BeautifulSoup
+import requests
 from func_timeout import *
 from users.models import *
 from leads.models import *
@@ -16,10 +18,13 @@ from subscriptions.models import *
 import os
 import csv
 from django.views.decorators.csrf import csrf_exempt
-from .custom_scripts import get_mx_records,get_mx_records_domain,is_valid_email,xlsx_info,xlsx_write_on_new_column,xlsx_retrive_column_data,csv_to_xlsx,requires_credit
+from .custom_scripts import *
 from .models import *
 from func_timeout import *
-
+import re
+from company_email_finder.custom_func import *
+from django.conf import settings as st
+openai.api_key = st.OPENAI_API_KEY
 
 
 def get_affiliate_data(request):
@@ -652,6 +657,213 @@ def download_bulk_email_found_file(request):
     
     
     return redirect(actual_file_path)
+
+
+
+
+#author email finding functionality starts here
+
+
+@login_required(login_url='/users/login/')
+@requires_credit
+def find_author_email(request):
+    if request.method == "GET":
+        return render(request,'dashboard/find_author_email.html')
+
+    if request.method == "POST":
+
+
+        names = []
+        domain = request.POST.get('domain')
+
+        print('domain name is ',domain)
+
+        if domain == "" or domain == None or domain == " ":
+            return HttpResponse("Please enter a valid blog post url")
+
+        else:
+            call_author = get_author_name(domain)
+            author_name = call_author["string"]
+            source_code = call_author["source_code"]
+
+            print("first try author name is - ",author_name)
+
+            pattern = re.compile(r"\w+")
+
+            split_author_name = pattern.findall(author_name)
+
+            try:
+                if len(split_author_name) == 1 and split_author_name[0] != None:
+
+                    names.append(split_author_name[0])
+                    
+                elif len(split_author_name) == 2:
+                    names= names + split_author_name
+
+                elif len(split_author_name) == 3:
+                    names = names + split_author_name
+
+                else:
+                    pass
+                    
+            except:
+                return render(request,'dashboard/components/found_email.html',{'not_found':True})
+
+            for i,name in enumerate(names):
+                if name == None or name == " " or name=="" or name == "None":
+                    del names[i]
+
+
+
+
+            #checking firstname and lastname availability and trying AI based approach
+            print("names are - ",names)
+            if len(names) == 0 or names == None:
+                if True:
+                    get_list_of_names = get_author_name_extracting_attribute(domain,source_code)
+
+                    print("get list of names ",get_list_of_names)
+                    new_names_cleaned = []
+                    for item in get_list_of_names:
+                        if item != None or item != "" or item != " ":
+                            if "\n" in item:
+                                item = item.split("\n")
+                                new_names_cleaned.append(item[-1].strip())
+                            
+                            else:
+                                new_names_cleaned.append(item.strip())
+                    
+                    get_list_of_names = new_names_cleaned
+
+                    print("after cleaning get list of names ",get_list_of_names)
+
+                    
+
+                    if get_list_of_names != None and len(get_list_of_names) > 0:
+                        names = get_list_of_names
+                        
+
+
+                        #return render(request,'dashboard/components/found_email.html',{'not_found':True})
+
+                else:
+                    pass
+
+        #extract only domain name from url
+
+        #print('firstname is from second ',first_name,' lastname is ',last_name,' domain is ',domain)
+        try:
+            domain = domain.split('/')[2]
+        except:
+            pass
+
+        
+
+        #iterate through all the names and find emails
+
+        
+        for name in names:
+            print("name is in loop ",name)
+
+            try:
+                full_name = name.encode('ascii','ignore').decode('ascii').strip()
+            except:
+                full_name = None
+
+        
+
+            if full_name != None and len(full_name.split(" ")) == 3:
+                first_name = full_name.split(" ")[0]
+                last_name = full_name.split(" ")[2]
+
+            elif full_name != None and len(full_name.split(" ")) == 2:
+                first_name = full_name.split(" ")[0]
+                last_name = full_name.split(" ")[1]
+
+            elif full_name != None and len(full_name.split(" ")) == 1:
+                first_name = full_name.split(" ")[0]
+                last_name = ""
+
+            else:
+                first_name = None
+                last_name = None
+
+            #find email address from firstname and lastname and domain
+
+            print(' after fname ',first_name,' after lname ',last_name,' dmain ',domain)
+
+            if first_name != None and last_name != None:
+                try:
+                    found_email = return_email_found_status(first_name,last_name,domain)
+                except:
+                    found_email = None
+                
+                if found_email != None:
+
+                    
+
+
+                    
+                    try:
+                        if return_email_found_status(first_name+'1',last_name+'1',domain) != None:
+                            found_email = None
+                            print("email is catch all sorry -- ")
+                            break
+                    except:
+                        found_email = None
+                        break
+
+                    sel_user_credit = user_credit.objects.get(user=request.user)
+                    sel_user_credit.credits_remaining -= 5
+                    sel_user_credit.save()
+
+                    save_lead = leads()
+                    save_lead.user = request.user
+                    save_lead.first_name = first_name
+                    save_lead.last_name = last_name
+                    save_lead.email = found_email
+                    save_lead.website = domain
+                    #save_lead.position = get_position
+                    save_lead.save()
+
+                    get_active_campaign = campaigns.objects.get(user=request.user,is_active=True)
+
+                    campaign_leads_inst = campaign_leads()
+                    campaign_leads_inst.campaign = get_active_campaign
+                    campaign_leads_inst.lead = save_lead
+                    campaign_leads_inst.save()
+
+                    
+                    return render(request,'dashboard/components/found_email.html',{'email':found_email,'position':None,'first_name':first_name,'last_name':last_name})
+                else:
+                    pass
+            
+            
+        try:
+            if found_email == None:    
+        
+                sel_user_credit = user_credit.objects.get(user=request.user)
+                sel_user_credit.credits_remaining -= 1
+                sel_user_credit.save()
+                return render(request,'dashboard/components/found_email.html',{'not_found':True})
+
+        except:
+            return render(request,'dashboard/components/found_email.html',{'not_found':True})
+            
+
+
+
+
+
+        
+
+        return render(request,'dashboard/components/found_email.html',{'not_found':True})
+        
+
+
+
+
+
 
 
 

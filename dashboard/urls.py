@@ -11,6 +11,7 @@ urlpatterns = [
     path('find_bulk_email/',views.find_bulk_email,name='find_bulk_email'),
     path('find_bulk_email_result/',views.find_bulk_email_result,name='find_bulk_email_result'),
     path('download_bulk_email_found_file/',views.download_bulk_email_found_file,name='download_bulk_email_found_file'),
+    path('find_author_email/',views.find_author_email,name='find_author_email'),
     path('contact_us/',views.contact_us,name="contact_us")
     
 ]

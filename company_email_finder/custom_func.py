@@ -134,6 +134,12 @@ def return_email_found_status(first_name,last_name,domain):
                     sel_user_credit.save()
                     '''
 
-                    return None
+                    pass
         except:
             return None
+
+
+
+
+
+

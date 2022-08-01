@@ -8,6 +8,13 @@ from functools import wraps
 from django.http import HttpResponse
 from users.models import *
 from func_timeout import *
+from bs4 import BeautifulSoup
+import requests
+import openai
+from django.conf import settings as st
+openai.api_key = st.OPENAI_API_KEY
+import re
+import tldextract
 
 def requires_credit(view):
     @wraps(view)
@@ -217,3 +224,99 @@ def csv_to_xlsx(filepath,file_name):
         return True
     except:
         return False
+
+
+
+def get_author_name(url):
+    get_contents = requests.get(url)
+    soup = BeautifulSoup(get_contents.content,'lxml')
+    all_a_tags = soup.find_all('a',href=True)
+    
+    for link in all_a_tags:
+        lnk = link["href"]
+        if any(["author" in lnk,"Author" in lnk,"contributor" in lnk,"profile" in lnk,"user" in lnk,"writer" in lnk]):
+            print("Author name is: "+link.string.strip())
+            return {'string':link.string.strip(),'source_code':get_contents.content}
+            break
+
+    print("Author name not found")
+
+    return {'string':None,'source_code':get_contents.content}
+        
+    
+
+
+
+
+
+
+def extract_names(text):
+    astring = text
+
+    
+
+    response_name = openai.Completion.create(
+	  model="text-davinci-002",
+	  prompt=f"extract all the  names  from the following text and separate names by comma: {astring}",
+	  temperature=0.7,
+	  max_tokens=35,
+	  top_p=1,
+	  frequency_penalty=0,
+	  presence_penalty=0
+	)
+
+
+    return str(response_name.choices[0].text).strip()
+
+
+def get_author_name_extracting_attribute(url,source_code=None):
+
+    if source_code == None:
+        get_contents = requests.get(url)
+
+        soup = BeautifulSoup(get_contents.content,'lxml')
+    else:
+        soup = BeautifulSoup(source_code,'lxml')
+        
+    find_all_class_containg_author = soup.find_all(class_=re.compile(r"author|writer"))
+
+	#string=re.compile(r"Written|article by|author|writer|Writer|written|editor|Author|published|ARTICLE|article|Article|By|by"))
+    # 
+    
+    list_of_possible_authors = []
+    for el in find_all_class_containg_author:
+        if el.string !=  None and len(el.string) < 30:
+            if el.string not in list_of_possible_authors and len(el.string.split(" ")) < 10:
+                list_of_possible_authors.append(el.string)
+                print(el.string,'\n')
+
+	
+
+    list_of_possible_ele = []
+
+    for ele in soup.descendants:
+        
+        if ele.string != None and ele != None and ele.string != "" and ele.string != " ":
+            cond = ["Written" in ele.string,"article by" in ele.string,"author" in ele.string,"writer" in ele.string,"Writer" in ele.string,"written" in ele.string,"editor" in ele.string,"Author" in ele.string,"published" in ele.string,"By" in ele.string,"by" in ele.string]
+            
+            
+            if any(cond) and len(ele.string.replace("\n"," ").replace("\r","").replace("  ","").strip()) < 20:
+                list_of_possible_ele.append(ele.string.replace("\n"," ").replace("\r","").replace("  ","").strip())
+                
+    list_of_possible_authors = set(list_of_possible_authors + list_of_possible_ele)
+    
+    unique_author_list = list(list_of_possible_authors)
+    
+    st = str(unique_author_list)[1:-1].strip().replace("'",'')
+    
+    names_in_comma = extract_names(st)
+    
+    if len(names_in_comma.split(',')) != 0:
+        return names_in_comma.split(',')
+        
+    else:
+        return None
+
+	
+
+

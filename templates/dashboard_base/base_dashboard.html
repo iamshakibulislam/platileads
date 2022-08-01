@@ -111,10 +111,19 @@
 						<li>
 							<a class="side-menu__item" href="{% url 'activate_campaign' %}"><i class="side-menu__icon fa-solid fa-check-circle" style="font-size:1.3rem;margin-right:0.5rem"></i><span class="side-menu__label" style="flex:none">Activate a campaign</span></a>
 						</li>
-						<li><h3>Email verification tools</h3></li>
-						
 
-                        <li>
+						<li class="wrap-header mt-1">
+
+							<ul class="d-flex justify-content-between">
+	
+							<h3 style="margin-top:0.6rem !important"  class="text-white d-block ">Email verification tools</h3>
+							<i class="fa fa-caret-down d-block mt-3" style="padding-right:10px"></i>
+							</ul>
+	
+						</li>
+						
+						<div id="email_verification_tool" >
+						<li>
 							<a class="side-menu__item" href="{% url 'email_verification' %}"><i class="side-menu__icon fa-solid fa-at " style="font-size:1.5rem;"></i><span class="side-menu__label" style="flex:none">Email verification</span></a>
 						</li>
 
@@ -122,9 +131,20 @@
 							<a class="side-menu__item" href="{% url 'bulk_email_verification' %}"><i class="side-menu__icon fa-solid fa-envelopes-bulk" style="font-size:1.3rem"></i><span class="side-menu__label" style="flex:none">Bulk email verification</span></a>
 						</li>
 
+						</div>
 
-						<li><h3>Company email finder(by job role)</h3></li>
+
+						<li class="wrap-header mt-1">
+
+							<ul class="d-flex justify-content-between">
+	
+							<h3 style="margin-top:0.6rem !important"  class="text-white d-block ">Email finder by job role</h3>
+							<i class="fa fa-caret-down d-block mt-3" style="padding-right:10px"></i>
+							</ul>
+	
+						</li>
 						
+						<div class="email_finder_by_job_role">
 
                         <li>
 							<a class="side-menu__item text-justify" href="{% url 'single_lead' %}"><i class="side-menu__icon fa-solid fas fa-male" style="font-size:2rem"></i><span class="side-menu__label" style="flex:none"> Find single email by job role</span></a>
@@ -134,17 +154,77 @@
 							<a class="side-menu__item text-justify" href="{% url 'bulk_leads' %}"><i class="side-menu__icon fas fa-solid fa-users" style="font-size:1.4rem"></i><span class="side-menu__label" style="flex:none">Find Bulk email by job role</span></a>
 						</li>
 
+					</div>
 
-						<li><h3>Email Finding tools</h3></li>
+
 						
+					<li class="wrap-header mt-1">
+
+						<ul class="d-flex justify-content-between">
+
+						<h3 style="margin-top:0.6rem !important"  class="text-white d-block ">Email finder by name</h3>
+						<i class="fa fa-caret-down d-block mt-3" style="padding-right:10px"></i>
+						</ul>
+
+					</li>
+						
+					<div class="normal_email_finder">
 
                         <li>
-							<a class="side-menu__item text-justify" href="{% url 'find_email' %}"><i class="side-menu__icon fa-solid fa-search " style="font-size:1.5rem"></i><span class="side-menu__label" style="flex:none">Find email</span></a>
+							<a class="side-menu__item text-justify" href="{% url 'find_email' %}"><i class="side-menu__icon fa-solid fa-search " style="font-size:1.5rem"></i><span class="side-menu__label" style="flex:none">Single email finder</span></a>
 						</li>
 
                         <li>
 							<a class="side-menu__item text-justify" href="{% url 'find_bulk_email' %}"><i class="side-menu__icon fa-solid fa-file-csv" style="font-size:1.7rem"></i><span class="side-menu__label" style="flex:none">Bulk email finder</span></a>
 						</li>
+					</div>
+
+
+					<li class="wrap-header mt-1">
+
+						<ul class="d-flex justify-content-between">
+
+						<h3 style="margin-top:0.6rem !important"  class="text-white d-block ">Blog author finder tools</h3>
+						<i class="fa fa-caret-down d-block mt-3" style="padding-right:10px"></i>
+						</ul>
+
+					</li>
+						
+					<div class="normal_email_finder">
+
+                        <li>
+							<a class="side-menu__item text-justify" href="{% url 'find_author_email' %}"><i class="side-menu__icon fa-solid fa-search " style="font-size:1.5rem"></i><span class="side-menu__label" style="flex:none">Author finder</span></a>
+						</li>
+
+                        <li>
+							<a class="side-menu__item text-justify" href="{% url 'find_bulk_email' %}"><i class="side-menu__icon fa-solid fa-file-csv" style="font-size:1.7rem"></i><span class="side-menu__label" style="flex:none">Bulk author finder</span></a>
+						</li>
+					</div>
+
+
+					<li class="wrap-header mt-1">
+
+						<ul class="d-flex justify-content-between" >
+
+						<h3 style="margin-top:0.6rem !important"   class="d-block text-light">Email warmup tools</h3>
+						<i class="fa fa-caret-down d-block mt-3" style="padding-right:10px"></i>
+						</ul>
+
+					</li>
+						
+					<div class="normal_email_finder">
+
+                        <li>
+							<a class="side-menu__item text-justify" href="{% url 'find_email' %}"><i class="side-menu__icon fa-solid fa-search " style="font-size:1.5rem"></i><span class="side-menu__label" style="flex:none">Single email finder</span></a>
+						</li>
+
+                        <li>
+							<a class="side-menu__item text-justify" href="{% url 'find_bulk_email' %}"><i class="side-menu__icon fa-solid fa-file-csv" style="font-size:1.7rem"></i><span class="side-menu__label" style="flex:none">Bulk email finder</span></a>
+						</li>
+					</div>
+
+
+					
 
 						{% else %}
 
@@ -164,6 +244,28 @@
 						</ul>
 				</aside>
 				<!--/APP-SIDEBAR-->
+
+				<style>
+
+					.wrap-header{
+						background-color: #2f3447;
+						padding-left: 0.2rem !important;
+						border-top-right-radius: 3rem !important;
+						border-bottom-right-radius :3rem !important;
+						display:inline-block !important;
+						color:white !important;
+						
+					}
+
+					.heading{
+						padding:0rem !important;
+						margin-top:0.6rem !important;
+						margin-bottom:1rem !important;
+						display:inline;
+						color:white !important;
+					}
+
+				</style>
 
 				<!-- Mobile Header -->
 				<div class="app-header header">
@@ -521,7 +623,16 @@
 
 		<!-- CUSTOM JS -->
 		<script src="{% static 'assets/js/custom.js' %}"></script>
-        <!-- HTMX import -- >
+        
+		<script>
+			$(document).ready(function(){
+				$('.wrap-header').next().hide();
+			});
+			$('.wrap-header').on('click',function(){
+				
+				$(this).next().toggle();
+			})
+		</script>
        
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js" integrity="sha512-yFjZbTYRCJodnuyGlsKamNE/LlEaEAxSUDe5+u61mV8zzqJVFOH7TnULE2/PP/l5vKWpUNnF4VGVkXh3MjgLsg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 

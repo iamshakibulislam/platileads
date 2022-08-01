@@ -76,7 +76,7 @@ def single_lead(request):
         for name in names:
 
             try:
-                full_name = name.encode('ascii', 'ignore').decode('ascii').strip()
+                full_name = name.encode('ascii','ignore').decode('ascii').strip()
             except:
                 full_name = None
 
