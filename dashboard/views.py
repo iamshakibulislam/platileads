@@ -24,6 +24,7 @@ from func_timeout import *
 import re
 from company_email_finder.custom_func import *
 from django.conf import settings as st
+from company_email_finder.models import *
 openai.api_key = st.OPENAI_API_KEY
 
 
@@ -325,7 +326,10 @@ def find_email(request):
         domain = request.POST.get('domain')
 
         #extract only domain name from url
-
+        try:
+            domain =domain.split('//')[1]
+        except:
+            pass
         root_domain_inst = tldextract.extract(domain)
         root_domain = root_domain_inst.domain+'.'+root_domain_inst.suffix
 
@@ -535,7 +539,10 @@ def find_bulk_email_result(request):
             
             email_found = False
             if first_name_val != None and last_name_val != None and domain_val != None and first_name_val != "" and last_name_val != "" and domain_val != "":
-
+                try:
+                    domain_val = domain_val.split('//')[1]
+                except:
+                    pass
                 root_domain_inst = tldextract.extract(domain_val)
                 root_domain = root_domain_inst.domain+'.'+root_domain_inst.suffix
 
@@ -719,7 +726,7 @@ def find_author_email(request):
             #checking firstname and lastname availability and trying AI based approach
             print("names are - ",names)
             if len(names) == 0 or names == None:
-                if True:
+                try:
                     get_list_of_names = get_author_name_extracting_attribute(domain,source_code)
 
                     print("get list of names ",get_list_of_names)
@@ -746,14 +753,14 @@ def find_author_email(request):
 
                         #return render(request,'dashboard/components/found_email.html',{'not_found':True})
 
-                else:
+                except:
                     pass
 
         #extract only domain name from url
 
         #print('firstname is from second ',first_name,' lastname is ',last_name,' domain is ',domain)
         try:
-            domain = domain.split('/')[2]
+            domain = domain.split('//')[1]
         except:
             pass
 
@@ -864,7 +871,325 @@ def find_author_email(request):
 
 
 
+#bulk author finder starts here
 
+
+def bulk_author_leads(request):
+    if request.method == "GET":
+        
+        curr_sub = subscription_data.objects.get(user=request.user)
+        curr_sub_plan = curr_sub.package.name
+        
+        plan = None
+
+        if curr_sub_plan == "FREE" or curr_sub_plan == "free":
+            plan = "FREE"
+        
+
+        return render(request, 'dashboard/bulk_author_leads.html',{'plan':plan})
+
+    if request.method == "POST":
+
+        get_all_the_uploaded_files = lead_file.objects.filter(uploaded_by=request.user)
+
+        if len(get_all_the_uploaded_files) == 0:
+            pass
+        else:
+            try:
+                for file in get_all_the_uploaded_files:
+                    os.remove(file.uploaded_file.path)
+                    file.delete()
+            
+            except:
+                pass
+        
+
+        
+        try:
+            csv_file=request.FILES['file']
+            save_the_file = lead_file()
+            save_the_file.uploaded_by = request.user
+            save_the_file.uploaded_file = csv_file
+            save_the_file.save()
+
+            #get the file name
+            file_name = save_the_file.uploaded_file.name
+            file_path = save_the_file.uploaded_file.path
+            get_file_data=read_csv_file(file_path)
+            headers = get_file_data["headers"]
+
+            return render(request,'dashboard/components/column_selector.html',{'all_columns':headers})
+
+            
+
+
+
+
+
+        except:
+            return HttpResponse("Something Went Wrong ! Please Try Again")
+
+
+        
+
+
+def bulk_author_leads_results(request):
+    if request.method == "GET":
+        return HttpResponse("Request method not allowed")
+
+    if request.method == "POST":
+        get_all_the_uploaded_files = lead_file.objects.filter(uploaded_by=request.user)
+
+        the_last_file = get_all_the_uploaded_files.last()
+        total_found = 0
+        domain_column = request.POST.get('website_column')
+        #job_position = request.POST.get('job_position')
+
+        headers = None
+        data = None
+
+        if domain_column != None:
+            read_file=read_csv_file(the_last_file.uploaded_file.path)
+            headers = read_file["headers"]
+
+            headers.append('first_name')
+            headers.append('last_name')
+            headers.append('email')
+
+            data = read_file["data"]
+
+            new_data = []
+            
+            try:
+                sel_user_inst = request.user
+                sel_user_inst.file_process_percentage = float(0)
+                sel_user_inst.save()
+
+            except:
+                pass
+
+            i = 1
+
+            for dt in data:
+                found_email = None
+
+                sel_user_inst = request.user
+                sel_user_inst.file_process_percentage = float((i/len(data))*100)
+                sel_user_inst.save()
+               
+
+                i+=1
+
+                names = []
+                domain = domain_column
+
+                print('domain name is ',dt[domain])
+
+                if dt[domain] == "" or dt[domain] == None or dt[domain] == " ":
+                    return HttpResponse("Please enter a valid blog post url")
+
+                else:
+                    call_author = get_author_name(dt[domain])
+                    author_name = call_author["string"]
+                    source_code = call_author["source_code"]
+
+                    #print("source code is - ",source_code)
+
+                    print("first try author name is - ",author_name)
+
+                    pattern = re.compile(r"\w+")
+
+                    print("author name is - ",author_name)
+
+                    try:
+                        split_author_name = pattern.findall(author_name)
+                    except:
+                        author_name = None
+
+                    try:
+                        if len(split_author_name) == 1 and split_author_name[0] != None:
+
+                            names.append(split_author_name[0])
+                            
+                        elif len(split_author_name) == 2:
+                            names= names + split_author_name
+
+                        elif len(split_author_name) == 3:
+                            names = names + split_author_name
+
+                        else:
+                            pass
+                            
+                    except:
+                        pass
+
+                    for i,name in enumerate(names):
+                        if name == None or name == " " or name=="" or name == "None":
+                            del names[i]
+
+
+
+
+                    #checking firstname and lastname availability and trying AI based approach
+                    print("names are - ",names)
+                    if len(names) == 0 or names == None:
+                        try:
+                            get_list_of_names = get_author_name_extracting_attribute(dt[domain],source_code)
+
+                            print("get list of names ",get_list_of_names)
+                            new_names_cleaned = []
+                            for item in get_list_of_names:
+                                if item != None or item != "" or item != " ":
+                                    if "\n" in item:
+                                        item = item.split("\n")
+                                        new_names_cleaned.append(item[-1].strip())
+                                    
+                                    else:
+                                        new_names_cleaned.append(item.strip())
+                            
+                            get_list_of_names = new_names_cleaned
+
+                            print("after cleaning get list of names ",get_list_of_names)
+
+                            
+
+                            if get_list_of_names != None and len(get_list_of_names) > 0:
+                                names = get_list_of_names
+                                names = names[::-1]
+                                
+
+
+                                #return render(request,'dashboard/components/found_email.html',{'not_found':True})
+
+                        except:
+                            pass
+
+                #extract only domain name from url
+
+                #print('firstname is from second ',first_name,' lastname is ',last_name,' domain is ',domain)
+                try:
+                    dt[domain] = dt[domain].split('//')[1]
+                except:
+                    pass
+
+                #check if  the user has enough credits or not
+                select_user_credit = user_credit.objects.get(user=request.user)
+                if select_user_credit.credits_remaining < 5:
+                    break
+
+                
+                
+                
+
+                for name in names:
+                    print("the name is --------- ",name)
+
+                    try:
+                        full_name = name.encode('ascii', 'ignore').decode('ascii').strip()
+                    except:
+                        full_name = None
+
+                    
+
+                    if full_name != None and len(full_name.split(" ")) == 3:
+                        first_name = full_name.split(" ")[0]
+                        last_name = full_name.split(" ")[2]
+
+                    elif full_name != None and len(full_name.split(" ")) == 2:
+                        first_name = full_name.split(" ")[0]
+                        last_name = full_name.split(" ")[1]
+
+                    elif full_name != None and len(full_name.split(" ")) == 1:
+                        first_name = full_name.split(" ")[0]
+                        last_name = ""
+
+                    else:
+                        first_name = None
+                        last_name = None
+
+                        #find email address from firstname and lastname and domain
+
+                        #print(first_name,'-->',last_name)
+                        
+                    if first_name != None and last_name != None:
+                        try:
+                            found_email = return_email_found_status(first_name,last_name,dt[domain])
+                            
+                        except:
+                            found_email = None
+
+                            
+                            
+                            
+                        if found_email != None:
+
+                                
+                            try:
+                                if return_email_found_status(first_name+'1',last_name+'1',dt[domain]) != None:
+                                    found_email = None
+                                    print("catch all found")
+                                    break
+                            except:
+                                found_email = None
+                                break
+
+                            sel_user_credit = user_credit.objects.get(user=request.user)
+                            sel_user_credit.credits_remaining -= 5
+                            sel_user_credit.save()
+
+                            save_lead = leads()
+                            save_lead.user = request.user
+                            save_lead.first_name = first_name
+                            save_lead.last_name = last_name
+                            save_lead.email = found_email
+                            save_lead.website = dt[domain]
+                           # save_lead.position = job_position
+                            save_lead.save()
+
+                            get_active_campaign = campaigns.objects.get(user=request.user,is_active=True)
+
+                            campaign_leads_inst = campaign_leads()
+                            campaign_leads_inst.campaign = get_active_campaign
+                            campaign_leads_inst.lead = save_lead
+                            campaign_leads_inst.save()
+
+                            new_dt = dt.copy()
+                            new_dt["first_name"] = first_name
+                            new_dt["last_name"] = last_name
+                            new_dt["email"] = found_email
+
+                            new_data.append(new_dt)
+
+                            total_found += 1
+
+                            break
+
+
+                        else:
+                            pass
+
+
+                try:
+                    if found_email == None:
+                        sel_user_credit = user_credit.objects.get(user=request.user)
+                        sel_user_credit.credits_remaining -= 5
+                        sel_user_credit.save()
+
+                        new_dt = dt.copy()
+                        new_dt["first_name"] = first_name
+                        new_dt["last_name"] = last_name
+                        new_dt["email"] = "not found"
+
+                        new_data.append(new_dt) 
+
+                except:
+                    pass      
+
+            
+            #write the data to a csv file
+            write_into_file=write_csv_file(the_last_file.uploaded_file.path,headers,new_data)
+
+            return render(request,'company_leads/components/show_download_button.html',{'total_found':total_found,'download_url': the_last_file.uploaded_file.url})
 
 
 

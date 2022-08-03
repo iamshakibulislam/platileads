@@ -44,6 +44,11 @@ def single_lead(request):
         get_position = request.POST.get('position')
         scraperapikey = st.SCRAPER_API_KEY
 
+        try:
+            get_domain =get_domain.split('//')[1]
+        except:
+            pass
+
         #get credits remaining
         cred = user_credit.objects.get(user=request.user)
         if cred.credits_remaining <5:
@@ -320,6 +325,10 @@ def bulk_leads_results(request):
                         #find email address from firstname and lastname and domain
 
                         #print(first_name,'-->',last_name)
+                        try:
+                            dt[domain] = dt[domain].split('//')[1]
+                        except:
+                            pass
                         
                         if first_name != None and last_name != None:
                             try:

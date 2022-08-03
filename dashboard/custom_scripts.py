@@ -257,7 +257,7 @@ def extract_names(text):
 
     response_name = openai.Completion.create(
 	  model="text-davinci-002",
-	  prompt=f"extract all the  names  from the following text and separate names by comma: {astring}",
+	  prompt=f"find all the human names from the following text and separate names by comma: {astring}",
 	  temperature=0.7,
 	  max_tokens=35,
 	  top_p=1,
@@ -288,28 +288,45 @@ def get_author_name_extracting_attribute(url,source_code=None):
         if el.string !=  None and len(el.string) < 30:
             if el.string not in list_of_possible_authors and len(el.string.split(" ")) < 10:
                 list_of_possible_authors.append(el.string)
-                print(el.string,'\n')
+                print('hello author ',el.string,'\n')
 
 	
 
     list_of_possible_ele = []
 
-    for ele in soup.descendants:
-        
-        if ele.string != None and ele != None and ele.string != "" and ele.string != " ":
-            cond = ["Written" in ele.string,"article by" in ele.string,"author" in ele.string,"writer" in ele.string,"Writer" in ele.string,"written" in ele.string,"editor" in ele.string,"Author" in ele.string,"published" in ele.string,"By" in ele.string,"by" in ele.string]
+    for ele in soup.h1.find_next_siblings()[:4]:
+        for k in ele.descendants:
             
-            
-            if any(cond) and len(ele.string.replace("\n"," ").replace("\r","").replace("  ","").strip()) < 20:
-                list_of_possible_ele.append(ele.string.replace("\n"," ").replace("\r","").replace("  ","").strip())
-                
+            if k.string != None and len(k.string) < 20 and len(k.string) > 7 and k.string != "\n":
+                list_of_possible_ele.append(k.string)
+                print(k.string,'\n')
+
+    print('ele is ',list_of_possible_ele)
+
+    
+
     list_of_possible_authors = set(list_of_possible_authors + list_of_possible_ele)
     
-    unique_author_list = list(list_of_possible_authors)
+    unique_author_list_without_validation = list(list_of_possible_authors)
+
+    unique_author_list = []
+
+    for au in unique_author_list_without_validation:
+        if len(au.split(" ")) > 1:
+            unique_author_list.append(au)
+
+
     
     st = str(unique_author_list)[1:-1].strip().replace("'",'')
+
+    
     
     names_in_comma = extract_names(st)
+
+    #print('all_names are ', list_of_possible_ele)
+
+
+    print('possible human names are -- ',names_in_comma)
     
     if len(names_in_comma.split(',')) != 0:
         return names_in_comma.split(',')
