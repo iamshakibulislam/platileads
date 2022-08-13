@@ -1,0 +1,140 @@
+{% extends 'dashboard_base/base_dashboard.html' %}
+
+{% block title %} Warmup email statictics {% endblock title %}
+
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="row justify-content-end">
+        <div class="col-md-9">
+
+<div class="card" style="margin-top:6rem">
+    <div class="card-header">
+        <h3 class="card-title">Warmup email statictics</h3>
+    </div>
+
+    {% if messages %}
+
+    {% for message in messages %}
+
+    <div class="card-header" role="alert">
+        <h3 class="card-title">
+            <div class="alert alert-danger alert-dismissible" >
+                
+                {{message}}
+
+                <span style="margin-left:5px;margin-bottom:5px" type="button" class="close" data-bs-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></span>
+            </div>
+        </h3>
+    </div>
+
+    {% endfor %}
+
+    {% endif %}
+
+    <div class="card-body">
+
+<table id="warmupstats" class="table-bordered table-dark " style="width:100%">
+    <thead >
+        <tr style="margin-top:3rem !important;margin-bottom:3rem !important">
+            <th>Campaign</th>
+            <th>Start</th>
+            <th>increament</th>
+            <th>End date</th>
+            <th>Today sent</th>
+            <th>Spam total</th>
+            <th>Marked not as spam</th>
+            <th>Total sent</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+
+    {% if lenth_of_stats != 0 %}
+
+    {% for data in stats %}
+
+        <tr class="mt-1">
+            <td>{{data.campaign.email}}</td>
+            <td>{{data.campaign.start_count}}</td>
+            <td>{{data.campaign.increament_count}}</td>
+            <td>{{data.campaign.end_at}}</td>
+            <td>{{data.today_sent}}</td>
+            <td>{{data.spam_count}}</td>
+            <td>{{data.moved_to_inbox}}</td>
+            <td>{{data.total_sent}}</td>
+            <td>{% if data.campaign.is_active %}Ongoing{% else %} Paused {% endif %} </td>  
+            <td>
+                <form action="{% url 'warmup_stats' %}" method="POST">
+                    {% csrf_token %}
+                <input type="hidden" name="stat_id" value="{{data.id}}">
+                <button type="submit" class="actbtn btn btn-danger btn-sm">{% if data.campaign.is_active %}Pause{% else %}Resume{% endif %}</button>
+                </form>
+            </td>
+        </tr>
+
+        {% endfor %}
+
+
+      {% else %}
+
+        <tr>
+            <td colspan="10" style="text-align:center">No data found</td>
+        </tr>
+      
+       
+        
+    {% endif %}
+
+    <style>
+        .actbtn:hover{
+            border:1px dotted #fff;
+        }
+    </style>
+      
+    </tbody>
+
+    
+</table>
+
+
+{% if stats.has_other_pages %}
+<ul class="pagination" style="margin-top:3rem">
+  {% if stats.has_previous %}
+    <li class="page-item"><a class="page-link" href="?page={{ stats.previous_page_number }}">&laquo;</a></li>
+  {% else %}
+    <li class="disabled page-item page-link"><span>&laquo;</span></li>
+  {% endif %}
+  {% for i in stats.paginator.page_range %}
+    {% if stats.number == i %}
+      <li class="page-item active"><a class="page-link"> {{ i }} <span class="sr-only">(current)</span></a></li>
+    {% else %}
+      <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+    {% endif %}
+  {% endfor %}
+  {% if stats.has_next %}
+    <li class="page-item"><a class="page-link" href="?page={{ stats.next_page_number }}">&raquo;</a></li>
+  {% else %}
+    <li class="disabled page-item page-link"><span>&raquo;</span></li>
+  {% endif %}
+</ul>
+{% endif %}
+
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+
+
+{% endblock content %}
+
+{% block customjs %}
+
+
+
+{% endblock customjs%}

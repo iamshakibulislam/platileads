@@ -45,6 +45,11 @@
                             <input type="password" name="confirm_password" id="password_confirmation" class="form-control" placeholder="Confirm your password" required>
                         </div>
 
+                        <div class="form-group">
+                           
+                            <input type="text" name="coupon" id="coupon_code" class="form-control" placeholder="Enter discount code (optional)">
+                        </div>
+
                         <div class="form-group d-flex justify-content-around">
                             <input type="checkbox" style="height:1rem;width:1rem" class="form-check-input mt-1" name="tos" required></input> <font>I agree to the <a href="{% url 'terms_and_conditions' %}">Terms and Conditions</a></font>
                         </div

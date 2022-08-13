@@ -380,7 +380,7 @@ def find_email(request):
                     save_lead.user = request.user
                     save_lead.first_name = first_name
                     save_lead.last_name = last_name
-                    save_lead.email = possible_email
+                    save_lead.email = possible_email.lower()
                     save_lead.website = domain
                     
                     save_lead.save()
@@ -393,7 +393,7 @@ def find_email(request):
                     campaign_leads_inst.save()
                     
                     print("email found unintentinally ---- not good")
-                    return render(request,'dashboard/components/found_email.html',{'email':possible_email.replace(' ','')})
+                    return render(request,'dashboard/components/found_email.html',{'email':possible_email.replace(' ','').lower()})
                 except:
                     pass
             else:
@@ -595,7 +595,7 @@ def find_bulk_email_result(request):
                                 is_exists = False
                                 email_found = False
                                 break
-                            xlsx_write_on_new_column(row_num,total_columns,comb,actual_file_path)
+                            xlsx_write_on_new_column(row_num,total_columns,comb.lower(),actual_file_path)
                             total_email_verified += 1
                             sel_user_credit = user_credit.objects.get(user=request.user)
                             sel_user_credit.credits_remaining -= 1
@@ -606,7 +606,7 @@ def find_bulk_email_result(request):
                             save_lead.user = request.user
                             save_lead.first_name = first_name_val
                             save_lead.last_name = last_name_val
-                            save_lead.email = comb
+                            save_lead.email = comb.lower()
                             save_lead.website = domain_val
                             
                             save_lead.save()
@@ -828,7 +828,7 @@ def find_author_email(request):
                     save_lead.user = request.user
                     save_lead.first_name = first_name
                     save_lead.last_name = last_name
-                    save_lead.email = found_email
+                    save_lead.email = found_email.lower()
                     save_lead.website = domain
                     #save_lead.position = get_position
                     save_lead.save()
@@ -1141,7 +1141,7 @@ def bulk_author_leads_results(request):
                             save_lead.user = request.user
                             save_lead.first_name = first_name
                             save_lead.last_name = last_name
-                            save_lead.email = found_email
+                            save_lead.email = found_email.lower()
                             save_lead.website = dt[domain]
                            # save_lead.position = job_position
                             save_lead.save()

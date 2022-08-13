@@ -42,6 +42,11 @@ def signup(request):
         confirm_password = request.POST.get('confirm_password')
         plan = request.POST.get('plan','f')
         is_affiliate = request.POST.get('is_affiliate',False)
+        coupon = None
+        try:
+            coupon = request.POST.get('coupon',None)
+        except:
+            coupon = None
 
         try:
             if is_affiliate == 1 or is_affiliate == '1':
@@ -98,7 +103,7 @@ def signup(request):
                 subscription_data.objects.create(user=new_user,package=get_package)
                 return redirect('dashboard_home')
 
-            if plan == 'f':
+            if plan == 'f' and coupon == None:
                 get_package = packages.objects.get(name='FREE')
                 subscription_data.objects.create(user=new_user,package=get_package)
             
@@ -116,6 +121,49 @@ def signup(request):
                 get_package = packages.objects.get(name='UNLIMITED')
                 #subscription_data.objects.create(user=new_user,package=get_package)
                 return HttpResponse("unlimited")
+
+            if coupon != None:
+                try:
+                    sel_deal = appsumo_deals.objects.get(code=coupon.strip())
+                    if sel_deal.is_active == True:
+                        print("coupon is ", coupon)
+                        if sel_deal.is_gold == True:
+                            sel_package = packages.objects.get(name='GOLD')
+                            new_sub = subscription_data(user=new_user,package=sel_package)
+                            new_sub.save()
+                            new_user.is_discounted = True
+                            new_user.save()
+
+
+                            sel_cr=user_credit.objects.get(user=new_user)
+                            sel_cr.credits_remaining = sel_package.credits
+                            sel_cr.save()
+
+                            sel_deal.is_active = False
+                            sel_deal.save()
+
+
+
+                        elif sel_deal.is_unlimited == True:
+                            sel_package = packages.objects.get(name='UNLIMITED')
+                            new_sub = subscription_data(user=new_user,package=sel_package)
+                            new_sub.save()
+                            new_user.is_discounted = True
+                            new_user.save()
+
+                            sel_cr=user_credit.objects.get(user=new_user)
+                            sel_cr.credits_remaining = sel_package.credits
+                            sel_cr.save()
+                            sel_deal.is_active = False
+                            sel_deal.save()
+
+                        else:
+                            pass
+
+
+                except:
+                    pass
+
 
             
 
@@ -135,6 +183,22 @@ def login(request):
         if user_auth is not None:
             auth.login(request,user_auth)
             get_sub = subscription_data.objects.get(user=request.user)
+
+            #check for discounted user and update the credits
+            if get_sub.package.name == 'GOLD' and get_sub.expire_date < datetime.date.today() and request.user.is_discounted == True:
+                get_user_credit=user_credit.objects.get(user=request.user)
+                get_sub.expire_date = datetime.date.today() + datetime.timedelta(days=30)
+                get_sub.save()
+                get_user_credit.credits_remaining = get_sub.package.credits
+                get_user_credit.save()
+            
+            if get_sub.package.name == 'UNLIMITED' and get_sub.expire_date < datetime.date.today() and request.user.is_discounted == True:
+                get_user_credit=user_credit.objects.get(user=request.user)
+                get_sub.expire_date = datetime.date.today() + datetime.timedelta(days=30)
+                get_sub.save()
+                get_user_credit.credits_remaining = get_sub.package.credits
+                get_user_credit.save()
+
             if get_sub.package.name == 'FREE' and get_sub.expire_date < datetime.date.today():
                 get_user_credit=user_credit.objects.get(user=request.user)
                 get_sub.expire_date = datetime.date.today() + datetime.timedelta(days=30)
@@ -142,13 +206,24 @@ def login(request):
                 get_user_credit.credits_remaining = get_sub.package.credits
                 get_user_credit.save()
             
-            if get_sub.package.name == 'UNLIMITED' and (get_sub.expire_date + datetime.timedelta(days=5)) < datetime.date.today():
+
+            
+            if get_sub.package.name == 'UNLIMITED' and (get_sub.expire_date + datetime.timedelta(days=5)) < datetime.date.today() and request.user.is_discounted == False:
                 get_user_credit=user_credit.objects.get(user=request.user)
                 get_sub.expire_date = datetime.date.today() + datetime.timedelta(days=30)
                 get_sub.package = packages.objects.get(name='FREE')
                 get_sub.save()
 
-                get_user_credit.credits_remaining = 200
+                get_user_credit.credits_remaining = 100
+                get_user_credit.save()
+
+            if get_sub.package.name == 'GOLD' and (get_sub.expire_date + datetime.timedelta(days=5)) < datetime.date.today() and request.user.is_discounted == False:
+                get_user_credit=user_credit.objects.get(user=request.user)
+                get_sub.expire_date = datetime.date.today() + datetime.timedelta(days=30)
+                get_sub.package = packages.objects.get(name='FREE')
+                get_sub.save()
+
+                get_user_credit.credits_remaining = 100
                 get_user_credit.save()
 
             res=HttpResponse("login_successful")

@@ -18,6 +18,7 @@ urlpatterns = [
     path('company_email_finder/',include('company_email_finder.urls')),
     path('affiliates/',views.affiliates,name='affiliates'),
     path('affiliate_payout/',include('affiliate_payout.urls')),
+    path('warmup/',include('warmup.urls')),
 ]
 
 

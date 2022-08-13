@@ -1,0 +1,18 @@
+{% load static %}
+
+{% if status == "success" %}
+<div id="verified" class="alertmessage d-flex flex-column justify-content-center">
+    <img src="{% static 'img/tikmark.gif' %}" alt="verified" style="height:6rem;width:6rem" class="align-self-center">
+    <h4 class="h4 font-weight-bold" style="color:green;margin-top:2rem" class="align-self-end ml-auto mr-auto mt-4">Email added to warmup queue : <span class="text-danger"><b>{{email}}</b></span> </h4>
+</div>
+
+{% endif %}
+
+{% if not_found %}
+
+<div id="invalid" class="alertmessage d-flex flex-column justify-content-center">
+    <img src="{% static 'img/cross.gif' %}" alt="verified" style="height:6rem;width:6rem;" class="align-self-center">
+    <h4 class="h4 font-weight-bold" style="color:red;margin-top:2rem;margin-left:2rem" class="align-self-end ml-auto mr-auto mt-4">OPS ! Email not found .</h4>
+</div>
+
+{% endif %}

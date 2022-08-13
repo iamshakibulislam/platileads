@@ -56,6 +56,7 @@ class User(AbstractUser):
     referred_by = models.ForeignKey('self',null=True,blank=True,on_delete=models.SET_NULL)
     is_affiliate = models.BooleanField(default=False)
     balance = models.FloatField(default=0)
+    is_discounted = models.BooleanField(default=False)
     #track user uploaded file progress while processing either for bulk email verification or finding . It will update the status and store 
     #the % of progress of the file . Later this field will be called from frontend to show the progress of the file
     file_process_percentage = models.FloatField(default=0)
@@ -106,13 +107,16 @@ class coupon_codes(models.Model):
         verbose_name_plural = 'Coupon Codes'
 
 
-class user_coupon(models.Model):
-    email = models.CharField(max_length=100,null=False,blank=False)
-    code = models.CharField(max_length=50,null=False,blank=False)
-    has_redeemed = models.BooleanField(default=False)
-    date = models.DateField(auto_now_add=True)
+class appsumo_deals(models.Model):
+    code = models.CharField(max_length=70,null=False,blank=False,unique=True)
+    is_gold = models.BooleanField(default=False)
+    is_unlimited = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateField(auto_now_add=True)
+    updated_at = models.DateField(auto_now=True)
+
 
     def __str__(self):
-        return str(self.email)+' | '+str(self.code) + ' | '+str(self.has_redeemed)
+        return str(self.code)
 
 

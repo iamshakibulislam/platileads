@@ -12,7 +12,7 @@
 						<!-- PAGE-HEADER -->
 						{% if request.user.alert_status and request.user.is_affiliate != 1 %}
 						<div class="page-header">
-							<p class="text-danger"> All new discovered leads will be stored under active campaign . Each email verification costs 1 credit and each email finding from company name(with job role) costs 5 credits per email. <a href="{% url 'change_alert_status' %}" class="btn btn-danger btn-sm">Got it,thanks</a></p>
+							<p class="text-danger"> All new discovered leads will be stored under active campaign . Each email verification costs 1 credit and each email finding costs 5 credits per email. <a href="{% url 'change_alert_status' %}" class="btn btn-danger btn-sm">Got it,thanks</a></p>
 						</div>
 
 						{% else %}
@@ -104,7 +104,7 @@
 												<div class="row">
 													<div class="col">
 														<h6 class="">Credits</h6>
-														<h3 class="mb-2 number-font">{{credits_remaining}}</h3>
+														<h3 class="mb-2 number-font">{% if credits_remaining > 4000 %}UNLIMITED{% else %}{{credits_remaining}} {% endif %}</h3>
 														
 													</div>
 													<div class="col col-auto">

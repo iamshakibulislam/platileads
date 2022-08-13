@@ -234,6 +234,27 @@ def webhook(request):
             new_credit = user_credit(user=sel_user,credits_remaining=sel_package.credits)
             new_credit.save()
 
+        
+        try:
+            sel_ref = sel_user.referred_by
+            pay_aff = User.objects.get(id=sel_ref.id)
+            pay_aff.balance += 4.2
+            pay_aff.save()
+
+            try:
+                f_ref = pay_aff.referred_by
+                f_u = User.objects.get(id=f_ref.id)
+                f_u.balance += 0.84
+                f_u.save()
+
+            except:
+                pass
+        except:
+            pass
+
+
+        
+
 
     
     if amount_paid == plan_amount and plan_id == settings.STRIPE_GOLD_PLAN:
@@ -267,6 +288,24 @@ def webhook(request):
         except:
             new_credit = user_credit(user=sel_user,credits_remaining=sel_package.credits)
             new_credit.save()
+
+
+        try:
+            sel_ref = sel_user.referred_by
+            pay_aff = User.objects.get(id=sel_ref.id)
+            pay_aff.balance += 11.7
+            pay_aff.save()
+
+            try:
+                f_ref = pay_aff.referred_by
+                f_u = User.objects.get(id=f_ref.id)
+                f_u.balance += 2.34
+                f_u.save()
+
+            except:
+                pass
+        except:
+            pass
 
         
 
@@ -302,6 +341,24 @@ def webhook(request):
         except:
             new_credit = user_credit(user=sel_user,credits_remaining=sel_package.credits)
             new_credit.save()
+
+        
+        try:
+            sel_ref = sel_user.referred_by
+            pay_aff = User.objects.get(id=sel_ref.id)
+            pay_aff.balance += 29.7
+            pay_aff.save()
+
+            try:
+                f_ref = pay_aff.referred_by
+                f_u = User.objects.get(id=f_ref.id)
+                f_u.balance += 5.94
+                f_u.save()
+
+            except:
+                pass
+        except:
+            pass
 
 
         

@@ -1,5 +1,4 @@
 
-
 {% extends 'homepage_base/front_base.html' %}
 
 {% block title %} Generate b2b Leads  Autopilot {% endblock title %}
@@ -59,7 +58,7 @@
 									<div class="carousel-ipad-camera"></div>
 									<div class="owl-carousel owl-theme nav-style-1 m-0" data-plugin-options="{'autoHeight': true, 'items': 1, 'margin': 10, 'nav': false, 'dots': false, 'stagePadding': 0, 'animateOut': 'fadeOut', 'autoplay': true, 'autoplayTimeout': 3000}">
 										<div>
-											<img alt=""  class="img-fluid rounded-0" src="{% static 'img/homepage/dashboard.PNG' %}">
+											<img alt=""  class="img-fluid rounded-0" src="{% static 'base_images/maindashboard.png' %}">
 										</div>
 										
 									</div>
@@ -124,6 +123,27 @@
 					</div>-->
 				</div>
 
+
+				<!--warmup section starts here -->
+
+				<section class="section bg-transparent m-0 border-0">
+					<div class="container">
+						<div class="row py-1 align-items-center justify-content-center">
+							<div class="col-lg-6 text-center text-lg-start">
+								<h2 class="text-color-dark font-weight-bold text-6 mb-1 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="0">Auto email warmup</h2>
+								<p class="appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="200"> Higher bounce rate causes emails landing on spam . We provide three levels of email verification including syntax check,dns check and mailbox existance check </p>
+								<p class="appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="400">If you have a list of email addresses , you can verify those with the bulk verification feature. Just upload your lead and let the software do all the boaring tasks for you.</p>
+								<a href="#pricing" class="btn btn-dark custom-secondary-font font-weight-bold text-3 px-5 py-3 mt-3 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="600">VIEW OUR PLANS</a>
+							</div>
+							<div class="col-lg-6 text-center">
+								<img class="img-fluid" style="height:40%" src="{% static 'base_images/email_warmup.png' %}" alt="">
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<!-- warmup section ends here -->
+
 				<section class="section m-0 mt-4 border-0 p-relative" id="features">
 					<div class="container">
 						<div class="row py-2 align-items-center justify-content-center">
@@ -160,7 +180,7 @@
 								<a href="#pricing" class="btn btn-dark custom-secondary-font font-weight-bold text-3 px-5 py-3 mt-3 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="600">VIEW OUR PLANS</a>
 							</div>
 							<div class="col-lg-6 text-center">
-								<img class="img-fluid" src="{% static 'img/homepage/email_verification.PNG' %}" alt="">
+								<img class="img-fluid" src="{% static 'base_images/email_verification_page.png' %}" alt="">
 							</div>
 						</div>
 					</div>
@@ -170,7 +190,7 @@
 					<div class="container">
 						<div class="row py-2 align-items-center justify-content-center">
 							<div class="col-lg-6 text-center">
-								<img class="img-fluid" src="{% static 'img/homepage/bulkemailfinder.PNG' %}" alt="">
+								<img class="img-fluid" src="{% static 'base_images/bulk_email_finder.png' %}" alt="">
 							</div>
 							<div class="col-lg-6 text-center text-lg-start">
 								<h2 class="text-color-dark font-weight-bold text-6 mb-1 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="0">Find anyones email using email finder tool</h2>
@@ -300,6 +320,7 @@
 											<li>100 credits/m</li>
 											<li>Email verification</li>
 											<li>Email finding(no job role selection)</li>
+											<li>Email warmup</li>
 						
 											<li>No priority support</li>
 										</ul>
@@ -323,7 +344,7 @@
 											<li>600 credits/m</li>
 											<li>Email verification</li>
 											<li>Email finding(with job role)</li>
-											
+											<li>Email warmup</li>
 											<li>Lead export</li>
 											<li>Priority support</li>
 										</ul>
@@ -347,6 +368,7 @@
 											<li>4000 credits/m</li>
 											<li>Email verification</li>
 											<li>Email finding(with job role)</li>
+											<li>Email warmup</li>
 									
 											<li>Lead export</li>
 											<li>Ultra priority support</li>
@@ -371,7 +393,7 @@
 											<li>Unlimited credit</li>
 											<li>Unlimited email verification</li>
 											<li>Unlimited email findings(with job role)</li>
-											
+											<li>Unlimited email warmup</li>
 											<li>Lead export</li>
 											<li>Super priority support</li>
 										</ul>
@@ -391,7 +413,7 @@
 						<div class="row py-2">
 							<div class="col text-center">
 								<h2 class="text-color-dark font-weight-bold text-7 mb-1">Frequent Asked Questions</h2>
-								<p class="lead">If these questions does not cover your inquery please contact us</p>
+								<p class="lead">If these questions do not cover your inquery please contact us</p>
 							</div>
 						</div>
 						<div class="row py-3 align-items-center justify-content-center">
@@ -399,7 +421,7 @@
 
 								<div class="toggle toggle-minimal toggle-primary" data-plugin-toggle>
 									<section class="toggle active">
-										<a class="toggle-title">does it tool verify email addresses?</a>
+										<a class="toggle-title">does it verify email addresses?</a>
 										<div class="toggle-content">
 											<p class="pb-3">Yes,It can verify email singly or in a  bulk</p>
 										</div>
@@ -407,13 +429,13 @@
 									<section class="toggle">
 										<a class="toggle-title">How credit system works ?</a>
 										<div class="toggle-content">
-											<p class="pb-3">Each email verification will cost 1 credit and each successful email finding/lead will cost 1 credit</p>
+											<p class="pb-3">Each email verification will cost 1 credit , each successful email finding/lead will cost 5 credits and each warmup email costs 2 credits . Every unsuccessful attempt costs 1 credit only.</p>
 										</div>
 									</section>
 									<section class="toggle">
 										<a class="toggle-title">Do you offer free trial ?</a>
 										<div class="toggle-content">
-											<p class="pb-3">Yes,we do . You will receive 200 free credit every single month (no credit card requuired)</p>
+											<p class="pb-3">Yes,we do . You will receive 100 free credit every single month (no credit card requuired)</p>
 										</div>
 									</section>
 									<section class="toggle">

@@ -1,10 +1,10 @@
 from django.contrib import admin
-from .models import User,coupon_codes,user_credit,user_coupon
+from .models import User, appsumo_deals,coupon_codes,user_credit
 
-@admin.register(user_coupon)
-class user_couponAdmin(admin.ModelAdmin):
-    list_display = ('email','code','has_redeemed','date')
-    search_fields = ('email','code','has_redeemed','date')
+@admin.register(appsumo_deals)
+class appsumo_dealsAdmin(admin.ModelAdmin):
+    list_display = ('code','is_active','updated_at')
+    search_fields = ('code','updated_at')
 
 @admin.register(user_credit)
 class user_creditAdmin(admin.ModelAdmin):

@@ -133,7 +133,7 @@ def single_lead(request):
                     save_lead.user = request.user
                     save_lead.first_name = first_name
                     save_lead.last_name = last_name
-                    save_lead.email = found_email
+                    save_lead.email = found_email.lower()
                     save_lead.website = get_domain
                     save_lead.position = get_position
                     save_lead.save()
@@ -359,7 +359,7 @@ def bulk_leads_results(request):
                                 save_lead.user = request.user
                                 save_lead.first_name = first_name
                                 save_lead.last_name = last_name
-                                save_lead.email = found_email
+                                save_lead.email = found_email.lower()
                                 save_lead.website = dt[domain]
                                 save_lead.position = job_position
                                 save_lead.save()

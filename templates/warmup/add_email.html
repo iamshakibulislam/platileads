@@ -1,0 +1,195 @@
+{% extends 'dashboard_base/base_dashboard.html' %}
+
+{% block title %} Add a warmup email {% endblock title%}
+
+{% block content %}
+
+{% load static %}
+    <div class="app-content" style="height:100vh">
+    <div class="row justify-content-center mt-4" >
+        <div class="col-md-6">
+            <div class="card" style="margin-top:0.1rem">
+                <img src="{% static 'img/loading.gif' %}" id="loading_spin" class="img-responsive htmx-indicator"  style="position:absolute;top:20%;left:45%;z-index:0"/>
+                <div class="card-header">
+                    <h4 class="card-title">Create new warmup campaign</h4>
+                </div>
+                <div class="card-body" id="display-msg">
+                    <p class="hidden" style="display:none" id="hiddenplace"></p>
+                        
+                    <form method="post"  action="{% url 'add_email' %}" hx-post="{% url 'add_email' %}" hx-trigger="submit" hx-target="#display-msg" hx-indicator="#loading_spin">
+                        {% csrf_token %}
+                        <div class="row">
+                        <div class="form-floating col-md-6">
+                            
+                            <input type="email" class="form-control" id="email" name="email" style="z-index:10"  placeholder="email@domain.com" required="true" value="  ">
+                            <label for="email" style="margin-left:1rem">Email Address</label>
+                        </div>
+                        <div class="form-floating col-md-6">
+                            
+                            <input type="text" class="form-control" id="provider" name="provider" style="z-index:10"  placeholder="Provider" required="true" value="Google" readonly>
+                            <label for="provider" style="margin-left:1rem">Provider</label>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+
+                        <div class="form-floating mt-4">
+                            
+                        <input type="text" class="form-control" id="app_password" name="app_password" style="z-index:10"  placeholder="examplecompany.com" required="true" value=" ">
+                        <label for="domain">App password</label>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6">
+
+                        <div class="form-floating mt-4">
+                            
+                            <input type="number" class="form-control" id="start" name="start" style="z-index:10"  placeholder="1" required="true" value="1">
+                            <label for="start">Starting sending quantity(day 1)</label>
+                            </div>
+
+                    </div>
+
+
+                    <div class="col-md-6">
+
+                        <div class="form-floating mt-4">
+                            
+                        <input type="number" class="form-control" id="increament" name="increament" style="z-index:10"  placeholder="examplecompany.com" required="true" value="2">
+                        <label for="increament">Daily increament</label>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6">
+
+                        <div class="form-floating mt-4">
+                            
+                            <input type="date" class="form-control" id="stop" name="stop" style="z-index:10"  placeholder="2" required="true" value="2">
+                            <label for="start">Stop date</label>
+                            </div>
+
+                    </div>
+
+                    <div class="row justify-content-between">
+                        <div class="col-md-8">
+                            <div class="form-group d-flex justify-content-center mt-3">
+                            <a id="test" class="btn btn-danger text-white" style="z-index:5"> Test Connection </a>
+                            </div>
+    
+                        </div>
+                    <div class="col-md-4">
+                        <div class="form-group d-flex justify-content-center mt-3">
+                        <button type="submit" id="submitbtn" class="btn btn-primary" style="z-index:5"> Start Warmup </button>
+                        </div>
+
+                    </div>
+                </div>
+
+                    </div>
+                    </form>
+                    <div id="messageBox">
+                    
+
+                </div>
+
+
+                    
+<!-- loading spinner-->
+
+
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+{% endblock content %}
+
+{% block customjs %}
+
+
+<script>
+
+    
+    $('#test').on('click',function(){
+
+    var pass = $("#app_password").val();
+    var email = $("#email").val();
+
+    console.log(pass);
+    console.log(email);
+
+
+        $("#test").text("testing...");
+
+        $.ajax(
+            {
+            url: "{% url 'test_email_connection' %}",
+            type: "GET",
+            dataType:"json",
+            data: {
+                'email': email,
+                'app_password': pass
+            },
+        }
+        ).done(function(data){
+            console.log(data);
+            if(data.status == 'success'){
+                $('#test').text("Connection successful ! ")
+            }
+            else{
+                
+                $('#test').text("Connection failed ! ")
+            }
+            }
+        ).fail(function(data){
+            console.log(data);
+            $('#test').text("Connection failed ! ")
+        })
+    })
+
+</script>
+
+<script>
+
+    
+    document.body.addEventListener('htmx:beforeRequest', function(e) {
+      
+       
+
+        $('.card > *:not(#loading_spin)').css('filter','blur(3px)');
+        $('#loading_spin').css('z-index','25');
+       
+        $('#submitbtn').css('z-index','1');
+        $('a,.btn').css('pointer-events','none');
+       
+    
+       
+    });
+    
+
+    document.body.addEventListener('htmx:afterRequest', function(e) {
+        
+       
+
+
+
+        $('.card > *:not(#loading_spin').css('filter', 'blur(0px)');
+        $('a,.btn').css('pointer-events','auto');
+        $('#loading_spin').css('z-index','0');
+        $('#submitbtn').css('z-index','5');
+        $('#email').css('z-index','10');
+    });
+    
+    </script>
+
+
+{% endblock customjs %}

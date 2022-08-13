@@ -38,12 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_crontab',
     'users',
     'dashboard',
     'leads',
     'subscriptions',
     'company_email_finder',
     'affiliate_payout',
+    'warmup',
 
 ]
 
@@ -237,4 +239,9 @@ if DEBUG == False:
             }
         
     }
+
+
+CRONJOBS = [
+    ('59 23 * * *', 'warmup.cronjob.warmup_emails')
+]
 
