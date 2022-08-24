@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'company_email_finder',
     'affiliate_payout',
     'warmup',
+    'email_sending',
+    'ckeditor',
 
 ]
 

@@ -1,0 +1,24 @@
+{% load static %}
+
+<div class="card">
+    <div class="card-body">
+
+{% if status == "success" %}
+<div id="verified" class="alertmessage d-flex flex-column justify-content-center">
+    <img src="{% static 'img/tikmark.gif' %}" alt="verified" style="height:6rem;width:6rem" class="align-self-center">
+    <h4 class="h4 font-weight-bold" style="color:green;margin-top:2rem" class="align-self-end ml-auto mr-auto mt-4">{{total}} Contacts added to the contact book  : <span class="text-danger"><b>{{contact_book}}</b></span> </h4>
+</div>
+
+{% endif %}
+
+{% if not_found %}
+
+<div id="invalid" class="alertmessage d-flex flex-column justify-content-center">
+    <img src="{% static 'img/cross.gif' %}" alt="verified" style="height:6rem;width:6rem;" class="align-self-center">
+    <h4 class="h4 font-weight-bold" style="color:red;margin-top:2rem;margin-left:2rem" class="align-self-end ml-auto mr-auto mt-4">OPS ! Not possible for now .</h4>
+</div>
+
+{% endif %}
+
+</div>
+</div>

@@ -19,6 +19,7 @@ urlpatterns = [
     path('affiliates/',views.affiliates,name='affiliates'),
     path('affiliate_payout/',include('affiliate_payout.urls')),
     path('warmup/',include('warmup.urls')),
+    path('email_sending/',include('email_sending.urls')),
 ]
 
 

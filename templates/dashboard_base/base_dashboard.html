@@ -184,7 +184,7 @@
 
 						<ul class="d-flex justify-content-between">
 
-						<h3 style="margin-top:0.6rem !important"  class="text-white d-block ">Blog author finder tools</h3>
+						<h3 style="margin-top:0.6rem !important"  class="text-white d-block ">Blog author finder </h3>
 						<i class="fa fa-caret-down d-block mt-3" style="padding-right:10px"></i>
 						</ul>
 
@@ -220,6 +220,32 @@
 
                         <li>
 							<a class="side-menu__item text-justify" href="{% url 'warmup_stats' %}"><i class="side-menu__icon fa-solid fa-chart-pie" style="font-size:1.3rem"></i><span class="side-menu__label" style="flex:none">Campaigns analytics</span></a>
+						</li>
+					</div>
+
+
+					<li class="wrap-header mt-1">
+
+						<ul class="d-flex justify-content-between" >
+
+						<h3 style="margin-top:0.6rem !important"   class="d-block text-light">Email sending campaign</h3>
+						<i class="fa fa-caret-down d-block mt-3" style="padding-right:10px"></i>
+						</ul>
+
+					</li>
+						
+					<div class="normal_email_finder">
+
+                        <li>
+							<a class="side-menu__item text-justify" href="{% url 'add_campaign_email' %}"><i class="side-menu__icon fa-solid fa-circle-plus" style="font-size:1.5rem"></i><span class="side-menu__label" style="flex:none">Add new sender email</span></a>
+						</li>
+
+                        <li>
+							<a class="side-menu__item text-justify" href="{% url 'sender_list' %}"><i class="side-menu__icon fa-solid fa-rectangle-list" style="font-size:1.3rem"></i><span class="side-menu__label" style="flex:none">Sender email list</span></a>
+						</li>
+
+						<li>
+							<a class="side-menu__item text-justify" href="{% url 'upload_contacts' %}"><i class="side-menu__icon fa-solid fa-address-book" style="font-size:1.4rem"></i><span class="side-menu__label" style="flex:none">Upload contacts</span></a>
 						</li>
 					</div>
 

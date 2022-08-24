@@ -1,0 +1,187 @@
+<div class="col-md-12" id="sub_container">
+
+    <div class="card">
+        <div class="card-header justify-content-start">
+            
+            <div class="col-md-3">
+            Contact list name : 
+          </div>
+            
+            <div class="col-md-4">
+            <input type="text" class="form-control" name="contact_list_name" placeholder="my contacts" id="contname" required>
+            </div>
+
+            <div class="col-md-5">
+                <button type="submit" class="btn btn-danger ml-auto" id="savecontact"> Save contacts </button>
+            </div>
+        
+        </div>
+
+        <div class="card-header d-none" id="pbheader">
+            
+            <div class="progress" id="pb" style="width:100%">
+            <div class="progress-bar progress-bar-striped active" role="progressbar" id="pb_bar"
+            aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%">
+            0%
+            </div>
+            </div><br>
+        </div>
+
+
+        <div class="card-body" style="overflow-x:auto;">
+            
+
+            
+
+            <table class="table table-bordered">
+                {% csrf_token %}
+                <thead>
+                <tr>
+                    {% for col in cols %}
+                    <th>
+                    <select class="form-control">
+                        <option field="0" value="0">Select column </option>
+                        {% for field in db_fields %}
+                        <option value="{{col}}" field="{{field}}">{{field}}</option>
+                        {% endfor %}
+                    </select>
+                    </th>
+                    {% endfor %}
+                    
+                    
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for dt in samble_data %}
+               <tr>
+                {% for item in dt %}
+                    <td>{{item}}</td>
+
+                {% endfor %}
+                    
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+
+            </table>
+
+            <style>
+                .table td, .table th {
+                    min-width: 11rem !important;
+                }
+            </style>
+
+        </div>
+    </div>
+
+</div>
+
+
+
+<script>
+
+    $(document).ready(function () {
+            $('#savecontact').on("click",function(){
+                //check all the fields 
+
+                var cont_camp_name = $('#contname').val();
+
+                if(cont_camp_name==null || cont_camp_name=="" || cont_camp_name == " "){
+
+                    alert("contact list name can not be blank !");
+                    return false;
+                }
+
+                else{
+
+                    var data = {};
+
+                    data["list_name"] = cont_camp_name;
+                    $("select").each(function(){
+                        var vall=$(this).val();
+                        var key=$(this).find(":selected").attr("field");
+                        if(data[key] == undefined && key != undefined){
+
+                            if(key == "0"){
+                                console.log("nothing selected");
+
+                            }
+                            else{
+                            data[key]=vall;
+                            }
+
+                        }
+                        else{
+
+                            alert("duplicate label detected !");
+                            return false;
+                        }
+                        
+                    
+                    });
+
+                    //if all data set correctly send ajax request 
+
+                    data["csrfmiddlewaretoken"]=$('input[name=csrfmiddlewaretoken]').val();
+                    console.log(data);
+
+                    $.ajax({
+                        type:"POST",
+                        
+                        data: data,
+                        url:"{% url 'process_contacts' %}"
+                    })
+                    .done(function (data) {
+
+                        $('#sub_container').removeClass('col-md-12');
+                        $('#sub_container').addClass('col-md-6');
+                        $('#sub_container').empty();
+                        $('#sub_container').append(data);
+                        
+                    })
+
+                    .fail(function (data){
+                        console.log(data);
+                    })
+
+                }
+
+
+
+
+                //end of checking all the fields
+
+                //check progressbar
+
+                $(this).attr("disabled","true");
+                $('#pbheader').removeClass('d-none');
+
+                function check_progress(){
+                    $.ajax({
+                        url: "{% url 'process_percentage' %}",
+                        type: "GET",
+                        dataType: "json"
+        
+                    }).done(function(data){
+                        console.log(data);
+                        $('#pb_bar').attr('style','width:'+data.percentage+'%');
+                        $('#pb_bar').text(data.percentage+'%');
+                        $('#pb_bar').attr('aria-valuenow',data.percentage);
+                        if(data.percentage > 99){
+                            clearInterval(check_status)
+                        }
+                    })
+                }
+        
+        
+               var check_status = setInterval(check_progress,1000);
+
+
+
+            })
+    })
+</script>
