@@ -1,0 +1,284 @@
+{% extends 'dashboard_base/base_dashboard.html' %}
+
+{% block title %} Email campaign {% endblock title %}
+
+
+{% block content %}
+
+{% load static %}
+
+
+<div class="row justify-content-center" style="margin-top:5rem">
+        <div class="col-md-1"></div>
+        <div class="col-md-7">
+            <div class="card">
+
+                <div class="card-header justify-content-center">
+                    Available placeholder tags
+                </div>
+
+                <div class="card-body">
+                    <table class="table">
+                        <tr >
+                            <td><b>{first_name|fallback}</b></td>
+                            <td><b>{last_name|fallback}</b></td>
+                            <td><b>{email|fallback}</b></td>
+                            <td><b>{company|fallback}</b></td>
+                            <td><b>{position|fallback}</b></td>
+
+                        </tr>
+
+                        <tr>
+                            <td><b>{phone|fallback}</b></td>
+                            <td><b>{website|fallback}</b></td>
+                            <td><b>{country|fallback}</b></td>
+                            <td><b>{address|fallback}</b></td>
+                            <td><b>{city|fallback}</b></td>
+
+                        </tr>
+                    </table>
+                    
+                </div>
+
+            </div>
+        </div>
+
+</div>
+
+
+<div class="row " style="margin-top:1rem">
+    <form class="form-inline">
+        {% csrf_token %}
+        <div class="col-md-3"></div>
+    <div class="col-md-2" style="margin-left:-0.9rem">
+       
+        <input type="text" class="form-control" id="campaign" name="camp_name" placeholder="campaign name" required/>
+    </div>
+    <div class="col-md-2">
+        
+        <select class="form-control" style="width:12rem;" id="contact-book" name="contact_book">
+            <option value="0">Select contact book</option>
+            {% for cam in cont_camp %}
+
+            <option value="{{cam.id}}">{{cam.name}}</option>
+
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="col-md-2">
+        
+        <select class="form-control" style="width:12rem;" id="sender_email" name="contact_book">
+            <option value="0">Select sender email</option>
+            {% for sender_email in sender_emails %}
+
+            <option value="{{sender_email.id}}">{{sender_email.email}}</option>
+
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="col-md-2">
+        <button class="btn btn-dark" id="start_camp">Start campaign</button>
+    </div>
+</form>
+</div>
+
+
+
+<div class="row justify-content-center" style="margin-top:1rem">
+<div class="col-md-6">
+<form>
+
+    
+    {{ form.media|safe}}
+    <input type="text" style="box-sizing:border-box;width:52rem" class="form-control mb-2" name="subject" id="subject" placeholder="subject" required />
+    <label>Email body </label> 
+    <i class="fa-solid fa-arrow-down"></i>
+    {{form.message0}}
+
+    <div class="sel_date  mt-4" style="width:50rem">
+    <div class="row justify-content-start">
+        <div class="col-md-3">
+    <p class="mt-3">Delivery date : </p>
+        </div>
+    
+        <div class="col-md-3">
+    <input type="date" date-for="id_message0" name="delivery_date" class="delivery_date form-control" />
+        </div>
+    </div>
+    </div>
+
+
+</form>
+
+
+
+
+
+
+
+
+</div>
+
+
+</div>
+
+
+
+<!--followup section -->
+<div class="followup_section" id="followup_section">
+
+</div>
+
+
+<!--followup button-->
+
+<div class="row mt-4">
+    <div class="col-md-3"></div>
+    <div class="col-md-1">
+        <button class="btn btn-danger" id="followupbtn">Add a followup <i class="fa-solid fa-plus"></i></button>
+    </div>
+</div>
+
+
+
+
+
+{% endblock content %}
+
+
+{% block customjs %}
+
+
+<script>
+
+    $(document).ready(function(){
+
+        var follow_track = 1;
+
+        $('#followupbtn').on('click',function(){
+
+            
+
+            $(this).text("Please wait.......");
+            
+
+            //call ajax to generate form
+
+            $.ajax({
+                type:"GET",
+                url:"{% url 'render_followup' %}?followno="+follow_track
+            })
+            .done(function(result){
+
+                $('#followup_section').append(result);
+                $('#followupbtn').text("Add a followup +");
+                follow_track = follow_track + 1;
+            })
+            .fail(function(result){alert("something went wrong ! Please try again");
+
+            $('#followupbtn').text("Add a followup +");
+        
+        })
+        })
+
+
+    })
+
+</script>
+
+
+<!-- script to send all info to view -->
+
+<script>
+
+$(document).ready(function(){
+
+    
+
+    $('#start_camp').on('click',function(event)
+    {
+
+        event.preventDefault();
+        var csrf_token = $("input[name=csrfmiddlewaretoken]").val();
+            
+
+        var contact_book = $('#contact-book').val();
+        var campaign = $('#campaign').val();
+        var sender_email = $('#sender_email').val();
+        var subject = $('#subject').val();
+
+
+        if(contact_book == 0 || contact_book == null || campaign==0 || campaign == null || sender_email == 0 || sender_email == null || subject == null || subject == " " || subject.length == 0){
+            alert("all fields are required");
+            return false
+        }
+
+        var ck_inst = CKEDITOR.instances;
+
+        var datas = {
+
+            "data":[]
+        
+        }
+
+        datas["contact_book"] = contact_book;
+        datas["campaign"] = campaign;
+        datas["sender_email"] = sender_email;
+        datas["subject"] = subject;
+
+        for(key in ck_inst){
+
+            var logi =  'input[date-for='+key+']';
+
+            var date_for = $(logi).val();
+
+            if (date_for == null || date_for == '' || date_for == ' '){
+                alert("you must select a delivery date");
+                return false
+            }
+
+            
+            
+            datas["data"].push({"message":ck_inst[key].getData(),"delivery_date":date_for})
+        }
+
+        
+        
+
+
+        //send the ajax request to backend to proccess data
+
+        $(this).text("Please wait.....");
+        console.log(datas);
+
+        $.ajax({
+            dataType:"JSON",
+            type:"POST",
+            data:{datas:JSON.stringify(datas),csrfmiddlewaretoken:csrf_token},
+            url :"{% url 'save_campaign' %}"
+            
+        })
+
+        .done(function(result){
+            $('#start_camp').text("Start campaign")
+            alert("done");
+        })
+
+        .fail(function(result){
+            alert("something went wrong !")
+        })
+
+        //end of sending ajax request
+
+        
+    }) 
+})
+
+
+</script>
+
+
+
+{% endblock customjs %}

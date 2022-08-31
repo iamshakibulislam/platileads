@@ -1,0 +1,23 @@
+<div class="row justify-content-center mt-3">
+<p><b>Followup {{follow_no}}</p><i class="fa-solid fa-arrow-down"></i></b>
+    <!-- here new boxes will be inserted-->
+    <div class="col-md-6">
+        <form>
+        {{ followup_form.media|safe }}
+        {{ followup_form }}
+        <div class="sel_date  mt-4" style="width:50rem">
+            <div class="row justify-content-start">
+                <div class="col-md-3">
+            <p class="mt-3">Delivery date : </p>
+                </div>
+            
+                <div class="col-md-3">
+            <input type="date" date-for="{{randstr}}" name="delivery_date" class="delivery_date form-control" />
+                </div>
+            </div>
+            </div>
+        </form>
+    </div>
+   
+
+</div>

@@ -48,8 +48,12 @@ class contact_listAdmin(admin.ModelAdmin):
 
 @admin.register(sending_campaign_track)
 class sending_campaign_trackAdmin(admin.ModelAdmin):
-    list_display = ['campaign','opened_total','replied_total','followedup_total','created_at','updated_at']
+    list_display = ['campaign','opened_total','replied_total','followedup_total','total_sent','created_at','updated_at']
     search_fields = ['campaign__campaign_name','campaign__email__email','campaign__email__user__email','email']
     list_per_page = 20
+
+
+admin.site.register(sending_track)
+    
 
     

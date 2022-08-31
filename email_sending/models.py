@@ -17,6 +17,15 @@ class emails_for_campaign(models.Model):
 
 
 
+class contact_campaign(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+    def __str__(self):
+        return self.name
 
 class sending_campaigns(models.Model):
     campaign_name = models.CharField(max_length=255)
@@ -25,6 +34,7 @@ class sending_campaigns(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
     followup_sequence = models.IntegerField(default=0)
+    contact_book = models.ForeignKey(contact_campaign,on_delete=models.CASCADE,null=True)
 
 
     def __str__(self):
@@ -49,17 +59,6 @@ class email_messages(models.Model):
     class Meta:
         verbose_name_plural = 'email messages'
         verbose_name = 'email message'
-
-
-class contact_campaign(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=255)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-
-    def __str__(self):
-        return self.name
 
 
 
@@ -90,6 +89,14 @@ class contact_list(models.Model):
         verbose_name_plural = 'contact list'
         verbose_name = 'contact list'
 
+class sending_track(models.Model):
+    campaign = models.ForeignKey(sending_campaigns,on_delete=models.CASCADE)
+    sent_to = models.ForeignKey(contact_list,on_delete=models.CASCADE)
+    is_replied = models.BooleanField(default=False)
+    is_opened = models.BooleanField(default=False)
+
+    def __str__(self):
+        return str(self.sent_to)
 
 class sending_campaign_track(models.Model):
     campaign = models.ForeignKey(sending_campaigns, on_delete=models.CASCADE)

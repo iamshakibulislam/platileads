@@ -121,12 +121,3 @@ def warmup_stats(request):
 
 
 
-def testimage(request):
-    cam_id = request.GET.get('id')
-    print('cam id is ',cam_id)
-    print("\nImage Loaded\n")
-    red = Image.new('RGB', (1, 1))
-    response = HttpResponse(content_type="image/png")
-    red.save(response, "PNG")
-    return response
-   # return redirect('/static/base_images/email_warmup.png')

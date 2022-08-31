@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'warmup',
     'email_sending',
     'ckeditor',
+    'widget_tweaks',
 
 ]
 
@@ -244,6 +245,28 @@ if DEBUG == False:
 
 
 CRONJOBS = [
-    ('59 23 * * *', 'warmup.cronjob.warmup_emails')
+    ('59 16 * * *', 'warmup.cronjob.warmup_emails'),
+    ('0 */6 * * *', 'email_sending.cron.check_reply'),
+    ('0 0 * * *', 'email_sending.cron.send_email_campaign')
 ]
 
+
+
+
+CKEDITOR_BASEPATH = "/static/ckeditor/ckeditor/"
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'Full',
+        'height': 250,
+        'width': 850,
+        'editorplaceholder':'Message starts from here'
+    },
+
+    'followup': {
+        'toolbar': 'Full',
+        'height':100,
+        'editorplaceholder':"Followup message here"
+    }
+
+}

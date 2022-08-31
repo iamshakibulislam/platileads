@@ -1,14 +1,20 @@
+from turtle import update
 from django.shortcuts import render,redirect
 from django.http import HttpResponse,JsonResponse
 #import django messages
 from django.contrib import messages
 import re
 from .models import *
+from .forms import *
 import pandas as pd
 import time
+import json
 import os
-
+import random
+from PIL import Image
+import string
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from .cron import *
 
 def add_campaign_email(request):
     if request.method == "GET":
@@ -174,3 +180,206 @@ def process_contacts(request):
 
 
         return render(request,"email_sending/components/contacts_added.html",{'contact_book':contact_list_name,'status':'success','total':counter})
+
+
+
+def contacts_book(request):
+    sel_cam=contact_campaign.objects.filter(user=request.user)
+    
+    
+
+    page = request.GET.get('page', 1)
+
+    paginator = Paginator(sel_cam, 10)
+
+    try:
+        stats = paginator.page(page)
+    except PageNotAnInteger:
+        stats = paginator.page(1)
+    except EmptyPage:
+        stats = paginator.page(paginator.num_pages)
+
+    #return render(request,'email_sending/sender_list.html',{'stats':stats,'lenth_of_stats':len(stats)})
+
+    
+
+    for x in stats:
+        total_contacts=len(contact_list.objects.filter(contact_campaign=x))
+        setattr(x,"contacts_total",total_contacts)
+
+
+    
+    return render(request,'email_sending/contacts_book.html',{'inf':stats,'total_dt':len(stats)})
+
+
+
+
+def delete_contact_book(request):
+    if request.method == "POST":
+        contact_book_id=request.POST.get("id",0)
+        
+        if contact_book_id == 0 or contact_book_id == None:
+            messages.info(request,"Wrong contact book selected !")
+            return redirect(request.META["HTTP_REFERER"])
+
+        else:
+            sel_contact_book = contact_campaign.objects.get(id=contact_book_id)
+            sel_contact_book.delete()
+            messages.info(request,f"Contact book ({sel_contact_book.name}) deleted !")
+            return redirect(request.META["HTTP_REFERER"])
+    else:
+        messages.info(request,"wrong request !")
+        return redirect(request.META["HTTP_REFERER"])
+
+
+def get_contacts(request):
+    get_cam_id = request.GET.get('id',0)
+    if get_cam_id == 0 or get_cam_id == None:
+        messages.info(request,"wrong contact book selected !")
+        return redirect(request.META["HTTP_REFERER"])
+
+    contact_listing = contact_list.objects.filter(contact_campaign = contact_campaign.objects.get(id=get_cam_id) )
+
+    page = request.GET.get('page', 1)
+
+    paginator = Paginator(contact_listing, 10)
+
+    try:
+        stats = paginator.page(page)
+    except PageNotAnInteger:
+        stats = paginator.page(1)
+    except EmptyPage:
+        stats = paginator.page(paginator.num_pages)
+
+    return render(request,'email_sending/contacts_list.html',{'inf':stats,'total_dt':len(stats),'cam_id':get_cam_id,'contact_book':contact_campaign.objects.get(id=get_cam_id)})
+
+
+
+
+def delete_contact(request):
+    if request.method == "POST":
+        contact_id=request.POST.get("id",0)
+        
+        if contact_id == 0 or contact_id == None:
+            messages.info(request,"Wrong contact  selected !")
+            return redirect(request.META["HTTP_REFERER"])
+
+        else:
+            sel_contact = contact_list.objects.get(id=contact_id)
+            sel_contact.delete()
+            messages.info(request,"Contact  deleted !")
+            return redirect(request.META["HTTP_REFERER"])
+    else:
+        messages.info(request,"request error !")
+        return redirect(request.META["HTTP_REFERER"])
+
+
+
+
+def email_campaign(request):
+    if request.method == "GET":
+        form = messageForm()
+        
+        
+        cont_camp = contact_campaign.objects.filter(user=request.user)
+        sender_email = emails_for_campaign.objects.filter(user=request.user)
+        return render(request,"email_sending/email_campaign.html",{'form':form,'cont_camp':cont_camp,'sender_emails':sender_email})
+
+
+
+def render_followup(request):
+
+    
+
+    letters = string.ascii_lowercase
+
+    randstr = ''.join(random.choice(letters) for i in range(7))
+
+    followup_form = getFollowupForm(randstr)
+
+    followno = request.GET.get("followno",1)
+
+    return render(request,"email_sending/components/render_followup.html",{'followup_form':followup_form,'randstr':"id_"+randstr,"follow_no":followno})
+
+
+
+def save_campaign(request):
+    if request.method == "GET":
+        return HttpResponse("not allowed")
+
+
+    if request.method == "POST":
+        dt=json.loads(request.POST["datas"])
+        sel_email = emails_for_campaign.objects.get(id=int(dt["sender_email"]),user=request.user)
+        
+        sel_contact_book = contact_campaign.objects.get(id=int(dt["contact_book"]))
+        create_camp=sending_campaigns.objects.create(campaign_name=dt["campaign"],email=sel_email,contact_book=sel_contact_book)
+
+        for data in dt["data"]:
+            email_messages.objects.create(campaign=create_camp,subject=dt["subject"],message=data["message"],delivery_date=data["delivery_date"])
+        
+
+
+        return JsonResponse({'status':'ok'})
+
+
+
+#create a blank image for tracking email openings
+
+
+def blank_image(request):
+    cam_id = request.GET.get('camp')
+    cont_id = request.GET.get('cont_id',0)
+
+    
+    try:
+        sel_camp = sending_campaigns.objects.get(id=int(cam_id))
+        sel_cont = contact_list.objects.get(id=int(cont_id))
+
+    except:
+        sel_camp =0
+        cont_id=0
+
+    try:
+        check_track = sending_track.objects.get(campaign=sel_camp,sent_to=sel_cont)
+    except:
+        check_track = sending_track.objects.create(campaign=sel_camp,sent_to=sel_cont)
+
+    try:
+
+        if sel_camp !=0 and check_track.is_opened == False:
+        
+            sel_track=sending_campaign_track.objects.get(campaign=sel_camp)
+            sel_track.opened_total +=1
+            
+            sel_track.save()
+
+            try:
+
+                update_sending=sending_track.objects.get(sent_to=sel_cont,campaign=sel_camp)
+                update_sending.is_opened = True
+                update_sending.save()
+            except:
+                sending_track.objects.create(sent_to=sel_cont,campaign=sel_camp,is_opened=True)
+
+    except sending_campaign_track.DoesNotExist:
+        sending_campaign_track.objects.create(campaign=sel_camp,opened_total=1)
+
+
+
+
+    print('cam id is ',cam_id)
+    print("\nImage Loaded\n")
+    red = Image.new('RGB', (1, 1))
+    response = HttpResponse(content_type="image/png")
+    red.save(response, "PNG")
+    return response
+
+
+
+
+def test_email_send(request):
+    check_reply()
+    #send_email_campaign()
+
+    return HttpResponse("status ok")

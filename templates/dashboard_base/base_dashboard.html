@@ -28,10 +28,11 @@
 
 		<!-- SIDE-MENU CSS -->
 		<link href="{% static 'assets/css/sidemenu.css' %}" rel="stylesheet" id="sidemenu-theme">
-
+		
 		<!--C3 CHARTS CSS -->
 		<link href="{% static 'assets/plugins/charts-c3/c3-chart.css' %}" rel="stylesheet"/>
 
+		
 		<!-- P-scroll bar css-->
 		<link href="{% static 'assets/plugins/p-scroll/perfect-scrollbar.css' %}" rel="stylesheet" />
 
@@ -246,6 +247,14 @@
 
 						<li>
 							<a class="side-menu__item text-justify" href="{% url 'upload_contacts' %}"><i class="side-menu__icon fa-solid fa-address-book" style="font-size:1.4rem"></i><span class="side-menu__label" style="flex:none">Upload contacts</span></a>
+						</li>
+
+						<li>
+							<a class="side-menu__item text-justify" href="{% url 'contacts_book' %}"><i class="side-menu__icon fa-solid fa-book" style="font-size:1.4rem"></i><span class="side-menu__label" style="flex:none">Contacts book</span></a>
+						</li>
+
+						<li>
+							<a class="side-menu__item text-justify" href="{% url 'email_campaign' %}"><i class="side-menu__icon fa-solid fa-paper-plane" style="font-size:1.4rem"></i><span class="side-menu__label" style="flex:none">Create new campaign</span></a>
 						</li>
 					</div>
 
