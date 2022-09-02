@@ -1,4 +1,4 @@
-from turtle import update
+
 from django.shortcuts import render,redirect
 from django.http import HttpResponse,JsonResponse
 #import django messages
