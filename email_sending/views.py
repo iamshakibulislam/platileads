@@ -12,9 +12,11 @@ import json
 import os
 import random
 from PIL import Image
+from datetime import datetime,date
 import string
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .cron import *
+from django.db.models import Q,Sum,Count,Max
 
 def add_campaign_email(request):
     if request.method == "GET":
@@ -379,7 +381,92 @@ def blank_image(request):
 
 
 def test_email_send(request):
-    check_reply()
-    #send_email_campaign()
+    #check_reply()
+    send_email_campaign()
 
     return HttpResponse("status ok")
+
+
+
+def campaigns(request):
+    dt=[]
+    sel_all_camp = sending_campaigns.objects.filter(email__user=request.user)
+
+    for camp in sel_all_camp:
+        get_messages=email_messages.objects.filter(campaign=camp)
+        mx = get_messages.aggregate(Max('delivery_date'))['delivery_date__max']
+        followup_total = len(get_messages)-1
+        
+
+        if date(mx.year,mx.month,mx.day) < datetime.now().date():
+            camp.is_active = False
+            camp.is_expired = True
+            camp.save()
+
+        
+        try:
+            trk=sending_campaign_track.objects.get(campaign=camp)
+        except sending_campaign_track.DoesNotExist:
+            trk=sending_campaign_track.objects.create(campaign=camp)
+
+        contacts_total = len(contact_list.objects.filter(contact_campaign=camp.contact_book))
+        
+        
+
+        
+        dt.append({'id':camp.id,'is_active':camp.is_active,'name':camp.campaign_name,'start':camp.created_at,
+        'followup':followup_total,
+        'contacts_total':contacts_total,'total_sent':trk.total_sent,'opened_total':trk.opened_total,
+        'replied_total':trk.replied_total,'is_active':camp.is_active,
+        'opened_perc':round(((trk.opened_total*100)/contacts_total),2),'replied_perc':round(((trk.replied_total*100)/contacts_total),2),'is_expired':camp.is_expired})
+
+    dt=dt[::-1]
+    page = request.GET.get('page', 1)
+
+    paginator = Paginator(dt, 10)
+
+    try:
+        stats = paginator.page(page)
+    except PageNotAnInteger:
+        stats = paginator.page(1)
+    except EmptyPage:
+        stats = paginator.page(paginator.num_pages)
+
+    return render(request,'email_sending/email_campaigns.html',{'stats':stats,'length_of_stats':len(stats)})
+
+
+
+
+def change_campaign_status(request):
+    if request.method == 'POST':
+        try:
+            campaign = sending_campaigns.objects.get(id=request.POST['campaign_id'])
+
+            get_messages=email_messages.objects.filter(campaign=campaign)
+            mx = get_messages.aggregate(Max('delivery_date'))['delivery_date__max']
+            
+            
+
+            if date(mx.year,mx.month,mx.day) < datetime.now().date():
+                campaign.is_active = False
+                campaign.is_expired = True
+                campaign.save()
+
+                messages.info(request,"Campaign has expired !")
+
+                return redirect(request.META["HTTP_REFERER"])
+
+            if campaign.is_active == True:
+                campaign.is_active = False
+                campaign.save()
+            else:
+                
+                campaign.is_active = True
+                campaign.save()
+
+            messages.info(request,"Status Updated !")
+
+            return redirect(request.META["HTTP_REFERER"])
+
+        except:
+            return redirect(request.META['HTTP_REFERER'])

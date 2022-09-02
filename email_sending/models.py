@@ -33,6 +33,7 @@ class sending_campaigns(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
+    is_expired = models.BooleanField(default=False)
     followup_sequence = models.IntegerField(default=0)
     contact_book = models.ForeignKey(contact_campaign,on_delete=models.CASCADE,null=True)
 

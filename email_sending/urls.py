@@ -14,6 +14,8 @@ urlpatterns = [
     path('render_followup/',views.render_followup,name='render_followup'),
     path('save_campaign/',views.save_campaign,name='save_campaign'),
     path('blank_image/',views.blank_image,name='blank_image'),
+    path('campaigns/',views.campaigns,name='campaigns'),
+    path('change_campaign_status/',views.change_campaign_status,name='change_campaign_status'),
     path('test_email_send/',views.test_email_send,name='test_email_send')
     
 ]

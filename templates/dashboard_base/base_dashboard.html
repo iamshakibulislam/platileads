@@ -104,13 +104,13 @@
 							<a class="side-menu__item"  data-bs-toggle="slide" href="{% url 'dashboard_home' %}"><i class="side-menu__icon fe fe-home" style="font-size:1.5rem;flex:none"></i><span class="side-menu__label" style="flex:none;margin-left:1rem">Dashboard</span></a>
 						</li>
 						{% if request.user.is_affiliate == 0 %}
-						<li><h3>Campaigns</h3></li>
+						<li><h3>Lead Campaigns</h3></li>
 						<li>
-							<a class="side-menu__item" href="{% url 'campaign_list' %}"><i class="side-menu__icon fa-solid fa-list" style="font-size:1.3rem;margin-right:0.5rem"></i><span class="side-menu__label" style="flex:none">All Campaigns</span></a>
+							<a class="side-menu__item" href="{% url 'campaign_list' %}"><i class="side-menu__icon fa-solid fa-list" style="font-size:1.3rem;margin-right:0.5rem"></i><span class="side-menu__label" style="flex:none">All lead Campaigns</span></a>
 						</li>
 
 						<li>
-							<a class="side-menu__item" href="{% url 'activate_campaign' %}"><i class="side-menu__icon fa-solid fa-check-circle" style="font-size:1.3rem;margin-right:0.5rem"></i><span class="side-menu__label" style="flex:none">Activate a campaign</span></a>
+							<a class="side-menu__item" href="{% url 'activate_campaign' %}"><i class="side-menu__icon fa-solid fa-check-circle" style="font-size:1.3rem;margin-right:0.5rem"></i><span class="side-menu__label" style="flex:none">Activate a lead campaign</span></a>
 						</li>
 
 						<li class="wrap-header mt-1">
@@ -256,6 +256,10 @@
 						<li>
 							<a class="side-menu__item text-justify" href="{% url 'email_campaign' %}"><i class="side-menu__icon fa-solid fa-paper-plane" style="font-size:1.4rem"></i><span class="side-menu__label" style="flex:none">Create new campaign</span></a>
 						</li>
+
+						<li>
+							<a class="side-menu__item text-justify" href="{% url 'campaigns' %}"><i class="side-menu__icon fa-solid fa-chart-line" style="font-size:1.4rem"></i><span class="side-menu__label" style="flex:none">Campaign analytics</span></a>
+						</li>
 					</div>
 
 
@@ -400,7 +404,7 @@
 									<div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
 										<div class="drop-heading">
 											<div class="text-center">
-												<h5 class="text-dark mb-0">{{request.user.first_name}} {{request.user.last_name}}</h5>
+												<h5 class="text-dark mb-0">{{request.user.first_name}} </h5>
 												
 											</div>
 										</div>

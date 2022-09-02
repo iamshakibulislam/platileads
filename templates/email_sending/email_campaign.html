@@ -262,8 +262,10 @@ $(document).ready(function(){
         })
 
         .done(function(result){
+            window.location.href="{% url 'campaigns' %}";
             $('#start_camp').text("Start campaign")
-            alert("done");
+            
+            
         })
 
         .fail(function(result){

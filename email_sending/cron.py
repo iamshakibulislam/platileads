@@ -9,7 +9,7 @@ from threading import Thread
 def send_email_campaign():
 
     #first filter all the message which is to delivered today
-    today_is_to_send = email_messages.objects.filter(delivery_date = datetime.now().date())
+    today_is_to_send = email_messages.objects.filter(delivery_date = datetime.now().date()).filter(campaign__is_active=True)
     #print(today_is_to_send.values())
 
     for msg in today_is_to_send:
@@ -84,6 +84,8 @@ def check_reply():
     #sel email messages which dellivery date was in the last 7 days
 
     sel_email_messages = email_messages.objects.filter(delivery_date__gte= (datetime.now() - timedelta(days=7)).date())
+
+    
 
     camp_list = []
 
