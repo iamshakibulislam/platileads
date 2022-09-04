@@ -13,7 +13,7 @@ def send_email_campaign():
     #print(today_is_to_send.values())
 
     for msg in today_is_to_send:
-
+        # mark as sent
         emai_msg = email_messages.objects.get(id=msg.id)
         emai_msg.is_sent = True
         emai_msg.save()
