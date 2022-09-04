@@ -24,8 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-8^*no3qd*^_&oslckj)yqgutk^rri!klzj1k))#(b%hcl=szql'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
+DEBUG = False
 ALLOWED_HOSTS = ['*']
 
 
@@ -199,7 +198,7 @@ EMAIL_HOST_PASSWORD = 'pURgSSJVVLny'
 
 #local testing database
 
-if DEBUG == False:
+if DEBUG == True:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',

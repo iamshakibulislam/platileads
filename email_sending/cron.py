@@ -14,6 +14,10 @@ def send_email_campaign():
 
     for msg in today_is_to_send:
 
+        emai_msg = email_messages.objects.get(id=msg.id)
+        emai_msg.is_sent = True
+        emai_msg.save()
+
         # check all the campaign recipients 
         sel_camp = msg.campaign
         sel_contact_book = sel_camp.contact_book
