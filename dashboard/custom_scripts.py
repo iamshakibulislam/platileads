@@ -56,7 +56,7 @@ def get_mx_records(email):
     return mx_records
 
 #check if the email is valid
-@func_set_timeout(5)
+@func_set_timeout(100)
 def is_valid_email(mx_record,email):
 
     try:

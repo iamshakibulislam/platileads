@@ -485,155 +485,157 @@ def find_bulk_email(request):
 @login_required(login_url='/users/login/')
 def find_bulk_email_result(request):
     if request.method == 'POST':
-        get_first_name_column = request.POST.get('first_name_column')
-        get_last_name_column = request.POST.get('last_name_column')
-        get_domain_column = request.POST.get('website_column')
-
-        get_file_instance = file_uploader.objects.filter(user=request.user)
-        get_file_path = get_file_instance[0].file.path
-        actual_file_path = ""
-        file_extension = get_file_path.split('.')[-1]
-
-        if file_extension == "xls":
-            actual_file_path = get_file_path[:-3]+"xlsx"
-           
-        elif file_extension == "csv":
-            actual_file_path = get_file_path[:-3]+"xlsx"
-
-        elif file_extension == "xlsx":
-            actual_file_path = get_file_path
-        
-        else:
-            return HttpResponse("Invalid File")
-
-        information = xlsx_info(actual_file_path)
-
-        all_columns = information['column_names']
-        total_columns = information['total_columns']
-        total_rows = information['total_rows']
-
-        get_the_first_name_column_position = all_columns.index(get_first_name_column)+1
-        get_the_last_name_column_position = all_columns.index(get_last_name_column)+1
-        get_the_domain_name_column_position = all_columns.index(get_domain_column)+1
-
-        total_email_verified = 0
         try:
-            sel_user_inst = request.user
-            sel_user_inst.file_process_percentage = float(0)
-            sel_user_inst.save()
+            get_first_name_column = request.POST.get('first_name_column')
+            get_last_name_column = request.POST.get('last_name_column')
+            get_domain_column = request.POST.get('website_column')
 
-        except:
-            pass
+            get_file_instance = file_uploader.objects.filter(user=request.user)
+            get_file_path = get_file_instance[0].file.path
+            actual_file_path = ""
+            file_extension = get_file_path.split('.')[-1]
 
-        for row_num in range(1,total_rows+1):
-            sel_user_inst = request.user
-            sel_user_inst.file_process_percentage = float((row_num/total_rows)*100)
-            sel_user_inst.save()
-
-            sel_user_credit = user_credit.objects.get(user=request.user)
-            if sel_user_credit.credits_remaining == 0:
-                break
-            first_name_val=xlsx_retrive_column_data(row_num,get_the_first_name_column_position,actual_file_path)
-            last_name_val=xlsx_retrive_column_data(row_num,get_the_last_name_column_position,actual_file_path)
-            domain_val=xlsx_retrive_column_data(row_num,get_the_domain_name_column_position,actual_file_path)
+            if file_extension == "xls":
+                actual_file_path = get_file_path[:-3]+"xlsx"
             
-            email_found = False
-            if first_name_val != None and last_name_val != None and domain_val != None and first_name_val != "" and last_name_val != "" and domain_val != "":
-                try:
-                    domain_val = domain_val.split('//')[1]
-                except:
-                    pass
-                root_domain_inst = tldextract.extract(domain_val)
-                root_domain = root_domain_inst.domain+'.'+root_domain_inst.suffix
+            elif file_extension == "csv":
+                actual_file_path = get_file_path[:-3]+"xlsx"
 
-                possible_combinations = []
-                possible_combinations.append(first_name_val+'@'+root_domain)
-                possible_combinations.append(first_name_val+'.'+last_name_val+'@'+root_domain)
+            elif file_extension == "xlsx":
+                actual_file_path = get_file_path
+            
+            else:
+                return HttpResponse("Invalid File")
+
+            information = xlsx_info(actual_file_path)
+
+            all_columns = information['column_names']
+            total_columns = information['total_columns']
+            total_rows = information['total_rows']
+
+            get_the_first_name_column_position = all_columns.index(get_first_name_column)+1
+            get_the_last_name_column_position = all_columns.index(get_last_name_column)+1
+            get_the_domain_name_column_position = all_columns.index(get_domain_column)+1
+
+            total_email_verified = 0
+            try:
+                sel_user_inst = request.user
+                sel_user_inst.file_process_percentage = float(0)
+                sel_user_inst.save()
+
+            except:
+                pass
+
+            for row_num in range(1,total_rows+1):
+                sel_user_inst = request.user
+                sel_user_inst.file_process_percentage = float((row_num/total_rows)*100)
+                sel_user_inst.save()
+
+                sel_user_credit = user_credit.objects.get(user=request.user)
+                if sel_user_credit.credits_remaining == 0:
+                    break
+                first_name_val=xlsx_retrive_column_data(row_num,get_the_first_name_column_position,actual_file_path)
+                last_name_val=xlsx_retrive_column_data(row_num,get_the_last_name_column_position,actual_file_path)
+                domain_val=xlsx_retrive_column_data(row_num,get_the_domain_name_column_position,actual_file_path)
                 
-                possible_combinations.append(last_name_val+'@'+root_domain)
-
-                possible_combinations.append(last_name_val+'.'+first_name_val+'@'+root_domain)
-                possible_combinations.append(last_name_val+'-'+first_name_val+'@'+root_domain)
-                possible_combinations.append(last_name_val+'_'+first_name_val+'@'+root_domain)
-                possible_combinations.append(first_name_val+'-'+last_name_val+'@'+root_domain)
-                possible_combinations.append(first_name_val+'_'+last_name_val+'@'+root_domain)
-                possible_combinations.append(first_name_val[0]+last_name_val+'@'+root_domain)
-                possible_combinations.append(first_name_val+last_name_val+'@'+root_domain)
-
-               
-                #do email validation here and write the result in the same column
-                if row_num == 1:
-                    
-                    xlsx_write_on_new_column(row_num,total_columns,"Email",actual_file_path)
-
-                else:
-                    
-                    #checking the email validity
+                email_found = False
+                if first_name_val != None and last_name_val != None and domain_val != None and first_name_val != "" and last_name_val != "" and domain_val != "":
                     try:
-                        get_mx = get_mx_records_domain(root_domain)[-1]
-
-                    except FunctionTimedOut:
+                        domain_val = domain_val.split('//')[1]
+                    except:
                         pass
+                    root_domain_inst = tldextract.extract(domain_val)
+                    root_domain = root_domain_inst.domain+'.'+root_domain_inst.suffix
 
-                    for comb in possible_combinations:
+                    possible_combinations = []
+                    possible_combinations.append(first_name_val+'@'+root_domain)
+                    possible_combinations.append(first_name_val+'.'+last_name_val+'@'+root_domain)
+                    
+                    possible_combinations.append(last_name_val+'@'+root_domain)
 
-                        #checking email existance here
+                    possible_combinations.append(last_name_val+'.'+first_name_val+'@'+root_domain)
+                    possible_combinations.append(last_name_val+'-'+first_name_val+'@'+root_domain)
+                    possible_combinations.append(last_name_val+'_'+first_name_val+'@'+root_domain)
+                    possible_combinations.append(first_name_val+'-'+last_name_val+'@'+root_domain)
+                    possible_combinations.append(first_name_val+'_'+last_name_val+'@'+root_domain)
+                    possible_combinations.append(first_name_val[0]+last_name_val+'@'+root_domain)
+                    possible_combinations.append(first_name_val+last_name_val+'@'+root_domain)
 
+                
+                    #do email validation here and write the result in the same column
+                    if row_num == 1:
+                        
+                        xlsx_write_on_new_column(row_num,total_columns,"Email",actual_file_path)
+
+                    else:
+                        
+                        #checking the email validity
                         try:
-
-                            is_exists = is_valid_email(get_mx,comb)
+                            get_mx = get_mx_records_domain(root_domain)[-1]
 
                         except FunctionTimedOut:
-                            is_exists = False
+                            pass
+
+                        for comb in possible_combinations:
+
+                            #checking email existance here
+
+                            try:
+
+                                is_exists = is_valid_email(get_mx,comb)
+
+                            except FunctionTimedOut:
+                                is_exists = False
+                            
+
+                            
+                            
+                            if is_exists == True:
+                                demo_mail=comb.split('@')[0]+'doe'+'@'+comb.split('@')[1]
+                                if is_valid_email(get_mx,demo_mail) == True:
+                                    is_exists = False
+                                    email_found = False
+                                    break
+                                xlsx_write_on_new_column(row_num,total_columns,comb.lower(),actual_file_path)
+                                total_email_verified += 1
+                                sel_user_credit = user_credit.objects.get(user=request.user)
+                                sel_user_credit.credits_remaining -= 1
+                                sel_user_credit.save()
+                                email_found = True
+
+                                save_lead = leads()
+                                save_lead.user = request.user
+                                save_lead.first_name = first_name_val
+                                save_lead.last_name = last_name_val
+                                save_lead.email = comb.lower()
+                                save_lead.website = domain_val
+                                
+                                save_lead.save()
+
+                                get_active_campaign = campaigns.objects.get(user=request.user,is_active=True)
+
+                                campaign_leads_inst = campaign_leads()
+                                campaign_leads_inst.campaign = get_active_campaign
+                                campaign_leads_inst.lead = save_lead
+                                campaign_leads_inst.save()
+                                break
+                            
+                            else:
+                                pass
                         
 
-                        
-                        
-                        if is_exists == True:
-                            demo_mail=comb.split('@')[0]+'doe'+'@'+comb.split('@')[1]
-                            if is_valid_email(get_mx,demo_mail) == True:
-                                is_exists = False
-                                email_found = False
-                                break
-                            xlsx_write_on_new_column(row_num,total_columns,comb.lower(),actual_file_path)
-                            total_email_verified += 1
+                        if email_found == False:
                             sel_user_credit = user_credit.objects.get(user=request.user)
                             sel_user_credit.credits_remaining -= 1
                             sel_user_credit.save()
-                            email_found = True
+                            xlsx_write_on_new_column(row_num,total_columns,"not found",actual_file_path)
 
-                            save_lead = leads()
-                            save_lead.user = request.user
-                            save_lead.first_name = first_name_val
-                            save_lead.last_name = last_name_val
-                            save_lead.email = comb.lower()
-                            save_lead.website = domain_val
-                            
-                            save_lead.save()
 
-                            get_active_campaign = campaigns.objects.get(user=request.user,is_active=True)
 
-                            campaign_leads_inst = campaign_leads()
-                            campaign_leads_inst.campaign = get_active_campaign
-                            campaign_leads_inst.lead = save_lead
-                            campaign_leads_inst.save()
-                            break
-                        
-                        else:
-                            pass
+                        #end of checking email validity
                     
-
-                    if email_found == False:
-                        sel_user_credit = user_credit.objects.get(user=request.user)
-                        sel_user_credit.credits_remaining -= 1
-                        sel_user_credit.save()
-                        xlsx_write_on_new_column(row_num,total_columns,"not found",actual_file_path)
-
-
-
-                    #end of checking email validity
-                   
-                    
+        except:
+            pass
                      
 
         
