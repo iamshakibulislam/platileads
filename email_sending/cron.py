@@ -9,7 +9,7 @@ from threading import Thread
 def send_email_campaign():
 
     #first filter all the message which is to delivered today
-    today_is_to_send = email_messages.objects.filter(delivery_date = datetime.now().date()).filter(campaign__is_active=True)
+    today_is_to_send = email_messages.objects.filter(delivery_date__lte = datetime.now().date()).filter(campaign__is_active=True).filter(is_sent=False)
     #print(today_is_to_send.values())
 
     for msg in today_is_to_send:

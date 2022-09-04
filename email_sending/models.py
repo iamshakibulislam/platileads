@@ -53,6 +53,7 @@ class email_messages(models.Model):
     delivery_date = models.DateTimeField(null=True,blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    is_sent = models.BooleanField(default=False)
 
     def __str__(self):
         return self.subject
