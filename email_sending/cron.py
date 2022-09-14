@@ -3,6 +3,7 @@ from .custom import *
 from datetime import datetime,timedelta
 from django.http import HttpResponse
 from threading import Thread
+from time import sleep
 
 
 
@@ -63,6 +64,8 @@ def send_email_campaign():
             try:
                 smtp_server_inst = smtplib.SMTP_SSL('smtp.gmail.com',465)   
                 smtp_server_inst.login(sel_camp.email.email,sel_camp.email.app_password)
+
+                sleep(120)
 
                 th = Thread(target=email_send,args=(msg.subject,final_message,sel_camp.email.email,reci.email,sel_camp.email.user.first_name,smtp_server_inst,sel_camp.email.user.id,sel_camp.id))
                 th.start()
