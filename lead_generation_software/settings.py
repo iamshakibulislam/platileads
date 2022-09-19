@@ -155,6 +155,7 @@ if DEBUG == False:
     #STRIPE LIVE WEBHOOK SECRET
 
     STRIPE_WEBHOOK_SECRET = "whsec_3pyNfTdYgX2N1fE0yMvJFpnNthPIpiWb"
+    STRIPE_LIFETIME_PAYMENT_LINK = "https://buy.stripe.com/00g7wi6hW4153Nm28b"
 
 else:
 
