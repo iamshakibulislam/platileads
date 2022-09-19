@@ -113,6 +113,12 @@ document.body.addEventListener('htmx:beforeSwap', function(e) {
         window.location.href = window.location.protocol+'//'+window.location.host+"/subscriptions/subscribe/?plan=u";
     }
 
+    if(e.detail.serverResponse == 'lifetime'){
+        e.preventDefault();
+        $('#show_alerts').html('<div class="alert alert-success" role="alert">Account created ! Please wait......</div>');
+        window.location.href = window.location.protocol+'//'+window.location.host+"/subscriptions/subscribe/?plan=l";
+    }
+
     $('body > *:not(#loading_spinner)').css('filter', 'blur(0px)');
     $('body > *:not(#loading_spinner)').css('pointer-events','auto');
 });

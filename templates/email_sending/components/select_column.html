@@ -42,7 +42,9 @@
                     <select class="form-control">
                         <option field="0" value="0">Select column </option>
                         {% for field in db_fields %}
+                        {% if field != "sending_track" %}
                         <option value="{{col}}" field="{{field}}">{{field}}</option>
+                        {% endif %}
                         {% endfor %}
                     </select>
                     </th>

@@ -25,6 +25,8 @@ def signup(request):
                 selected_plan = 'g'
             elif get_plan == 'u':
                 selected_plan = 'u'
+            elif get_plan == 'l':
+                selected_plan = 'l'
 
         except:
             pass
@@ -43,6 +45,8 @@ def signup(request):
         plan = request.POST.get('plan','f')
         is_affiliate = request.POST.get('is_affiliate',False)
         coupon = None
+
+        print("the plan is ",plan)
         try:
             coupon = request.POST.get('coupon',None)
         except:
@@ -121,6 +125,11 @@ def signup(request):
                 get_package = packages.objects.get(name='UNLIMITED')
                 #subscription_data.objects.create(user=new_user,package=get_package)
                 return HttpResponse("unlimited")
+
+            elif plan == 'l':
+                get_package = packages.objects.get(name='LIFETIME')
+                #subscription_data.objects.create(user=new_user,package=get_package)
+                return HttpResponse("lifetime")
 
             if coupon != None:
                 try:
@@ -205,6 +214,7 @@ def login(request):
             
 
         user_auth = auth.authenticate(email=email,password=password)
+
         if user_auth is not None:
             auth.login(request,user_auth)
             get_sub = subscription_data.objects.get(user=request.user)
@@ -225,6 +235,13 @@ def login(request):
                 get_user_credit.save()
 
             if get_sub.package.name == 'FREE' and get_sub.expire_date < datetime.date.today():
+                get_user_credit=user_credit.objects.get(user=request.user)
+                get_sub.expire_date = datetime.date.today() + datetime.timedelta(days=30)
+                get_sub.save()
+                get_user_credit.credits_remaining = get_sub.package.credits
+                get_user_credit.save()
+
+            if get_sub.package.name == 'LIFETIME' and get_sub.expire_date < datetime.date.today() and request.user.is_discounted == False:
                 get_user_credit=user_credit.objects.get(user=request.user)
                 get_sub.expire_date = datetime.date.today() + datetime.timedelta(days=30)
                 get_sub.save()

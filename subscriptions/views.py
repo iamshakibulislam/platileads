@@ -1,4 +1,6 @@
+from locale import currency
 import re
+from webbrowser import get
 from django.http import JsonResponse,HttpResponse
 from django.shortcuts import render,redirect
 import stripe
@@ -39,7 +41,11 @@ def subscribe(request):
 
         elif get_plan == 'u':
 
-            plan = 'ultimate'
+            plan = 'unlimited'
+            price = 99
+
+        elif get_plan == 'l':
+            plan = "lifetime"
             price = 99
         return render(request,'subscriptions/subscription.html',{'plan':plan,'price':price,'plan_key':get_plan,'stripe_public_key':settings.STRIPE_PUBLIC_KEY})
 
@@ -61,6 +67,9 @@ def create_payment_intent(request):
         price = 3900
 
     elif get_plan == 'u':
+        price = 9900
+
+    elif get_plan == 'l':
         price = 9900
 
     customer = None
@@ -145,6 +154,28 @@ def create_payment_intent(request):
 
         return JsonResponse({'subscriptionId':subscriptionId,'clientSecret':clientSecret})
 
+    if get_plan == 'l':
+        #life plan 99 bucks for 30 days
+        subscription = stripe.PaymentIntent.create(
+            customer=customer,
+            amount = 9900,
+            currency = "usd",
+            
+            payment_method_types=["card"],
+            metadata={'is_one_time':True},
+            #payment_behavior='default_incomplete',
+            #expand=['latest_invoice.payment_intent'],
+        )
+
+        #print(subscription)
+        subscriptionId=subscription.id
+        clientSecret=subscription.client_secret
+
+        
+       
+
+        return JsonResponse({'subscriptionId':subscriptionId,'clientSecret':clientSecret})
+
 
 
 
@@ -178,191 +209,234 @@ def webhook(request):
             # Invalid signature
         raise e
 
-
-    customer_email=event['data']['object']['customer_email']
-    
-    invoice_pdf = event['data']['object']['invoice_pdf']
-    
-    amount_paid = event['data']['object']['amount_paid']
     
 
-   
-    
-    plan_amount = event['data']['object']['lines']['data'][0]['plan']['amount']
+    try:
     
 
-    subscription_id = event['data']['object']['lines']['data'][0]['subscription']
+        customer_email=event['data']['object']['customer_email']
+        
+        invoice_pdf = event['data']['object']['invoice_pdf']
+        
+        amount_paid = event['data']['object']['amount_paid']
+        
 
-    plan_id = event['data']['object']['lines']['data'][0]['plan']['id']
     
+        
+        plan_amount = event['data']['object']['lines']['data'][0]['plan']['amount']
+        
+
+        subscription_id = event['data']['object']['lines']['data'][0]['subscription']
+
+        plan_id = event['data']['object']['lines']['data'][0]['plan']['id']
+        
 
 
-
-    
-    
-    
-    
-    if amount_paid == plan_amount and plan_id == settings.STRIPE_PLATINUM_PLAN:
-        sel_user = User.objects.get(email=customer_email)
-        #check if the user is already subscribed or not
-        if sel_user.subscription_id == None or sel_user.subscription_id == '':
-            sel_user.subscription_id = subscription_id
-        else:
-            del_sub=stripe.Subscription.delete(sel_user.subscription_id)
-            if del_sub.status == 'canceled':
-                sel_user.subscription_id = subscription_id
-
-        sel_user.save()
-        sel_package = packages.objects.get(name='PLATINUM')
-
-        try:
-            get_user_sub=subscription_data.objects.get(user=sel_user)
-            get_user_sub.package = sel_package
-            get_user_sub.expire_date = datetime.now() + timedelta(days=30)
-            get_user_sub.save()
-
-        except:
-            new_sub = subscription_data(user=sel_user,package=sel_package)
-            new_sub.save()
-
-        try:
-            sel_credit=user_credit.objects.get(user=sel_user)
-            sel_credit.credits_remaining = sel_package.credits
-            sel_credit.save()
-
-        except:
-            new_credit = user_credit(user=sel_user,credits_remaining=sel_package.credits)
-            new_credit.save()
 
         
-        try:
-            sel_ref = sel_user.referred_by
-            pay_aff = User.objects.get(id=sel_ref.id)
-            pay_aff.balance += 4.2
-            pay_aff.save()
+        
+        
+        
+        if amount_paid == plan_amount and plan_id == settings.STRIPE_PLATINUM_PLAN:
+            sel_user = User.objects.get(email=customer_email)
+            #check if the user is already subscribed or not
+            if sel_user.subscription_id == None or sel_user.subscription_id == '':
+                sel_user.subscription_id = subscription_id
+            else:
+                del_sub=stripe.Subscription.delete(sel_user.subscription_id)
+                if del_sub.status == 'canceled':
+                    sel_user.subscription_id = subscription_id
+
+            sel_user.save()
+            sel_package = packages.objects.get(name='PLATINUM')
 
             try:
-                f_ref = pay_aff.referred_by
-                f_u = User.objects.get(id=f_ref.id)
-                f_u.balance += 0.84
-                f_u.save()
+                get_user_sub=subscription_data.objects.get(user=sel_user)
+                get_user_sub.package = sel_package
+                get_user_sub.expire_date = datetime.now() + timedelta(days=30)
+                get_user_sub.save()
 
             except:
-                pass
-        except:
-            pass
+                new_sub = subscription_data(user=sel_user,package=sel_package)
+                new_sub.save()
 
+            try:
+                sel_credit=user_credit.objects.get(user=sel_user)
+                sel_credit.credits_remaining = sel_package.credits
+                sel_credit.save()
 
-        
+            except:
+                new_credit = user_credit(user=sel_user,credits_remaining=sel_package.credits)
+                new_credit.save()
 
-
-    
-    if amount_paid == plan_amount and plan_id == settings.STRIPE_GOLD_PLAN:
-        sel_user = User.objects.get(email=customer_email)
-        if sel_user.subscription_id == None or sel_user.subscription_id == '':
-            sel_user.subscription_id = subscription_id
-        else:
-            del_sub=stripe.Subscription.delete(sel_user.subscription_id)
             
-            if del_sub.status == 'canceled':
-                sel_user.subscription_id = subscription_id
-        
-        sel_user.save()
-        sel_package = packages.objects.get(name='GOLD')
-
-        try:
-            get_user_sub=subscription_data.objects.get(user=sel_user)
-            get_user_sub.package = sel_package
-            get_user_sub.expire_date = datetime.now() + timedelta(days=30)
-            get_user_sub.save()
-
-        except:
-            new_sub = subscription_data(user=sel_user,package=sel_package)
-            new_sub.save()
-
-        try:
-            sel_credit=user_credit.objects.get(user=sel_user)
-            sel_credit.credits_remaining = sel_package.credits
-            sel_credit.save()
-
-        except:
-            new_credit = user_credit(user=sel_user,credits_remaining=sel_package.credits)
-            new_credit.save()
-
-
-        try:
-            sel_ref = sel_user.referred_by
-            pay_aff = User.objects.get(id=sel_ref.id)
-            pay_aff.balance += 11.7
-            pay_aff.save()
-
             try:
-                f_ref = pay_aff.referred_by
-                f_u = User.objects.get(id=f_ref.id)
-                f_u.balance += 2.34
-                f_u.save()
+                sel_ref = sel_user.referred_by
+                pay_aff = User.objects.get(id=sel_ref.id)
+                pay_aff.balance += 5.6
+                pay_aff.save()
 
+                try:
+                    f_ref = pay_aff.referred_by
+                    f_u = User.objects.get(id=f_ref.id)
+                    f_u.balance += 1.12
+                    f_u.save()
+
+                except:
+                    pass
             except:
                 pass
-        except:
-            pass
+
+
+            
+
 
         
+        if amount_paid == plan_amount and plan_id == settings.STRIPE_GOLD_PLAN:
+            sel_user = User.objects.get(email=customer_email)
+            if sel_user.subscription_id == None or sel_user.subscription_id == '':
+                sel_user.subscription_id = subscription_id
+            else:
+                del_sub=stripe.Subscription.delete(sel_user.subscription_id)
+                
+                if del_sub.status == 'canceled':
+                    sel_user.subscription_id = subscription_id
+            
+            sel_user.save()
+            sel_package = packages.objects.get(name='GOLD')
 
+            try:
+                get_user_sub=subscription_data.objects.get(user=sel_user)
+                get_user_sub.package = sel_package
+                get_user_sub.expire_date = datetime.now() + timedelta(days=30)
+                get_user_sub.save()
+
+            except:
+                new_sub = subscription_data(user=sel_user,package=sel_package)
+                new_sub.save()
+
+            try:
+                sel_credit=user_credit.objects.get(user=sel_user)
+                sel_credit.credits_remaining = sel_package.credits
+                sel_credit.save()
+
+            except:
+                new_credit = user_credit(user=sel_user,credits_remaining=sel_package.credits)
+                new_credit.save()
+
+
+            try:
+                sel_ref = sel_user.referred_by
+                pay_aff = User.objects.get(id=sel_ref.id)
+                pay_aff.balance += 15.6
+                pay_aff.save()
+
+                try:
+                    f_ref = pay_aff.referred_by
+                    f_u = User.objects.get(id=f_ref.id)
+                    f_u.balance += 3.12
+                    f_u.save()
+
+                except:
+                    pass
+            except:
+                pass
+
+            
+
+            
         
+        if amount_paid == plan_amount and plan_id == settings.STRIPE_UNLIMITED_PLAN:
+            sel_user = User.objects.get(email=customer_email)
+            if sel_user.subscription_id == None or sel_user.subscription_id == '':
+                sel_user.subscription_id = subscription_id
+            else:
+                del_sub=stripe.Subscription.delete(sel_user.subscription_id)
+                if del_sub.status == 'canceled':
+                    sel_user.subscription_id = subscription_id
+            
+            sel_user.save()
+            sel_package = packages.objects.get(name='UNLIMITED')
+
+            try:
+                get_user_sub=subscription_data.objects.get(user=sel_user)
+                get_user_sub.package = sel_package
+                get_user_sub.expire_date = datetime.now() + timedelta(days=30)
+                get_user_sub.save()
+
+            except:
+                new_sub = subscription_data(user=sel_user,package=sel_package)
+                new_sub.save()
+
+            try:
+                sel_credit=user_credit.objects.get(user=sel_user)
+                sel_credit.credits_remaining = sel_package.credits
+                sel_credit.save()
+
+            except:
+                new_credit = user_credit(user=sel_user,credits_remaining=sel_package.credits)
+                new_credit.save()
+
+            
+            try:
+                sel_ref = sel_user.referred_by
+                pay_aff = User.objects.get(id=sel_ref.id)
+                pay_aff.balance += 39.6
+                pay_aff.save()
+
+                try:
+                    f_ref = pay_aff.referred_by
+                    f_u = User.objects.get(id=f_ref.id)
+                    f_u.balance += 7.92
+                    f_u.save()
+
+                except:
+                    pass
+            except:
+                pass
+
+
     
-    if amount_paid == plan_amount and plan_id == settings.STRIPE_UNLIMITED_PLAN:
-        sel_user = User.objects.get(email=customer_email)
-        if sel_user.subscription_id == None or sel_user.subscription_id == '':
-            sel_user.subscription_id = subscription_id
-        else:
-            del_sub=stripe.Subscription.delete(sel_user.subscription_id)
-            if del_sub.status == 'canceled':
-                sel_user.subscription_id = subscription_id
-        
-        sel_user.save()
-        sel_package = packages.objects.get(name='UNLIMITED')
-
+    except:
         try:
-            get_user_sub=subscription_data.objects.get(user=sel_user)
-            get_user_sub.package = sel_package
-            get_user_sub.expire_date = datetime.now() + timedelta(days=30)
-            get_user_sub.save()
+            #print("event is ",event)
+           # event = json.loads(event)
+            customer_id = event["data"]["object"]["customer"]
+            is_paid = event["data"]["object"]["charges"]["data"][0]["paid"]
+            is_one_time = event["data"]["object"]["metadata"]["is_one_time"]
 
-        except:
-            new_sub = subscription_data(user=sel_user,package=sel_package)
-            new_sub.save()
+            if (is_paid == True or is_paid == "True") and (is_one_time==True or is_one_time == "True"):
+                sel_user = User.objects.get(customer_id=customer_id)
+                sel_package=packages.objects.get(name="LIFETIME")
+                try:
+                    subdata=subscription_data.objects.get(user=sel_user)
+                    subdata.package = sel_package
+                    subdata.save()
+                except:
+                    subscription_data.objects.create(user=sel_user,package = sel_package)
 
-        try:
-            sel_credit=user_credit.objects.get(user=sel_user)
-            sel_credit.credits_remaining = sel_package.credits
-            sel_credit.save()
+                update_credit = user_credit.objects.get(user=sel_user)
+                update_credit.credits_remaining = sel_package.credits
+                update_credit.save()
 
-        except:
-            new_credit = user_credit(user=sel_user,credits_remaining=sel_package.credits)
-            new_credit.save()
+                get_referer = sel_user.referred_by
 
-        
-        try:
-            sel_ref = sel_user.referred_by
-            pay_aff = User.objects.get(id=sel_ref.id)
-            pay_aff.balance += 29.7
-            pay_aff.save()
+                if get_referer != None and get_referer != "" and get_referer != " " and get_referer != 0:
+                    sel_ref = User.objects.get(id=get_referer.id)
 
-            try:
-                f_ref = pay_aff.referred_by
-                f_u = User.objects.get(id=f_ref.id)
-                f_u.balance += 5.94
-                f_u.save()
+                    sel_ref.balance = sel_ref.balance + 39.6
+                    sel_ref.save()
 
-            except:
-                pass
+
+
+
+
+
+
+            print("customer id = ",customer_id," is_paid = ",is_paid," is_one_time ",is_one_time)
+
         except:
             pass
-
-
-        
-
 
 
     

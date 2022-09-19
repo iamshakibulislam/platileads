@@ -86,7 +86,7 @@ def email_send(subject,body,from_,to,fname,smtp_server_inst,uid,campid):
 	try:
 		
 		rn = random.randint(3,15)
-		sleep(int(rn))
+		#sleep(int(rn))
 		smtp_server_inst.send_message(msg)
 		print('successfully sent to ',to)
 		sel_user=user_credit.objects.get(user=User.objects.get(id=int(uid)))
