@@ -12,7 +12,8 @@
                 <img src="{% static 'img/loading.gif' %}" id="loading_spin" class="img-responsive htmx-indicator"  style="position:absolute;top:20%;left:45%;z-index:0"/>
                 <div class="card-header justify-content-center">
                     <h4 class="card-title">Subscribe to {{plan}} plan</h4>
-                    <h4>{{price}}$ / month</h4>
+                    
+                    <h4>{{price}}$ {% if plan != "lifetime" %} / month {% else %} One-time {% endif %}</h4>
                 </div>
                 <div class="card-body">
                     <p class="hidden" style="display:none" id="hiddenplace"></p>
