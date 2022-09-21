@@ -381,8 +381,8 @@ def blank_image(request):
 
 
 def test_email_send(request):
-    #check_reply()
-    send_email_campaign()
+    check_reply()
+    #send_email_campaign()
 
     return HttpResponse("status ok")
 

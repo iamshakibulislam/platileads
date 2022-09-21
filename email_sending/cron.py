@@ -65,7 +65,7 @@ def send_email_campaign():
                 smtp_server_inst = smtplib.SMTP_SSL('smtp.gmail.com',465)   
                 smtp_server_inst.login(sel_camp.email.email,sel_camp.email.app_password)
 
-                sleep(0.2)
+                sleep(5)
 
                 th = Thread(target=email_send,args=(msg.subject,final_message,sel_camp.email.email,reci.email,sel_camp.email.user.first_name,smtp_server_inst,sel_camp.email.user.id,sel_camp.id))
                 th.start()
