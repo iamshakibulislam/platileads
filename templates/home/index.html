@@ -30,13 +30,227 @@
 					</div> 
 				-->
 
+				<style>
+
+					
+					
+
+					@media screen and (max-width: 450px) {
+						
+						.custom-screens-carousel{
+							margin-top:-12rem !important;
+							
+						}
+	
+					  }
+
+					  @media screen and (max-width: 407px) {
+						
+						.custom-screens-carousel{
+							margin-top:-10rem !important;
+							
+						}
+	
+					  }
+
+					  @media screen and (max-width: 364px) {
+						
+						.custom-screens-carousel{
+							margin-top:-9rem !important;
+							
+						}
+	
+					  }
+
+					@media screen and (max-width: 480px) {
+						
+						#herotext{
+							font-size:2rem !important;
+						}
+
+						.headmsg{
+							font-size:1.5rem !important;
+							margin-top:0px !important;
+
+						}
+
+						.headpara{
+							font-size:1rem !important;
+							padding-left:0px !important;
+							padding-right:0px !important;
+						}
+
+						.seccontainer{
+							margin-top:0px !important;
+							margin-bottom:0px !important;
+							
+						}
+
+						.rowcont{
+							padding-bottom:0px !important;
+						}
+
+						.delimg{
+							display: none !important;
+						}
+
+						#features{
+							margin-top:0px !important;
+						}
+
+						.plan-header{
+							width:100vw;
+						}
+
+						.lifetimedeal{
+							margin-top:0px !important;
+							padding-top:0px !important;
+						}
+
+						.pricingsec{
+							margin-bottom:0px !important;
+							padding-bottom:0px !important;
+						}
+
+	
+					  }
+
+					  @media screen and (max-width: 470px) {
+						
+						#viewplanbtn{
+							margin-top:1rem !important;
+							margin-left:0px !important;
+						}
+	
+					  }
+
+
+					  @media only screen and (min-width: 451px) and (max-width: 470px) {
+						.custom-screens-carousel{
+							margin-top:-15rem !important;
+
+							
+						}
+
+						#viewplanbtn{
+							margin-top:0px !important;
+						}
+					}
+
+
+					@media only screen and (min-width: 471px) and (max-width: 474px) {
+						.custom-screens-carousel{
+							margin-top:-15rem !important;
+
+
+							
+						}
+
+						#viewplanbtn{
+							margin-top:1px !important;
+							margin-left:0px !important;
+						}
+					}
+
+
+					@media only screen and (min-width: 475px) and (max-width: 480px) {
+						.custom-screens-carousel{
+							margin-top:-14rem !important;
+
+
+							
+						}
+
+						#viewplanbtn{
+							margin-top:1px !important;
+							margin-left:0px !important;
+						}
+					}
+
+
+					@media only screen and (min-width: 768px) and (max-width: 991px) {
+						.custom-screens-carousel{
+							margin-top:-13rem !important;
+
+
+							
+						}
+
+						#viewplanbtn{
+							margin-top:1px !important;
+							margin-left:0px !important;
+						}
+					}
+
+					@media only screen and (min-width: 992px) and (max-width: 1199px) {
+						.custom-screens-carousel{
+							margin-top:-10rem !important;
+
+
+							
+						}
+
+						#viewplanbtn{
+							margin-top:1px !important;
+							margin-left:0px !important;
+						}
+					}
+
+
+					@media only screen and (min-width: 1200px) {
+						.custom-screens-carousel{
+							margin-top:-13rem !important;
+
+
+							
+						}
+
+						#viewplanbtn{
+							margin-top:1px !important;
+							margin-left:0px !important;
+						}
+					}
+
+					
+
+
+					@media only screen and (min-width: 300px) and (max-width: 984px) {
+						.header-logo-non-sticky{
+							opacity : 1 !important;
+							margin-top:2.5rem !important;
+						}
+
+						.findemailtxt{
+							margin-top:2rem !important;
+						}
+					}
+
+
+
+
+
+					  
+
+					  
+
+
+
+
+
+
+
+
+					  
+					
+				</style>
+
 					<div class="container pt-5 mt-5">
 						<div class="row justify-content-center pt-5 mt-5">
 							<div class="col-lg-7 text-center pt-3">
-								<h1 class="text-color-light font-weight-extra-bold text-12 mb-1 mb-2 line-height-2 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="500" style="margin-bottom:4rem;margin-top:-6rem">The AI-Powered Software to Find,Verify and Manage Outbound Leads</h1>
+								<h1 id="herotext" class="text-color-light font-weight-extra-bold text-12 mb-1 mb-2 line-height-2 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="500" style="margin-bottom:4rem;margin-top:-6rem">The AI-Powered Software to Find,Verify and Manage Outbound Leads</h1>
 								
 								<a href="{% url 'signup' %}" class="btn btn-light text-color-dark custom-secondary-font font-weight-bold text-3 px-5 py-3 appear-animation" data-appear-animation="fadeInRightShorter" data-appear-animation-delay="900">GET STARTED FREE</small></a>
-								<a href="#pricing" class="btn btn-dark custom-secondary-font font-weight-bold text-3 px-5 py-3 ms-4 appear-animation" data-appear-animation="fadeInLeftShorter" data-appear-animation-delay="900">VIEW OUR PLANS</a>
+								<a href="#pricing" id="viewplanbtn" class="btn btn-dark custom-secondary-font font-weight-bold text-3 px-5 py-3 ms-4 appear-animation" data-appear-animation="fadeInLeftShorter" data-appear-animation-delay="900">VIEW OUR PLANS</a>
 							</div>
 						</div>
 					</div>
@@ -69,15 +283,15 @@
 					</div>
 				</div>
 
-				<div class="container my-5">
-					<div class="row text-center py-5">
+				<div class="container my-5 seccontainer">
+					<div class="row text-center py-5 rowcont">
 						<div class="col px-5">
 							
-							<h1 class="word-rotator-title font-weight-bold text-9 mb-3 appear-animation" data-appear-animation="fadeInUpShorter">
+							<h1  class="headmsg word-rotator-title font-weight-bold text-9 mb-3 appear-animation" data-appear-animation="fadeInUpShorter">
 								Generate leads in bulk - completely autopilot
 							</h1>
 							
-							<p class="lead px-5 mb-0 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="200">
+							<p  class="headpara lead px-5 mb-0 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="200">
 								Find and verify targeted emails in a bulk. No need to enter manually.Our AI powered software will find and verify emails from csv files.
 							</p>
 							<a href="{% url 'signup' %}" class="btn btn-primary text-center mt-2" style="border-radius:25px">Signup For Free</a>
@@ -131,11 +345,11 @@
 						<div class="row py-1 align-items-center justify-content-center">
 							<div class="col-lg-6 text-center text-lg-start">
 								<h2 class="text-color-dark font-weight-bold text-6 mb-1 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="0">Auto email warmup</h2>
-								<p class="appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="200"> Higher bounce rate causes emails landing on spam . We provide three levels of email verification including syntax check,dns check and mailbox existance check </p>
-								<p class="appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="400">If you have a list of email addresses , you can verify those with the bulk verification feature. Just upload your lead and let the software do all the boaring tasks for you.</p>
+								<p class="appear-animation leadpara" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="200"> Higher bounce rate causes emails landing on spam . We provide three levels of email verification including syntax check,dns check and mailbox existance check </p>
+								<p class="appear-animation leadpara" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="400">If you have a list of email addresses , you can verify those with the bulk verification feature. Just upload your lead and let the software do all the boaring tasks for you.</p>
 								<a href="#pricing" class="btn btn-dark custom-secondary-font font-weight-bold text-3 px-5 py-3 mt-3 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="600">VIEW OUR PLANS</a>
 							</div>
-							<div class="col-lg-6 text-center">
+							<div class="col-lg-6 text-center delimg">
 								<img class="img-fluid" style="height:40%" src="{% static 'base_images/email_warmup.png' %}" alt="">
 							</div>
 						</div>
@@ -150,7 +364,7 @@
 							<div class="col-lg-6 text-center" style="max-width: 1500px">
 								<img class="img-fluid" src="{% static 'img/jobroleemail.png' %}" alt="">
 							</div>
-							<div class="col-lg-6 text-center text-lg-start">
+							<div class="col-lg-6 text-center text-lg-start findemailtxt">
 								<h2 class="text-color-dark font-weight-bold text-6 mb-1 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="0">Find anyones email selecting only job role</h2>
 								<p class="appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="200">
 									Only have company website address ? No problem. Our AI powered software  is capable of findng anybody if you just give it the targated job position .<br>
@@ -179,7 +393,7 @@
 								<p class="appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="400">If you have a list of email addresses , you can verify those with the bulk verification feature. Just upload your lead and let the software do all the boaring tasks for you.</p>
 								<a href="#pricing" class="btn btn-dark custom-secondary-font font-weight-bold text-3 px-5 py-3 mt-3 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="600">VIEW OUR PLANS</a>
 							</div>
-							<div class="col-lg-6 text-center">
+							<div class="col-lg-6 text-center delimg">
 								<img class="img-fluid" src="{% static 'base_images/email_verification_page.png' %}" alt="">
 							</div>
 						</div>
@@ -192,7 +406,7 @@
 							<div class="col-lg-6 text-center">
 								<img class="img-fluid" src="{% static 'base_images/bulk_email_finder.png' %}" alt="">
 							</div>
-							<div class="col-lg-6 text-center text-lg-start">
+							<div class="col-lg-6 text-center text-lg-start findemailtxt">
 								<h2 class="text-color-dark font-weight-bold text-6 mb-1 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="0">Find anyones email using email finder tool</h2>
 								<p class="appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="200">Just have company websites ? No problem , Just go to the email finding tool and enter website and targeted job position and the tool will find and validate the email. </p>
 								<p class="appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="400">If you have a list of leads with name and website , the tool will find emails even more faster</p>
@@ -211,7 +425,7 @@
 								<p class="appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="400">No more guesswork - Run your campaign based on data and achive the highest ROI</p>
 								<a href="#pricing" class="btn btn-dark custom-secondary-font font-weight-bold text-3 px-5 py-3 mt-3 appear-animation" data-appear-animation="fadeInUpShorter" data-appear-animation-delay="600">VIEW OUR PLANS</a>
 							</div>
-							<div class="col-lg-6 text-center">
+							<div class="col-lg-6 text-center delimg">
 								<img class="img-fluid" src="{% static 'base_images/campaign_stats.png' %}" alt="">
 							</div>
 						</div>
@@ -309,7 +523,7 @@
 
 			-->
 
-				<section class="section section-height-3 bg-transparent m-0 border-0" id="pricing">
+				<section class="pricingsec section section-height-3 bg-transparent m-0 border-0" id="pricing">
 					<div class="container">
 						<div class="row py-2">
 							<div class="col text-center">
@@ -433,13 +647,13 @@
 
 				<!-- lifetime deal-->
 
-				<section class="section section-height-3 bg-transparent m-0 border-0" id="pricing">
+				<section class="pricingsec lifetimedeal section section-height-3 bg-transparent m-0 border-0" id="pricing_lifetime">
 					<div class="container">
 						<div class="row py-2">
 							<div class="col text-center">
 								<h2 class="text-color-dark font-weight-bold text-7 mb-1">Lifetime Deal</h2>
 								<p class="lead">Get lifetime access to platileads - One time payment</p>
-								<small style="font-size:100%">Each successful email verification  costs 1 credit . Email finding with job position costs 5 credits each. Warmup and sending costs 2 credits / sending </small>
+								
 							</div>
 						</div>
 
@@ -452,7 +666,7 @@
 										<h3> Lifetime access  </h3>
 									</div>
 									<div class="plan-price">
-										<span class="price"><span class="price-unit">$</span>99</span>
+										<span class="price"><span class="price-unit">$</span>49</span>
 										<label class="price-label">One time payment</label>
 									</div>
 									<div class="plan-features">
@@ -481,7 +695,7 @@
 
 				<!-- end of lifetime deal-->
 
-				<section class="section section-height-3 curved-border m-0 border-0" id="faqs">
+				<section class="pricingsec section section-height-3 curved-border m-0 border-0" id="faqs">
 					<div class="container">
 						<div class="row py-2">
 							<div class="col text-center">

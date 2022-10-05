@@ -59,16 +59,19 @@
 		<!-- crisp chat-->
 		<script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="d723f232-5785-4760-9ab7-26eef3fbbc51";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
 		<!-- Global site tag (gtag.js) - Google Analytics -->
-		<script async src="https://www.googletagmanager.com/gtag/js?id=G-2E6RT8E65W"></script>
-		<script>
-		window.dataLayer = window.dataLayer || [];
-		function gtag(){dataLayer.push(arguments);}
-		gtag('js', new Date());
-
-		gtag('config', 'G-2E6RT8E65W');
-		</script>
+		<!-- Google Tag Manager -->
+		<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+			new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+			j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+			'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+			})(window,document,'script','dataLayer','GTM-WRK65V6');</script>
+			<!-- End Google Tag Manager -->
 	</head>
 	<body data-plugin-scroll-spy data-plugin-options="{'target': '#header'}">
+		<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WRK65V6"
+	height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	<!-- End Google Tag Manager (noscript) -->
 		<!--
 		<div style="background-color:red;height:2rem;width:100%" class="text-white">
 			<marquee>
@@ -86,7 +89,7 @@
 								<div class="header-row">
 									<div class="header-logo header-logo-sticky-change" style="width: 82px; height: 40px;">
 										<a href="{% url 'home_page' %}">
-											<img class="header-logo-non-sticky opacity-0" alt="Porto" width="100" height="50" src="{% static 'img/logo_blue.svg' %}">
+											<img class="header-logo-non-sticky opacity-0" alt="Porto" width="100" height="50" src="{% static 'img/logo_white.svg' %}">
 											<img class="header-logo-sticky opacity-0" alt="Porto" width="100" height="50" src="{% static 'img/logo_blue.svg' %}">
 										</a>
 									</div>
@@ -103,18 +106,20 @@
 													
 													
 													<li><a data-hash data-hash-offset="0" data-hash-offset-lg="60" href="#pricing" class="dropdown-item">PRICING</a></li>
+													<li><a data-hash data-hash-offset="0" data-hash-offset-lg="60" href="#pricing_lifetime" class="dropdown-item">LIFETIME DEAL</a></li>
 													<li><a data-hash data-hash-offset="0" data-hash-offset-lg="60" href="#faqs" class="dropdown-item">FAQ'S</a></li>
 													<li><a data-hash data-hash-offset="0" data-hash-offset-lg="60" href="{% url 'affiliates' %}" class="dropdown-item">Afiiliate Program</a></li>
 													<li><a data-hash data-hash-offset="0" data-hash-offset-lg="60" href="#trial" class="dropdown-item">CONTACT</a></li>
-													<li><a data-hash data-hash-offset="0" data-hash-offset-lg="60" href="#overview" class="dropdown-item btn btn-info"></a></li>
-													<li><a data-hash data-hash-offset="0" data-hash-offset-lg="60" href="{% url 'login' %}" class="dropdown-item btn btn-info">Login</a></li>
-													<li><a data-hash data-hash-offset="0" data-hash-offset-lg="60" href="{% url 'signup' %}" class="dropdown-item btn btn-success">Sign Up</a></li>
+
+													<li><a data-hash data-hash-offset="0" data-hash-offset-lg="60" href="{% url 'login' %}" class="dropdown-item ">Login</a></li>
+													<li><a data-hash data-hash-offset="0" data-hash-offset-lg="60" href="{% url 'signup' %}" class="dropdown-item ">Sign Up</a></li>
 												</ul>
 											</nav>
 										</div>
 									</div>
 								</div>
 							</div>
+							
 							<div class="header-column">
 								<div class="header-row justify-content-end">
 									<!---

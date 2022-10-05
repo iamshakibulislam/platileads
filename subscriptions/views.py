@@ -46,7 +46,7 @@ def subscribe(request):
 
         elif get_plan == 'l':
             plan = "lifetime"
-            price = 99
+            price = 49
         return render(request,'subscriptions/subscription.html',{'plan':plan,'price':price,'plan_key':get_plan,'stripe_public_key':settings.STRIPE_PUBLIC_KEY})
 
 
@@ -70,7 +70,7 @@ def create_payment_intent(request):
         price = 9900
 
     elif get_plan == 'l':
-        price = 9900
+        price = 4900
 
     customer = None
     if request.user.customer_id == None or request.user.customer_id == '':
@@ -158,7 +158,7 @@ def create_payment_intent(request):
         #life plan 99 bucks for 30 days
         subscription = stripe.PaymentIntent.create(
             customer=customer,
-            amount = 9900,
+            amount = 4900,
             currency = "usd",
             
             payment_method_types=["card"],
@@ -180,10 +180,10 @@ def create_payment_intent(request):
 
 
 def thank_you(request):
-    if request.GET.get('payment_intent')==None or request.GET['payment_intent'] == "":
+    if request.GET.get('payment_intent')==None or request.GET.get('payment_intent') == "":
         raise Http404
 
-    if request.GET.get('payment_intent_client_secret') == None or request.GET['payment_intent_client_secret'] == "":
+    if request.GET.get('payment_intent_client_secret') == None or request.GET.get('payment_intent_client_secret') == "":
         raise Http404
 
     return render(request,'subscriptions/thank_you.html')
@@ -424,7 +424,7 @@ def webhook(request):
                 if get_referer != None and get_referer != "" and get_referer != " " and get_referer != 0:
                     sel_ref = User.objects.get(id=get_referer.id)
 
-                    sel_ref.balance = sel_ref.balance + 39.6
+                    sel_ref.balance = sel_ref.balance + 19.6
                     sel_ref.save()
 
 

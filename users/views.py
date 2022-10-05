@@ -127,8 +127,8 @@ def signup(request):
                 return HttpResponse("unlimited")
 
             elif plan == 'l':
-                get_package = packages.objects.get(name='LIFETIME')
-                #subscription_data.objects.create(user=new_user,package=get_package)
+                get_package = packages.objects.get(name='FREE')
+                subscription_data.objects.create(user=new_user,package=get_package)
                 return HttpResponse("lifetime")
 
             if coupon != None:
