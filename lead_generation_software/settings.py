@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-8^*no3qd*^_&oslckj)yqgutk^rri!klzj1k))#(b%hcl=szql'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 
@@ -165,6 +165,9 @@ else:
     STRIPE_GOLD_PLAN = "price_1Kf0kkHrW1RE7YcKLkpGXhdd"
     STRIPE_UNLIMITED_PLAN = "price_1Kf0m0HrW1RE7YcKcXXu11gz"
     STRIPE_LIFETIME_PLAN = "price_1LitjlHrW1RE7YcKbcCa3hLL"
+
+    #STRIPE_LIFETIME_PAYMENT_LINK = "https://buy.stripe.com/00g7wi6hW4153Nm28b"
+
     STRIPE_LIFETIME_PAYMENT_LINK = "https://buy.stripe.com/test_4gwaEU4mr7Cs0VObII"
 
     #stripe secret keys FOR TEST

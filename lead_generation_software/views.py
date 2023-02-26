@@ -5,6 +5,10 @@ from django.conf import settings
 
 
 
+def backlink_builder(request):
+    return render(request,"home/backlink_builder_vsl.html")
+
+
 def home_page(request):
     if request.method == "GET":
         lifetime_payment_link  = settings.STRIPE_LIFETIME_PAYMENT_LINK

@@ -21,11 +21,244 @@ from django.views.decorators.csrf import csrf_exempt
 from .custom_scripts import *
 from .models import *
 from func_timeout import *
+from save_thread_result import ThreadWithResult
 import re
+import threading
 from company_email_finder.custom_func import *
 from django.conf import settings as st
 from company_email_finder.models import *
+from .guestpostscript import *
 openai.api_key = st.OPENAI_API_KEY
+
+
+
+
+
+@login_required(login_url='/users/login/')
+def download_bulk_guestpost_file(request):
+    get_file_instance = file_uploader.objects.filter(user=request.user)
+    get_file_path = get_file_instance[0].file.url
+    actual_file_path = ""
+    file_extension = get_file_path.split('.')[-1]
+
+    if file_extension == "xls":
+        actual_file_path = get_file_path[:-3]+"xlsx"
+    
+    elif file_extension == "csv":
+        actual_file_path = get_file_path[:-3]+"xlsx"
+    
+    elif file_extension == "xlsx":
+        actual_file_path = get_file_path
+
+    else:
+        return HttpResponse("Invalid File")
+    
+    
+    return redirect(actual_file_path)
+
+
+
+
+
+
+def backlink_result(request):
+
+    if request.method == 'POST':
+        get_column_name = request.POST.get('column_name')
+        get_file_instance = file_uploader.objects.filter(user=request.user)
+        get_file_path = get_file_instance[0].file.path
+        actual_file_path = ""
+        file_extension = get_file_path.split('.')[-1]
+
+        if file_extension == "xls":
+            actual_file_path = get_file_path[:-3]+"xlsx"
+           
+        elif file_extension == "csv":
+            actual_file_path = get_file_path[:-3]+"xlsx"
+
+        elif file_extension == "xlsx":
+            actual_file_path = get_file_path
+        
+        else:
+            return HttpResponse("Invalid File")
+
+        information = xlsx_info(actual_file_path)
+
+        all_columns = information['column_names']
+        total_columns = information['total_columns']
+        total_rows = information['total_rows']
+
+        get_the_email_column_position = all_columns.index(get_column_name)+1
+        total_email_verified = 0
+        try:
+            sel_user_inst = request.user
+            sel_user_inst.file_process_percentage = float(0)
+            sel_user_inst.save()
+
+        except:
+            pass
+
+        all_threads = []
+
+        for row_num in range(1,total_rows+1):
+            
+            try:
+                
+
+                sel_user_credit_inst = user_credit.objects.get(user=request.user)
+                if sel_user_credit_inst.credits_remaining == 0:
+                    break
+                email_val = xlsx_retrive_column_data(row_num,get_the_email_column_position,actual_file_path)
+                
+
+                if email_val != None and email_val != "":
+                
+                    #do email validation here and write the result in the same column
+                    if row_num == 1:
+                        
+                        xlsx_write_on_new_column(row_num,total_columns,"Contact Email",actual_file_path)
+
+                    else:
+
+
+                        thread = ThreadWithResult(target=crawl_and_find_emails,args=(email_val,row_num,request,total_rows))
+                        
+                        
+                        thread.start()
+
+                        all_threads.append(thread)
+
+            except:
+                pass
+
+
+        #join all the thread ie - wait for all of them to finish working
+
+        for thread in all_threads:
+            thread.join()
+
+
+
+        thread_results = []
+
+        #place all the threads output in the thread_result list . the format of the output is 
+        #{"found_email":"youremail@gmail.com","row_num":1}
+
+        for th in all_threads:
+
+            try:
+            
+                print("the result is - ",th.result)
+                thread_results.append(th.result)
+
+            except:
+                pass
+
+
+        #thread result putting into csv
+
+        for result in thread_results:
+            try:
+                xlsx_write_on_new_column(result["row_num"],total_columns,result["found_email"],actual_file_path)
+                
+                sel_user_credit = user_credit.objects.get(user=request.user)
+                sel_user_credit.credits_remaining -= 1
+                sel_user_credit.save()
+
+                if result["found_email"] != None and result["found_email"] != "" and result["found_email"] != " " and len(result["found_email"]) != 0:
+                    total_email_verified +=1
+
+            except:
+                pass
+                            
+
+
+        
+        return render(request,'dashboard/components/show_download_button_for_guestpost.html',{'total_verified':total_email_verified})
+
+
+
+@login_required(login_url='/users/login/')
+def backlink_builder(request):
+    if request.method == "GET":
+        return render(request,"dashboard/bulk_guestpost_oportunity_finder.html")
+
+    if request.method == "POST":
+        try:
+            get_this_user_files = file_uploader.objects.filter(user=request.user)
+            for file in get_this_user_files:
+                try:
+                    os.remove(file.file.path)
+                except:
+                    pass
+                try:
+                    os.remove(file.file.path[:-3]+"xlsx")
+                except:
+                    pass
+                file.delete()
+        except:
+            pass
+        get_file = request.FILES.get('file')
+
+        file_instance = file_uploader(user=request.user,file=get_file)
+
+
+        file_instance.save()
+
+        file_path = file_instance.file.path
+        
+        #check file extension
+        file_extension = file_path.split('.')[-1]
+
+
+        if file_extension == "xls":
+            new_file_path = file_path[:-3]+"xlsx"
+            thexls = XLS2XLSX(file_path)
+            thexls.to_xlsx(new_file_path)
+
+            information = xlsx_info(new_file_path)
+
+
+        
+        
+
+        elif file_extension == "csv":
+
+            #convert csv to xlsx
+
+            print("here is the file path : ",file_path, "and file name :",file_instance.file.name)
+            
+
+            check= csv_to_xlsx(file_path,file_instance.file.name)
+            new_path = file_instance.file.path[:len(file_instance.file.path)-3]+"xlsx"
+            information = xlsx_info(new_path)
+           
+           # file_instance.file.path=file_instance.file.path[:len(file_instance.file.path)-3]+"xlsx"
+            
+
+        elif file_extension == "xlsx":
+
+        
+            information = xlsx_info(file_path)
+
+        else:
+            print("removing file path and extensions")
+            os.remove(file_instance.file.path)
+            return HttpResponse("invalid_file_extension")
+
+        all_columns = information['column_names']
+
+
+
+        return render(request,'dashboard/components/backlink_column_selection.html',{'all_columns':all_columns})
+
+
+
+
+
+
+
+
 
 
 def get_affiliate_data(request):
