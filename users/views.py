@@ -51,6 +51,9 @@ def signup(request):
             coupon = request.POST.get('coupon',None)
         except:
             coupon = None
+        print("coupon is ",coupon)
+        if len(str(coupon)) < 4:
+            coupon = None
 
         try:
             if is_affiliate == 1 or is_affiliate == '1':
@@ -62,7 +65,6 @@ def signup(request):
         except:
             pass
 
-        
 
     
         try:
@@ -93,7 +95,7 @@ def signup(request):
             set_secret.secret_id = abs(hash(str(new_user.id)+str(new_user.email)))
             set_secret.save()
 
-            user_credit.objects.create(user=new_user,credits_remaining=100)
+            user_credit.objects.create(user=new_user,credits_remaining=10)
             user_auth = auth.authenticate(email=email,password=password)
             auth.login(request,user_auth)
 
@@ -107,36 +109,36 @@ def signup(request):
                 subscription_data.objects.create(user=new_user,package=get_package)
                 return redirect('dashboard_home')
 
-            if plan == 'f' and coupon == None:
+            if plan == 'f' and coupon==None:
                 get_package = packages.objects.get(name='FREE')
                 subscription_data.objects.create(user=new_user,package=get_package)
             
-            elif plan == 'p':
+            elif plan == 'p' and coupon==None:
                 get_package = packages.objects.get(name='PLATINUM')
                 #subscription_data.objects.create(user=new_user,package=get_package)
                 return HttpResponse("platinum")
 
-            elif plan == 'g':
+            elif plan == 'g' and coupon==None:
                 get_package = packages.objects.get(name='GOLD')
                 #subscription_data.objects.create(user=new_user,package=get_package)
                 return HttpResponse("gold")
             
-            elif plan == 'u':
+            elif plan == 'u' and coupon==None:
                 get_package = packages.objects.get(name='UNLIMITED')
                 #subscription_data.objects.create(user=new_user,package=get_package)
                 return HttpResponse("unlimited")
 
-            elif plan == 'l':
+            elif plan == 'l' and coupon == None:
                 get_package = packages.objects.get(name='FREE')
                 subscription_data.objects.create(user=new_user,package=get_package)
                 return HttpResponse("lifetime")
 
-            if coupon != None:
+            if coupon != None and coupon=="16175836":
                 try:
-                    sel_deal = appsumo_deals.objects.get(code=coupon.strip())
-                    if sel_deal.is_active == True:
+                    sel_deal = {'is_active':True,'is_unlimited':True,'is_gold':False}
+                    if sel_deal["is_active"] == True:
                         print("coupon is ", coupon)
-                        if sel_deal.is_gold == True:
+                        if sel_deal["is_gold"] == True:
                             sel_package = packages.objects.get(name='GOLD')
                             new_sub = subscription_data(user=new_user,package=sel_package)
                             new_sub.save()
@@ -148,12 +150,12 @@ def signup(request):
                             sel_cr.credits_remaining = sel_package.credits
                             sel_cr.save()
 
-                            sel_deal.is_active = False
-                            sel_deal.save()
+                            #sel_deal.is_active = False
+                            #sel_deal.save()
 
 
 
-                        elif sel_deal.is_unlimited == True:
+                        elif sel_deal["is_unlimited"] == True:
                             sel_package = packages.objects.get(name='UNLIMITED')
                             new_sub = subscription_data(user=new_user,package=sel_package)
                             new_sub.save()
@@ -163,8 +165,8 @@ def signup(request):
                             sel_cr=user_credit.objects.get(user=new_user)
                             sel_cr.credits_remaining = sel_package.credits
                             sel_cr.save()
-                            sel_deal.is_active = False
-                            sel_deal.save()
+                            #sel_deal.is_active = False
+                            
 
                         else:
                             pass
@@ -269,8 +271,8 @@ def login(request):
                 get_user_credit.save()
 
             res=HttpResponse("login_successful")
-            res.set_cookie('plati_key', value=request.user.secret_id, max_age=999999999999999, expires=datetime.datetime.now()+timedelta(days=365), path='/', domain=None, secure=False, httponly=False, samesite=None)
-            res.set_cookie('name', value=request.user.first_name, max_age=999999999999999, expires=datetime.datetime.now()+timedelta(days=365), path='/', domain=None, secure=False, httponly=False, samesite=None)
+            res.set_cookie('plati_key', value=request.user.secret_id,expires=datetime.datetime.now()+timedelta(days=365), path='/', domain=None, secure=False, httponly=False, samesite=None)
+            res.set_cookie('name', value=request.user.first_name,expires=datetime.datetime.now()+timedelta(days=365), path='/', domain=None, secure=False, httponly=False, samesite=None)
             return res
         else:
             return HttpResponse("<div class='alert alert-danger'>Invalid Credentials</div>")

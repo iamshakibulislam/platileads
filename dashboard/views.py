@@ -132,7 +132,7 @@ def backlink_result(request):
                 pass
 
 
-        #join all the thread ie - wait for all of them to finish working
+        #join all the thread ie - wait for all of them to finish workings
 
         for thread in all_threads:
             thread.join()
@@ -344,6 +344,46 @@ def email_verification(request):
 
         else:
              return HttpResponse("something_went_wrong")
+
+def email_verification_ext(request):
+    
+
+    if request.method == "GET":
+        email = request.GET.get('email')
+
+        if email == None or email == "":
+            return HttpResponse("invalid_email")
+
+        is_exists = False
+
+        
+
+        #checking the email validity
+        get_mx = get_mx_records(email)[-1]
+
+        is_exists = is_valid_email(get_mx,email)
+
+        #end of checking email validity
+        
+        if is_exists == False:
+            #sel_user_credit = user_credit.objects.get(user=request.user)
+            #sel_user_credit.credits_remaining -= 1
+            #sel_user_credit.save()
+           
+            return JsonResponse({"status":"invalid_email"})
+
+        elif is_exists == True:
+            if is_valid_email(get_mx,'1'+email) == True:
+                return HttpResponse('invalid_email')
+            #sel_user_credit = user_credit.objects.get(user=request.user)
+            #sel_user_credit.credits_remaining -= 1
+            #sel_user_credit.save()
+            return JsonResponse({"status":"valid_email"})
+
+        else:
+             return JsonResponse({"status":"something_went_wrong"})
+
+
 
 @login_required(login_url='/users/login/')
 @requires_credit

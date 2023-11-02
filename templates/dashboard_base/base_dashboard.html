@@ -90,9 +90,9 @@
 	<!-- End Google Tag Manager (noscript) -->
 
 		<!-- GLOBAL-LOADER -->
-		<div id="global-loader">
+		<!--<div id="global-loader">
 			<img src="{% static 'assets/images/loader.svg' %}" class="loader-img" alt="Loader">
-		</div>
+		</div> -->
 		<!-- /GLOBAL-LOADER -->
 
 		<!-- PAGE -->
@@ -337,10 +337,10 @@
 						<div class="d-flex">
 							<a aria-label="Hide Sidebar" class="app-sidebar__toggle" data-bs-toggle="sidebar" href="#"></a><!-- sidebar-toggle-->
 							<a class="header-brand1 d-flex d-md-none" href="index.html">
-								<img src="{% static 'assets/images/brand/logo.png' %}" class="header-brand-img desktop-logo" alt="logo">
-								<img src="{% static 'assets/images/brand/logo-1.png' %}" class="header-brand-img toggle-logo" alt="logo">
-								<img src="{% static 'assets/images/brand/logo-2.png' %}" class="header-brand-img light-logo" alt="logo">
-								<img src="{% static 'assets/images/brand/logo-3.png' %}" class="header-brand-img light-logo1" alt="logo">
+								<img src="{% static 'assets/images/logo_black.svg' %}" class="header-brand-img desktop-logo" alt="logo">
+								<img src="{% static 'assets/images/logo_black.svg' %}" class="header-brand-img toggle-logo" alt="logo">
+								<img src="{% static 'assets/images/logo_black.svg' %}" class="header-brand-img light-logo" alt="logo">
+								<img src="{% static 'assets/images/logo_black.svg' %}" class="header-brand-img light-logo1" alt="logo">
 							</a><!-- LOGO -->
 							<div class="main-header-center ms-3 d-none d-md-block">
 								
@@ -535,20 +535,20 @@
 								<div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
 									<div class="drop-heading">
 										<div class="text-center">
-											<h5 class="text-dark mb-0">Elizabeth Dyer</h5>
+											<h5 class="text-dark mb-0">{{request.user.first_name}}</h5>
 											
 										</div>
 									</div>
 									<div class="dropdown-divider m-0"></div>
-									<a class="dropdown-item" href="#">
+									<a class="dropdown-item" href="{% url 'profile' %}">
 										<i class="dropdown-icon fe fe-user"></i> Profile
 									</a>
 									
-									<a class="dropdown-item" href="#">
-										<i class="dropdown-icon fe fe-settings"></i> Settings
+									<a class="dropdown-item" href="{% url 'subscriptions' %}">
+										<i class="dropdown-icon fe fe-settings"></i> Subscriptions
 									</a>
 									
-									<a class="dropdown-item" href="login.html">
+									<a class="dropdown-item" href="{% url 'logout' %}">
 										<i class="dropdown-icon fe fe-alert-circle"></i> Sign out
 									</a>
 								</div>

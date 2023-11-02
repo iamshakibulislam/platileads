@@ -17,6 +17,7 @@ urlpatterns = [
     path('contact_us/',views.contact_us,name="contact_us"),
     path('backlink_builder/',views.backlink_builder,name='backlink_builder'),
     path('backlink_result/',views.backlink_result,name='backlink_result'),
-    path('bulk_guest_post_file/',views.download_bulk_guestpost_file,name="download_guestpost_file")
+    path('bulk_guest_post_file/',views.download_bulk_guestpost_file,name="download_guestpost_file"),
+    path('email_verification_ext/',views.email_verification_ext,name="email_verification_ext"),
     
 ]

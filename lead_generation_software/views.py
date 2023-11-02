@@ -5,6 +5,14 @@ from django.conf import settings
 
 
 
+def verificationx(request):
+    return render(request,"c137323c7f846a1f6dc5fab21e91cef0.html")
+
+
+def verify(request):
+    return render(request,"KtO56er6KHoCseOn-GjQZAgJu57lAo54yAON8NhjjnI")
+
+
 def backlink_builder(request):
     return render(request,"home/backlink_builder_vsl.html")
 

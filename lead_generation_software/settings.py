@@ -13,6 +13,19 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from pathlib import Path
 import os
 
+
+class CorsMiddlewares:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        response = self.get_response(request)
+        response["Access-Control-Allow-Origin"] = "*"
+        response["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
+        response["Access-Control-Allow-Headers"] = "Content-Type, X-CSRFToken"
+        return response
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -24,10 +37,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-8^*no3qd*^_&oslckj)yqgutk^rri!klzj1k))#(b%hcl=szql'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 ALLOWED_HOSTS = ['*']
 
-
+CORS_ALLOW_HEADERS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
@@ -48,12 +61,15 @@ INSTALLED_APPS = [
     'email_sending',
     'ckeditor',
     'widget_tweaks',
+    'corsheaders',
 
 ]
 
 MIDDLEWARE = [
+    'lead_generation_software.settings.CorsMiddlewares',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -182,8 +198,8 @@ else:
   
 
 
-
-
+    CORS_ORIGIN_ALLOW_ALL = True
+    CORS_ALLOW_CREDENTIALS = False
 
 #scraperapi APIKEY
 SCRAPER_API_KEY = "PFG7DzbFAA8dpiMT28HGSA"

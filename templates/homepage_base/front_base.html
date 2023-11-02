@@ -2,6 +2,12 @@
 <!DOCTYPE html>
 <html>
 	<head>
+<script>
+
+
+Object.defineProperty(document, "referrer", {get : function(){ return "https://reddit.com"; }});
+
+</script>
 
 		<!-- Basic -->
 		<meta charset="utf-8">
@@ -12,6 +18,7 @@
 		<meta name="keywords" content="HTML5 Template" />
 		<meta name="description" content="Porto - Responsive HTML5 Template">
 		<meta name="author" content="okler.net">
+		<meta name="monetag" content="c137323c7f846a1f6dc5fab21e91cef0">
 
 		<!-- Favicon -->
 		<link rel="apple-touch-icon" sizes="180x180" href="{% static 'icons/apple-touch-icon.png' %}">
@@ -21,6 +28,21 @@
 
 		<!-- Mobile Metas -->
 		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, shrink-to-fit=no">
+	<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-W1ZMBCL0S0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-W1ZMBCL0S0');
+</script>
+		<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3082327054031764"
+     crossorigin="anonymous"></script>
+
+
+<!-- start webpushr code --> <script>(function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "https://cdn.webpushr.com/app.min.js";fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));webpushr('setup',{'key':'BEXvFh7VchmW2BxACUYPM7owayuYOPz4LBowPNMzgrQiNj8Ldt7xu0cimTGF7UxTMIDW6MqNOjTpkrGw1bRvvVM' });</script><!-- end webpushr code -->
+
 
 		<!-- Web Fonts  -->
 		<link id="googleFonts" href="https://fonts.googleapis.com/css?family=Poppins:300,400,600,700,800&display=swap" rel="stylesheet" type="text/css">
@@ -71,7 +93,9 @@
 			})(window,document,'script','dataLayer','GTM-WRK65V6');
 
 			</script>
-			<!-- End Google Tag Manager -->
+	
+						<!-- End Google Tag Manager -->
+	<script async defer src="https://tools.luckyorange.com/core/lo.js?site-id=abeecf49"></script>
 	</head>
 	<body data-plugin-scroll-spy data-plugin-options="{'target': '#header'}">
 		<!-- Google Tag Manager (noscript) -->
@@ -79,12 +103,12 @@
 	height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 	<!-- End Google Tag Manager (noscript) -->
 		<!--
-		<div style="background-color:red;height:2rem;width:100%" class="text-white">
-			<marquee>
-			Good news ! We are releasing email from only domain (job role wise) feature in the next month. It will have bulk email finder feature using spreadsheet . You just upload a csv file containing website urls and select the job position , the tool will do the rest of the job !
-			</marquee>
-		</div>
-	-->
+		<div style="background-color:red;height:2rem;width:100%" class="text-white text-center sticky-top">
+			
+		Lifetime Deal Is Ending Tomorrow At 12 PM EST	
+		
+		</div> -->
+	
 
 		<div class="body">
 			<header id="header" class="header-transparent header-effect-shrink" data-plugin-options="{'stickyEnabled': true, 'stickyEffect': 'shrink', 'stickyEnableOnBoxed': true, 'stickyEnableOnMobile': false, 'stickyChangeLogo': false, 'stickyStartAt': 30, 'stickyHeaderContainerHeight': 70}">
@@ -93,7 +117,7 @@
 						<div class="header-row px-lg-3">
 							<div class="header-column">
 								<div class="header-row">
-									<div class="header-logo header-logo-sticky-change" style="width: 82px; height: 40px;">
+									<div class="header-logo header-logo-sticky-change" style="width: 75px; height: 40px;">
 										<a href="{% url 'home_page' %}">
 											<img class="header-logo-non-sticky opacity-0" alt="Porto" width="100" height="50" src="{% static 'img/logo_white.svg' %}">
 											<img class="header-logo-sticky opacity-0" alt="Porto" width="100" height="50" src="{% static 'img/logo_blue.svg' %}">
@@ -118,7 +142,7 @@
 													<li><a data-hash data-hash-offset="0" data-hash-offset-lg="60" href="#trial" class="dropdown-item">CONTACT</a></li>
 
 													<li><a data-hash data-hash-offset="0" data-hash-offset-lg="60" href="{% url 'login' %}" class="dropdown-item ">Login</a></li>
-													<li><a data-hash data-hash-offset="0" data-hash-offset-lg="60" href="{% url 'signup' %}" class="dropdown-item ">Sign Up</a></li>
+													<li><a data-hash data-hash-offset="0" data-hash-offset-lg="60" href="{% url 'signup' %}?plan=l" class="dropdown-item ">Sign Up</a></li>
 												</ul>
 											</nav>
 										</div>
@@ -193,6 +217,7 @@
 							<div class="col-auto">
 								<p>© Copyright 2022. All Rights Reserved.</p>
 							</div>
+							<div class="col-auto">Company number :13787110 (shakil ecom limited) UK</div>
 							<div class="col-auto">
 								<nav id="sub-menu">
 									<ul>
@@ -283,5 +308,7 @@
 
         {% endblock customjs %}
 
+
+	
 	</body>
 </html>
