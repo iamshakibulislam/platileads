@@ -28,7 +28,10 @@ def test_email_connection(request):
     if request.method == "GET":
         email = request.GET.get('email')
         app_password = request.GET.get('app_password')
-        if test_email_connection_status(email,app_password):
+
+        smtp_server = request.GET.get('smtp_server',"smtp.gmail.com")
+        smtp_port = request.GET.get('smtp_port',465)
+        if test_email_connection_status(email,app_password,smtp_server,smtp_port):
             return JsonResponse({'status':'success'})
         else:
             return JsonResponse({'status':'fail'})

@@ -23,12 +23,15 @@ def add_campaign_email(request):
         return render(request,'email_sending/add_email_for_cam.html')
 
     if request.method == "POST":
+        print("is a post request")
         email = request.POST.get('email')
         app_password = request.POST.get('app_password')
         provider = request.POST.get('provider')
+        smtp_port = request.POST.get('smtp_port')
+
 
         if email != None and app_password != None and provider != None:
-            emails_for_campaign.objects.create(user=request.user,email=email,app_password=app_password,provider=provider)
+            emails_for_campaign.objects.create(user=request.user,email=email,app_password=app_password,provider=provider,smtp_port=smtp_port)
             return render(request,'email_sending/components/email_added.html',{'status':'success','email':email})
 
 

@@ -1,4 +1,6 @@
 media/
 migrations/
+env/
 __pycache__/
+env/*
 .pyc

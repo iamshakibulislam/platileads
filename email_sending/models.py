@@ -6,7 +6,10 @@ class emails_for_campaign(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     email = models.EmailField(max_length=255)
     app_password = models.CharField(max_length=255)
-    provider = models.CharField(max_length=255,default='gmail')
+    provider = models.CharField(max_length=255,default='smtp.gmail.com')
+    smtp_port = models.IntegerField(default=465,null=False)
+
+    name = models.CharField(default="shakibul islam",blank=True,null=True,max_length=200)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

@@ -39,6 +39,7 @@ def send_email_campaign():
                 #now send the email to this recepient
                 dict_obj_for_reci = contact_list.objects.filter(id=reci.id)
                 main_message = fill_message(msg.message,dict_obj_for_reci.values()[0])
+                main_subject = fill_message(msg.subject,dict_obj_for_reci.values()[0])
                 tracking_str = f"""
                 
                 
@@ -62,12 +63,14 @@ def send_email_campaign():
             #setup smtp server here
 
             try:
-                smtp_server_inst = smtplib.SMTP_SSL('smtp.gmail.com',465)   
+                smtp_server = sel_camp.email.provider
+                smtp_port = sel_camp.email.smtp_port
+                smtp_server_inst = smtplib.SMTP_SSL(smtp_server,int(smtp_port))   
                 smtp_server_inst.login(sel_camp.email.email,sel_camp.email.app_password)
 
                 sleep(5)
 
-                th = Thread(target=email_send,args=(msg.subject,final_message,sel_camp.email.email,reci.email,sel_camp.email.user.first_name,smtp_server_inst,sel_camp.email.user.id,sel_camp.id))
+                th = Thread(target=email_send,args=(main_subject,final_message,sel_camp.email.email,reci.email,sel_camp.email.user.first_name,smtp_server_inst,sel_camp.email.user.id,sel_camp.id))
                 th.start()
 
                 #email_send(msg.subject,final_message,sel_camp.email.email,reci.email,sel_camp.email.user.first_name,smtp_server_inst,sel_camp.email.user.id)

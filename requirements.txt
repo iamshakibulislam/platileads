@@ -11,7 +11,7 @@ charset-normalizer==3.0.1
 cssutils==2.6.0
 currency-symbols==2.0.3
 dj-database-url==1.2.0
-Django==4.1.7
+django==4.1.7
 django-ckeditor==6.5.1
 django-crontab==0.7.1
 django-js-asset==2.0.0
@@ -38,7 +38,6 @@ pytz==2022.7.1
 PyYAML==6.0
 requests==2.28.2
 requests-file==1.5.1
-save-thread-result==0.1.0
 six==1.16.0
 soupsieve==2.4
 sqlparse==0.4.3
@@ -52,3 +51,4 @@ webcolors==1.12
 xlrd==2.0.1
 xls2xlsx==0.2.0
 yarl==1.8.2
+save-thread-result==0.1.0

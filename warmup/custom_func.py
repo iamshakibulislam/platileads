@@ -15,16 +15,12 @@ openai.api_key = st.OPENAI_API_KEY
 
 
 @func_set_timeout(30)
-def test_email_connection_status(email,app_password):
+def test_email_connection_status(email,app_password,smtp_server,smtp_port):
 	print("testing email connectivity")
 	try:
-		mailbox = MailBox('imap.gmail.com').login(email.strip(),app_password.strip())
-
-		print("mail box checking")
-
-		for msg in mailbox.fetch():
-			print(msg.from_)
-			return True
+		context = smtplib.SMTP_SSL(smtp_server, int(smtp_port))
+		context.login(email,app_password)
+		return True
 	
 	except:
 		return False
