@@ -1,6 +1,7 @@
 from django.db import models
 from users.models import User
 from ckeditor.fields import RichTextField
+from django.utils import timezone
 
 class emails_for_campaign(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -3,6 +3,8 @@ from .custom import *
 from datetime import datetime,timedelta
 from django.http import HttpResponse
 from threading import Thread
+from django.utils import timezone
+
 from time import sleep
 
 
@@ -10,7 +12,13 @@ from time import sleep
 def send_email_campaign():
 
     #first filter all the message which is to delivered today
-    today_is_to_send = email_messages.objects.filter(delivery_date__lte = datetime.now().date()).filter(campaign__is_active=True).filter(is_sent=False)
+
+    print("hi shakil")
+
+    print(email_messages.objects.filter(delivery_date__lte=timezone.now()))
+
+    today_is_to_send = email_messages.objects.filter(delivery_date__lte = timezone.now()).filter(campaign__is_active=True).filter(is_sent=False)
+    print('tday ',today_is_to_send)
     #print(today_is_to_send.values())
 
     for msg in today_is_to_send:
@@ -53,12 +61,17 @@ def send_email_campaign():
                 """
 
             #message is ready to send
+                
+            try:
 
-            final_message = main_message+tracking_str
+                final_message = main_message+tracking_str
+                main_subject = main_subject
+            except:
+                continue
 
             
             #now send the message and make sure to create new thread for each message 
-            pass
+            
 
             #setup smtp server here
 

@@ -52,8 +52,12 @@ class sending_campaign_trackAdmin(admin.ModelAdmin):
     search_fields = ['campaign__campaign_name','campaign__email__email','campaign__email__user__email','email']
     list_per_page = 20
 
+@admin.register(sending_track)
+class sending_trackAdmin(admin.ModelAdmin):
+    list_display = ['sent_to','campaign']
+    search_fields = ['campaign__campaign_name','sent_to__email']
+    list_per_page = 200
 
-admin.site.register(sending_track)
     
 
     

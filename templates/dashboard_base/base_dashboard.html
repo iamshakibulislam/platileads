@@ -118,6 +118,7 @@
 							<a class="side-menu__item"  data-bs-toggle="slide" href="{% url 'dashboard_home' %}"><i class="side-menu__icon fe fe-home" style="font-size:1.5rem;flex:none"></i><span class="side-menu__label" style="flex:none;margin-left:1rem">Dashboard</span></a>
 						</li>
 						{% if request.user.is_affiliate == 0 %}
+						<!---
 						<li><h3>Lead Campaigns</h3></li>
 						<li>
 							<a class="side-menu__item" href="{% url 'campaign_list' %}"><i class="side-menu__icon fa-solid fa-list" style="font-size:1.3rem;margin-right:0.5rem"></i><span class="side-menu__label" style="flex:none">All lead Campaigns</span></a>
@@ -125,7 +126,7 @@
 
 						<li>
 							<a class="side-menu__item" href="{% url 'activate_campaign' %}"><i class="side-menu__icon fa-solid fa-check-circle" style="font-size:1.3rem;margin-right:0.5rem"></i><span class="side-menu__label" style="flex:none">Activate a lead campaign</span></a>
-						</li>
+						</li> -->
 
 						
 						<li>
@@ -159,16 +160,18 @@
 
 
 
-
+						
 						<li class="wrap-header mt-1">
+
+							<!---
 
 							<ul class="d-flex justify-content-between">
 	
 							<h3 style="margin-top:0.6rem !important"  class="text-white d-block ">Email finder by job role</h3>
 							<i class="fa fa-caret-down d-block mt-3" style="padding-right:10px"></i>
-							</ul>
+							</ul> -->
 	
-						</li>
+						</li> 
 						
 						<div class="email_finder_by_job_role">
 
@@ -178,7 +181,7 @@
 
                         <li>
 							<a class="side-menu__item text-justify" href="{% url 'bulk_leads' %}"><i class="side-menu__icon fas fa-solid fa-users" style="font-size:1.3rem"></i><span class="side-menu__label" style="flex:none">Find Bulk email by job role</span></a>
-						</li>
+						</li> 
 
 					</div>
 
@@ -207,12 +210,13 @@
 
 
 					<li class="wrap-header mt-1">
+						<!---
 
 						<ul class="d-flex justify-content-between">
 
 						<h3 style="margin-top:0.6rem !important"  class="text-white d-block ">Blog author finder </h3>
 						<i class="fa fa-caret-down d-block mt-3" style="padding-right:10px"></i>
-						</ul>
+						</ul> -->
 
 					</li>
 						

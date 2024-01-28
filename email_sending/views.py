@@ -321,7 +321,9 @@ def save_campaign(request):
         create_camp=sending_campaigns.objects.create(campaign_name=dt["campaign"],email=sel_email,contact_book=sel_contact_book)
 
         for data in dt["data"]:
-            email_messages.objects.create(campaign=create_camp,subject=dt["subject"],message=data["message"],delivery_date=data["delivery_date"])
+            datetime_object = datetime.strptime(data["delivery_date"], "%Y-%m-%dT%H:%M")
+            aware_datetime = timezone.make_aware(datetime_object, timezone.get_current_timezone())
+            email_messages.objects.create(campaign=create_camp,subject=dt["subject"],message=data["message"],delivery_date=aware_datetime)
         
 
 
@@ -399,6 +401,7 @@ def campaigns(request):
         get_messages=email_messages.objects.filter(campaign=camp)
         mx = get_messages.aggregate(Max('delivery_date'))['delivery_date__max']
         followup_total = len(get_messages)-1
+        print("mx is... ",mx," followup ",followup_total)
         
 
         if date(mx.year,mx.month,mx.day) < datetime.now().date():
