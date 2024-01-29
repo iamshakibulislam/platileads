@@ -53,7 +53,7 @@ def send_email_campaign():
                 
             <table id=":1d7" cellpadding="0" role="presentation" class="cf gz ac0"><tbody>
             <tr><td><div class="cKWzSc mD" idlink="" tabindex="0" role="button" jslog="21576; u014N:cOuCgd,Kr2w4b;">
-            <img class="mL" id="platileads" camp="{sel_camp.id}" cont_id="{reci.id}" src="https://platileads.com/email_sending/blank_image/?camp={sel_camp.id}&cont_id={reci.id}" alt=""></div></td><td>
+            <img class="mL" id="platileads" camp="{sel_camp.id}" cont_id="{reci.id}" src="https://bigisoft.com/email_sending/blank_image/?camp={sel_camp.id}&cont_id={reci.id}" alt=""></div></td><td>
             </td><td><div class="XymfBd mD" idlink="" tabindex="0" role="button" jslog="21578; u014N:cOuCgd,Kr2w4b;">
              </div></td><td></td>
             <td class="io"><div class="adA"></div></td></tr></tbody></table>
