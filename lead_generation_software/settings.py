@@ -270,7 +270,7 @@ if DEBUG == False:
 CRONJOBS = [
     ('59 16 * * *', 'warmup.cronjob.warmup_emails'),
     ('0 */6 * * *', 'email_sending.cron.check_reply'),
-    ('0 0 * * *', 'email_sending.cron.send_email_campaign')
+    ('0 */3 * * *', 'email_sending.cron.send_email_campaign')
 ]
 
 

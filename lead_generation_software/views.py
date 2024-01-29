@@ -10,7 +10,7 @@ def verificationx(request):
 
 
 def verify(request):
-    return render(request,"KtO56er6KHoCseOn-GjQZAgJu57lAo54yAON8NhjjnI")
+    return render(request,"Jexr8qpLLzlhSzZPSO_dH-RaToVbRKkODQ5i_qPQ0b8")
 
 
 def backlink_builder(request):

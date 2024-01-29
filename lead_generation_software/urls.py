@@ -21,7 +21,7 @@ urlpatterns = [
     path('warmup/',include('warmup.urls')),
     path('email_sending/',include('email_sending.urls')),
     path('backlink_builder/',views.backlink_builder,name='backlink_building'),
-    path('.well-known/acme-challenge/KtO56er6KHoCseOn-GjQZAgJu57lAo54yAON8NhjjnI',views.verify,name='verify'),
+    path('.well-known/acme-challenge/Jexr8qpLLzlhSzZPSO_dH-RaToVbRKkODQ5i_qPQ0b8',views.verify,name='verify'),
     path('c137323c7f846a1f6dc5fab21e91cef0.html',views.verificationx,name='verifyx')
 ]
 
