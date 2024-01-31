@@ -619,7 +619,11 @@ def find_email(request):
         possible_combinations.append(first_name[0]+last_name+'@'+root_domain)
         possible_combinations.append(first_name+last_name+'@'+root_domain)
 
-        get_mx = get_mx_records_domain(root_domain)[-1]
+        try:
+
+            get_mx = get_mx_records_domain(root_domain)[-1]
+        except:
+            return render(request,'dashboard/components/found_email.html',{'not_found':True})
 
         #print('your mx record is:',get_mx)
         for possible_email in possible_combinations:
@@ -816,7 +820,7 @@ def find_bulk_email_result(request):
                     try:
                         domain_val = domain_val.split('//')[1]
                     except:
-                        pass
+                        continue
                     root_domain_inst = tldextract.extract(domain_val)
                     root_domain = root_domain_inst.domain+'.'+root_domain_inst.suffix
 
@@ -846,8 +850,8 @@ def find_bulk_email_result(request):
                         try:
                             get_mx = get_mx_records_domain(root_domain)[-1]
 
-                        except FunctionTimedOut:
-                            pass
+                        except:
+                            continue
 
                         for comb in possible_combinations:
 
